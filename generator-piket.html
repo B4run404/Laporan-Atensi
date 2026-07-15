@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Generator Reminder Piket — Lapas Tanjung Pati</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  html { -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  .ac-list { max-height: 220px; }
+  @keyframes flash { 0% { background-color: #bbf7d0; } 100% { background-color: transparent; } }
+  .flash { animation: flash 0.9s ease-out; }
+</style>
+</head>
+<body class="bg-slate-100 min-h-screen pb-16">
+
+<!-- ===== HEADER BAR ===== -->
+<div class="bg-slate-900 text-white sticky top-0 z-30 shadow-md">
+  <div class="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
+    <div class="w-9 h-9 rounded-full bg-amber-400 flex items-center justify-center text-slate-900 font-bold text-sm shrink-0">P</div>
+    <div class="min-w-0">
+      <h1 class="text-sm font-bold leading-tight truncate">Generator Reminder Piket</h1>
+      <p class="text-[11px] text-slate-300 leading-tight truncate">Lapas Kelas IIB Tanjung Pati</p>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-2xl mx-auto px-3 pt-4 space-y-3">
+
+  <!-- ===== HEADER TEXT INPUT ===== -->
+  <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Header Pesan</label>
+    <textarea id="headerInput" rows="2"
+      class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400 resize-none"
+      placeholder="MOHON IZIN MENGINGATKAN PIKET PERWIRA, PIKET KUNJUNGAN & PENGGELEDAHAN BARANG"></textarea>
+    <p class="text-[11px] text-slate-400 mt-1">Kosongkan untuk memakai header default.</p>
+  </section>
+
+  <!-- ===== DATE SYSTEM ===== -->
+  <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Tanggal Piket</label>
+    <div class="flex gap-2 mb-2">
+      <button data-shift="0" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-900 text-white">Hari Ini</button>
+      <button data-shift="1" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Besok</button>
+      <button data-shift="2" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Lusa</button>
+    </div>
+    <input type="date" id="dateInput" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400">
+    <div class="mt-2 text-center bg-amber-50 border border-amber-200 rounded-lg py-2 text-sm font-bold text-amber-800" id="dateDisplay">—</div>
+  </section>
+
+  <!-- ===== CATEGORIES CONTAINER ===== -->
+  <div id="categoriesContainer" class="space-y-3"></div>
+
+  <!-- ===== OUTPUT ===== -->
+  <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <div class="flex items-center justify-between mb-2">
+      <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Preview Output</label>
+      <span id="warnBadge" class="hidden text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">⚠ Ada peringatan</span>
+    </div>
+    <pre id="outputBox" class="mono whitespace-pre-wrap text-[13px] leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-3 min-h-[120px]"></pre>
+    <button id="copyBtn" class="mt-3 w-full bg-emerald-600 active:bg-emerald-700 text-white font-bold text-sm py-3 rounded-lg shadow-sm transition-colors">
+      📋 Copy Output
+    </button>
+  </section>
+
+  <p class="text-center text-[11px] text-slate-400 pt-2 pb-4">Data petugas tersimpan otomatis di perangkat ini (localStorage).</p>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50"></div>
+
+<script>
+/* ============================================================
+   KONFIGURASI KATEGORI
+============================================================ */
+const CATEGORIES = [
+  { key: 'PERWIRA', label: 'Perwira Piket', color: 'blue' },
+  { key: 'PB', label: 'Penggeledahan Barang (PB)', color: 'rose' },
+  { key: 'PO', label: 'Penggeledahan Orang (PO)', color: 'violet' },
+  { key: 'PD', label: 'Pendaftaran (SDP) / PD', color: 'teal' },
+  { key: 'WARTELSUSPAS', label: 'Pengawasan Wartelsuspas', color: 'amber' },
+];
+
+const DEFAULT_HEADER = 'MOHON IZIN MENGINGATKAN PIKET PERWIRA, PIKET KUNJUNGAN & PENGGELEDAHAN BARANG';
+
+const CATATAN_LINES = [
+  'Kunjungan pagi dimulai pukul 09.00 - 11.00 WIB',
+  'Pelayanan titipan barang dimulai pukul 09.00 - 11.30 WIB',
+  'Petugas piket yang bertugas harap selalu mematuhi peraturan',
+  'Petugas piket harap selalu berkoordinasi dengan Piket Perwira Kunjungan',
+];
+
+// Database awal (seed) — masing-masing kategori diambil dari TABEL SUMBER yang
+// spesifik dan berbeda di dalam PDF Jadwal Piket Juli 2026, Lapas Kelas IIB Tanjung Pati.
+// Gelar/titel di belakang nama (SH, S.Tr.Pas, S.Kep, Ners, dsb) TETAP disertakan
+// persis seperti tertulis di PDF — tidak dihilangkan.
+//   - Perwira Piket        -> tabel "Pembagian Tugas Perwira Pengawas Pelayanan"
+//   - PB / PO / PD         -> tabel "Piket Pelayanan Kunjungan & Penggeledahan Barang"
+//   - Pengawasan Wartelsuspas -> tabel "Piket Pengawasan Wartelsuspas"
+const SEED_DB = {
+  PERWIRA: [
+    'NOFIA YONDRI, SH', 'JERI GUNTARA, SH', 'MUHAMMAD HAFIZ, SH', 'HANIF BUDI NUGROHO, S.TR.PAS',
+    'WIYATA MANDALA, SH', 'ADEKA FITRIA, SH', 'DESI ANWAR, SH',
+  ],
+  PB: [
+    'NOVRIADY, SH', 'RIDHA IKHWANUS', 'HANDOKO', 'ZULFIKRI ANSHORI', 'DANIEL J.W. SIHOMBING',
+    'ANJANI DWIKI KURNIAWAN', 'TEDI SEPDIAN, SH', 'JEFFY GUSHENDRA', 'FUAD MHD THAUFIK',
+    'ZENO AULIA ANUGRAH', 'PRATAMA YOSHANANDA', 'ATHAL RAFIF AIMI', 'AHMAD HIZBULLAH, S.TR.PAS', 'M. AMANDA',
+  ],
+  PO: [
+    'HARDI HAFIS', 'EKA RAHMADHAN PUTRA', 'RIDOWAN KOLIF', 'M. TAUFIT HIDAYAT', 'ZIO ALHADI',
+    'DIO ALIF UTAMA', 'RIZKY PUTRA GUSFAR', 'RESTIARA AZARAH, S.KEP, NERS', 'DWI FITRIA YENI',
+    'NOVELLA RAHMI', 'PUTRI LAVENA', 'KEZZIA PUTRI WAZANE',
+  ],
+  PD: [
+    'HARDI HAFIS', 'EKA RAHMADHAN PUTRA', 'RIDOWAN KOLIF', 'M. TAUFIT HIDAYAT', 'ZIO ALHADI',
+    'DIO ALIF UTAMA', 'RIZKY PUTRA GUSFAR', 'RESTIARA AZARAH, S.KEP, NERS', 'DWI FITRIA YENI',
+    'NOVELLA RAHMI', 'PUTRI LAVENA', 'KEZZIA PUTRI WAZANE',
+  ],
+  WARTELSUSPAS: [
+    'NOVRIADY, SH', 'HANDOKO', 'DANIEL J.W. SIHOMBING', 'TEDI SEPDIAN, SH', 'FUAD MHD THAUFIK',
+    'PRATAMA YOSHANANDA', 'AHMAD HIZBULLAH, S.TR.PAS', 'HARDI HAFIS', 'M. AMANDA', 'EKA RAHMADHAN PUTRA',
+    'ZENO AULIA ANUGRAH', 'RIDHA IKHWANUS', 'JEFFY GUSHENDRA', 'ZELFI AFRUL', 'RIDOWAN KOLIF',
+    'M. TAUFIT HIDAYAT', 'ZIO ALHADI', 'ZULFIKRI ANSHORI', 'DIO ALIF UTAMA',
+    'ANJANI DWIKI KURNIAWAN', 'ATHAL RAFIF AIMI', 'RIZKY PUTRA GUSFAR',
+  ],
+};
+
+/* ============================================================
+   STORAGE
+============================================================ */
+const LS_DB = 'piket_petugas_db_v4';
+const LS_HEADER = 'piket_header_v1';
+
+function loadDB() {
+  try {
+    const raw = localStorage.getItem(LS_DB);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  saveDB(SEED_DB);
+  return JSON.parse(JSON.stringify(SEED_DB));
+}
+function saveDB(db) { localStorage.setItem(LS_DB, JSON.stringify(db)); }
+
+let DB = loadDB();
+
+// state: rows[categoryKey] = array of names selected (in order)
+let rows = {};
+CATEGORIES.forEach(c => rows[c.key] = []);
+
+/* ============================================================
+   RENDER: KATEGORI + BARIS INPUT
+============================================================ */
+const colorMap = {
+  blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', chip: 'bg-blue-600' },
+  rose: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', chip: 'bg-rose-600' },
+  violet: { bg: 'bg-violet-50', text: 'text-violet-700', border: 'border-violet-200', chip: 'bg-violet-600' },
+  teal: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200', chip: 'bg-teal-600' },
+  amber: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', chip: 'bg-amber-600' },
+};
+
+const container = document.getElementById('categoriesContainer');
+
+function buildCategorySection(cat) {
+  const c = colorMap[cat.color];
+  const section = document.createElement('section');
+  section.className = `bg-white rounded-xl shadow-sm border ${c.border} overflow-hidden`;
+  section.innerHTML = `
+    <div class="${c.bg} px-4 py-2.5 flex items-center justify-between">
+      <h2 class="text-sm font-bold ${c.text}">${cat.label}</h2>
+      <span class="text-[10px] font-semibold ${c.text} bg-white/70 px-2 py-0.5 rounded-full" id="count-${cat.key}">0 orang</span>
+    </div>
+    <div class="p-3 space-y-2" id="rows-${cat.key}"></div>
+    <div class="px-3 pb-3">
+      <button data-cat="${cat.key}" class="addRowBtn w-full text-xs font-bold ${c.text} border ${c.border} border-dashed rounded-lg py-2 active:${c.bg}">
+        + Tambah Petugas
+      </button>
+    </div>
+  `;
+  container.appendChild(section);
+}
+CATEGORIES.forEach(buildCategorySection);
+
+/* ============================================================
+   AUTOCOMPLETE ROW
+============================================================ */
+function addRow(catKey, presetName) {
+  rows[catKey].push(presetName || '');
+  renderRows(catKey);
+  generateOutput();
+}
+
+function removeRow(catKey, idx) {
+  rows[catKey].splice(idx, 1);
+  renderRows(catKey);
+  generateOutput();
+}
+
+function setRowValue(catKey, idx, name) {
+  rows[catKey][idx] = name;
+  renderRows(catKey);
+  generateOutput();
+}
+
+function renderRows(catKey) {
+  const wrap = document.getElementById(`rows-${catKey}`);
+  wrap.innerHTML = '';
+  document.getElementById(`count-${catKey}`).textContent = `${rows[catKey].filter(Boolean).length} orang`;
+
+  rows[catKey].forEach((val, idx) => {
+    const rowId = `${catKey}-${idx}`;
+    const row = document.createElement('div');
+    row.className = 'relative';
+    row.innerHTML = `
+      <div class="flex gap-2 items-center">
+        <span class="text-xs font-mono text-slate-400 w-5 text-right shrink-0">${idx + 1}.</span>
+        <div class="relative flex-1">
+          <input type="text" autocomplete="off"
+            class="acInput w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400"
+            data-cat="${catKey}" data-idx="${idx}"
+            placeholder="Cari / pilih nama..." value="${val || ''}">
+          <div class="acDropdown hidden absolute z-20 mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-lg overflow-y-auto ac-list"></div>
+        </div>
+        <button data-cat="${catKey}" data-idx="${idx}" class="removeRowBtn shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 text-slate-500 active:bg-red-100 active:text-red-600 font-bold">✕</button>
+      </div>
+      <div class="dupWarning hidden text-[11px] text-amber-600 font-medium mt-1 ml-7"></div>
+    `;
+    wrap.appendChild(row);
+  });
+
+  checkDuplicates(catKey);
+}
+
+/* Dropdown filtering */
+function openDropdown(input) {
+  const cat = input.dataset.cat;
+  const idx = parseInt(input.dataset.idx);
+  const dropdown = input.parentElement.querySelector('.acDropdown');
+  const query = input.value.trim().toUpperCase();
+  const list = DB[cat] || [];
+  const filtered = query ? list.filter(n => n.toUpperCase().includes(query)) : list;
+
+  let html = '';
+  filtered.slice(0, 50).forEach(name => {
+    html += `<div class="acOption px-3 py-2 text-sm hover:bg-amber-50 cursor-pointer" data-cat="${cat}" data-idx="${idx}" data-name="${name}">${name}</div>`;
+  });
+
+  const exactExists = list.some(n => n.toUpperCase() === query);
+  if (query && !exactExists) {
+    html += `<div class="acAddNew px-3 py-2 text-sm text-emerald-700 font-semibold hover:bg-emerald-50 cursor-pointer border-t border-slate-100" data-cat="${cat}" data-idx="${idx}" data-name="${query}">+ Tambah "${query}" ke database</div>`;
+  }
+  if (!html) html = `<div class="px-3 py-2 text-xs text-slate-400">Tidak ditemukan. Ketik nama baru lalu pilih "Tambah".</div>`;
+
+  dropdown.innerHTML = html;
+  dropdown.classList.remove('hidden');
+}
+
+function closeAllDropdowns() {
+  document.querySelectorAll('.acDropdown').forEach(d => d.classList.add('hidden'));
+}
+
+container.addEventListener('input', (e) => {
+  if (e.target.classList.contains('acInput')) {
+    const cat = e.target.dataset.cat, idx = parseInt(e.target.dataset.idx);
+    rows[cat][idx] = e.target.value.toUpperCase();
+    openDropdown(e.target);
+    generateOutput();
+    checkDuplicates(cat);
+  }
+});
+
+container.addEventListener('focusin', (e) => {
+  if (e.target.classList.contains('acInput')) openDropdown(e.target);
+});
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('acOption') || e.target.classList.contains('acAddNew')) {
+    const cat = e.target.dataset.cat, idx = parseInt(e.target.dataset.idx), name = e.target.dataset.name;
+    if (e.target.classList.contains('acAddNew')) {
+      if (!DB[cat].includes(name)) { DB[cat].push(name); saveDB(DB); }
+    }
+    setRowValue(cat, idx, name);
+    closeAllDropdowns();
+    return;
+  }
+  if (!e.target.classList.contains('acInput')) closeAllDropdowns();
+});
+
+container.addEventListener('click', (e) => {
+  if (e.target.classList.contains('addRowBtn')) {
+    addRow(e.target.dataset.cat);
+  }
+  if (e.target.classList.contains('removeRowBtn')) {
+    removeRow(e.target.dataset.cat, parseInt(e.target.dataset.idx));
+  }
+});
+
+/* ============================================================
+   VALIDASI DUPLIKAT
+============================================================ */
+function checkDuplicates(catKey) {
+  const wrap = document.getElementById(`rows-${catKey}`);
+  const vals = rows[catKey].map(v => (v || '').trim().toUpperCase());
+
+  wrap.querySelectorAll('.dupWarning').forEach((w, idx) => {
+    const name = vals[idx];
+    if (!name) { w.classList.add('hidden'); return; }
+    const countInCat = vals.filter(v => v === name).length;
+    if (countInCat > 1) {
+      w.textContent = '⚠ Nama sudah ada di kategori ini.';
+      w.classList.remove('hidden');
+    } else {
+      w.classList.add('hidden');
+    }
+  });
+}
+
+function checkCrossCategoryDuplicates() {
+  const nameToCats = {};
+  CATEGORIES.forEach(cat => {
+    const uniqueInCat = new Set(rows[cat.key].map(v => (v || '').trim().toUpperCase()).filter(Boolean));
+    uniqueInCat.forEach(name => {
+      if (!nameToCats[name]) nameToCats[name] = new Set();
+      nameToCats[name].add(cat.key);
+    });
+  });
+  const crossDupes = Object.entries(nameToCats).filter(([name, cats]) => cats.size > 1).map(([name]) => name);
+  return crossDupes;
+}
+
+/* ============================================================
+   TANGGAL
+============================================================ */
+const dateInput = document.getElementById('dateInput');
+const dateDisplay = document.getElementById('dateDisplay');
+const HARI = ['MINGGU','SENIN','SELASA','RABU','KAMIS',"JUM'AT",'SABTU'];
+const BULAN = ['','JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+
+function toLocalISO(d) {
+  const tz = d.getTimezoneOffset() * 60000;
+  return new Date(d - tz).toISOString().slice(0, 10);
+}
+
+function setDateByShift(shift) {
+  const d = new Date();
+  d.setDate(d.getDate() + shift);
+  dateInput.value = toLocalISO(d);
+  updateDateDisplay();
+  document.querySelectorAll('.dateShiftBtn').forEach(b => {
+    const active = parseInt(b.dataset.shift) === shift;
+    b.className = `dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg ${active ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 border border-slate-300'}`;
+  });
+}
+
+function updateDateDisplay() {
+  if (!dateInput.value) { dateDisplay.textContent = '—'; return; }
+  const [y, m, day] = dateInput.value.split('-').map(Number);
+  const d = new Date(y, m - 1, day);
+  const text = `${HARI[d.getDay()]}, ${day} ${BULAN[m]} ${y}`;
+  dateDisplay.textContent = text;
+  generateOutput();
+}
+
+document.querySelectorAll('.dateShiftBtn').forEach(btn => {
+  btn.addEventListener('click', () => setDateByShift(parseInt(btn.dataset.shift)));
+});
+dateInput.addEventListener('change', () => {
+  document.querySelectorAll('.dateShiftBtn').forEach(b => b.className = 'dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300');
+  updateDateDisplay();
+});
+
+/* ============================================================
+   HEADER
+============================================================ */
+const headerInput = document.getElementById('headerInput');
+headerInput.value = localStorage.getItem(LS_HEADER) || '';
+headerInput.addEventListener('input', () => {
+  localStorage.setItem(LS_HEADER, headerInput.value);
+  generateOutput();
+});
+
+/* ============================================================
+   GENERATE OUTPUT
+============================================================ */
+const outputBox = document.getElementById('outputBox');
+const warnBadge = document.getElementById('warnBadge');
+
+function generateOutput() {
+  const header = headerInput.value.trim() || DEFAULT_HEADER;
+  const dateLine = dateDisplay.textContent && dateDisplay.textContent !== '—' ? dateDisplay.textContent : '';
+
+  let out = `${header}\n\n${dateLine}\n`;
+
+  CATEGORIES.forEach(cat => {
+    const names = rows[cat.key].map(n => (n || '').trim().toUpperCase()).filter(Boolean);
+    if (names.length === 0) return;
+    out += `\n*${cat.label}*\n`;
+    names.forEach((n, i) => { out += `${i + 1}. ${n}\n`; });
+  });
+
+  out += `\n*Catatan :*\n`;
+  CATATAN_LINES.forEach((line, i) => { out += `${i + 1}. ${line}\n`; });
+  out += `\nTerima Kasih 🙏🙏`;
+
+  outputBox.textContent = out;
+
+  const crossDupes = checkCrossCategoryDuplicates();
+  if (crossDupes.length > 0) {
+    warnBadge.classList.remove('hidden');
+    warnBadge.title = `Perhatian: dipilih di lebih dari satu kategori — ${crossDupes.join(', ')}`;
+  } else {
+    warnBadge.classList.add('hidden');
+  }
+}
+
+/* ============================================================
+   COPY BUTTON
+============================================================ */
+const copyBtn = document.getElementById('copyBtn');
+const toast = document.getElementById('toast');
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.remove('opacity-0');
+  toast.classList.add('opacity-100');
+  setTimeout(() => { toast.classList.remove('opacity-100'); toast.classList.add('opacity-0'); }, 1800);
+}
+
+copyBtn.addEventListener('click', async () => {
+  const text = outputBox.textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast('✅ Output berhasil disalin!');
+  } catch (e) {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ Output berhasil disalin!');
+  }
+  outputBox.classList.add('flash');
+  setTimeout(() => outputBox.classList.remove('flash'), 900);
+});
+
+/* ============================================================
+   INIT
+============================================================ */
+setDateByShift(0);
+CATEGORIES.forEach(cat => addRow(cat.key));
+generateOutput();
+</script>
+</body>
+</html>

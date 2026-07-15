@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Atensi Pimpinan — Lapas Kelas IIB Tanjung Pati</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --bg:#F3F1EA;
+    --surface:#FFFFFF;
+    --surface-alt:#FAF8F2;
+    --navy:#12233F;
+    --navy-2:#1B3A63;
+    --gold:#B8894A;
+    --gold-soft:#E8DCC5;
+    --maroon:#7A2331;
+    --ink:#22262E;
+    --muted:#68706E;
+    --line:#DFD8C6;
+  }
+
+  * { font-family: 'IBM Plex Sans', sans-serif; }
+  .font-display { font-family: 'Source Serif 4', serif; }
+  .font-mono { font-family: 'IBM Plex Mono', monospace; }
+
+  body { background: var(--bg); color: var(--ink); }
+
+  /* SECTION CARD */
+  .doc-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .doc-card:focus-within {
+    border-color: var(--navy-2);
+    box-shadow: 0 2px 14px rgba(18, 35, 63, 0.08);
+  }
+
+  .numeral-chip {
+    width: 30px; height: 30px;
+    border: 1px solid var(--gold);
+    color: var(--navy);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* INPUTS */
+  .field-input, .field-select, .field-textarea {
+    width: 100%;
+    background: var(--surface-alt);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.875rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .field-input:focus, .field-select:focus, .field-textarea:focus {
+    border-color: var(--navy-2);
+    background: #fff;
+  }
+  .field-label {
+    display:block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  /* BUTTONS */
+  .btn-outline {
+    border: 1px solid var(--navy);
+    color: var(--navy);
+    background: transparent;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    padding: 0.65rem 1rem;
+    transition: background 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-outline:hover { background: var(--navy); color: #fff; }
+
+  .btn-primary {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 600;
+    border-radius: 6px;
+    border: 1px solid var(--navy);
+    transition: background 0.15s ease, transform 0.1s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .btn-primary:hover { background: var(--navy-2); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--gold-soft);
+    border: 1px solid rgba(232, 220, 197, 0.45);
+    font-weight: 600;
+    border-radius: 6px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: var(--gold-soft); }
+
+  .btn-ghost {
+    background: transparent;
+    color: rgba(255,255,255,0.55);
+    border: 1px solid transparent;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
+
+  /* STICKY ACTION BAR */
+  .sticky-actions {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--navy);
+    border-top: 2px solid var(--gold);
+    z-index: 50;
+    padding: 0.9rem 1rem;
+  }
+
+  /* STATUS BADGE */
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .status-dot { width: 7px; height: 7px; border-radius: 999px; flex-shrink: 0; }
+  .status-dot.pulse { animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  /* LETTERHEAD PREVIEW PANEL */
+  .letterhead {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .letterhead-top {
+    border-bottom: 2px solid var(--navy);
+    padding: 1.1rem 1.25rem 0.9rem;
+    text-align: center;
+    position: relative;
+  }
+  .letterhead-seal {
+    width: 40px; height: 40px;
+    margin: 0 auto 0.5rem;
+    border: 1.5px solid var(--maroon);
+    border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--maroon);
+  }
+
+  /* WHATSAPP BUBBLE (authentic, muted) */
+  .whatsapp-bubble {
+    background: #DCF8C6;
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: #1b1b1b;
+  }
+
+  .form-preview-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  @media (min-width: 1024px) {
+    .form-preview-split { grid-template-columns: 1fr 0.95fr; }
+  }
+
+  .correction-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--navy);
+    background: var(--gold-soft);
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+</style>
+</head>
+<body class="pb-28">
+
+<!-- HEADER -->
+<div class="w-full" style="background:var(--navy); border-bottom:2px solid var(--gold);">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-md flex items-center justify-center flex-shrink-0" style="border:1px solid var(--gold);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8DCC5" stroke-width="1.6"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+      </div>
+      <div>
+        <h1 class="text-base sm:text-lg font-bold text-white tracking-wide font-display">Laporan Atensi Pimpinan</h1>
+        <p class="text-xs" style="color:var(--gold-soft);">Humas Lapas Kelas IIB Tanjung Pati</p>
+      </div>
+    </div>
+    <div class="text-right hidden sm:block">
+      <div id="realtime-clock" class="font-mono text-sm mb-1" style="color:var(--gold-soft);">00:00:00</div>
+      <div id="status-badge" class="status-pill">
+        <span class="status-dot pulse" style="background:#D9A441;"></span>
+        <span>Mengedit…</span>
+      </div>
+    </div>
+  </div>
+  <div class="sm:hidden max-w-6xl mx-auto px-4 pb-3 flex justify-between items-center">
+    <div id="realtime-clock-mobile" class="font-mono text-xs" style="color:var(--gold-soft);">00:00:00</div>
+  </div>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <div id="validation_message" class="hidden mb-6 p-3.5 rounded-md text-sm" style="background:#FBEAEA; border-left:3px solid var(--maroon); color:#5C1A1A;"></div>
+
+  <div class="form-preview-split">
+    <div class="space-y-4">
+
+      <!-- I. KEGIATAN -->
+      <div class="doc-card p-5">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="numeral-chip">I</span>
+          <label for="kegiatan" class="text-sm font-bold tracking-wide" style="color:var(--navy);">KEGIATAN</label>
+        </div>
+        <input
+          type="text"
+          id="kegiatan"
+          value="PELAKSANAAN TUGAS LAPAS KELAS IIB TANJUNG PATI DI PAYAKUMBUH"
+          class="field-input uppercase font-medium"
+          oninput="markEditing(); saveDraft(); updatePreview();"
+        />
+      </div>
+
+      <!-- II. WAKTU & TEMPAT -->
+      <div class="doc-card p-5">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="numeral-chip">II</span>
+          <h2 class="text-sm font-bold tracking-wide" style="color:var(--navy);">WAKTU &amp; TEMPAT</h2>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label for="tanggal_waktu" class="field-label">Hari &amp; Tanggal</label>
+            <div class="flex gap-2 flex-wrap">
+              <input
+                type="text"
+                id="tanggal_waktu"
+                placeholder="Contoh: Rabu, 01 Juli 2026"
+                class="field-input flex-1 min-w-[200px]"
+                oninput="markEditing(); saveDraft(); updatePreview();"
+              />
+              <button type="button" onclick="gunakan_hari_ini()" class="btn-outline">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                Hari Ini
+              </button>
+            </div>
+          </div>
+          <div>
+            <label for="waktu_jam" class="field-label">Jam Dinas</label>
+            <select id="waktu_jam" class="field-select" onchange="markEditing(); saveDraft(); updatePreview();">
+              <option value="07.30 - 17.30 WIB">07.30 - 17.30 WIB (Siang)</option>
+              <option value="17.30 - 07.30 WIB" selected>17.30 - 07.30 WIB (Malam)</option>
+            </select>
+          </div>
+          <div>
+            <label for="tempat" class="field-label">Tempat</label>
+            <input
+              type="text"
+              id="tempat"
+              value="LAPAS KELAS IIB TANJUNG PATI"
+              class="field-input"
+              oninput="markEditing(); saveDraft(); updatePreview();"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- III. URAIAN KEGIATAN -->
+      <div class="doc-card p-5">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="numeral-chip">III</span>
+          <h2 class="text-sm font-bold tracking-wide" style="color:var(--navy);">URAIAN KEGIATAN</h2>
+        </div>
+        <div class="mb-4">
+          <label for="uraian_utama" class="field-label">Uraian Harian (gunakan tanda "-" untuk setiap poin)</label>
+          <textarea
+            id="uraian_utama"
+            placeholder="- Apel Serah Terima&#10;- Briefing dan pembagian tugas&#10;- Kontrol area..."
+            class="field-textarea min-h-40"
+            oninput="markEditing(); checkSmartCorrection(); saveDraft(); updatePreview();"
+          ></textarea>
+          <div id="correction-list" class="mt-2 flex flex-wrap gap-1.5"></div>
+        </div>
+        <div>
+          <label for="pelaksana" class="field-label">Pelaksana Kegiatan</label>
+          <select id="pelaksana" class="field-select" onchange="markEditing(); saveDraft(); updatePreview();">
+            <option value="Kegiatan ini dilaksanakan oleh Kepala Lapas (Kalapas), Kepala Kesatuan Pengamanan Lembaga Pemasyarakatan (Ka.KPLP), Perwira piket Bankam, Karupam, staf KPLP, beserta anggota jaga.">Regu Pengamanan (Piket Malam/Rutin)</option>
+            <option value="Kegiatan ini dilaksanakan oleh Kalapas dan Jajaran, Karupam beserta anggota jaga, Pegawai dan staff beserta CPNS dan Peserta Magang.">Jajaran/Staff Kantor (Apel Pagi/Khusus)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- IV. FOOTER -->
+      <div class="doc-card p-5">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="numeral-chip">IV</span>
+          <h2 class="text-sm font-bold tracking-wide" style="color:var(--navy);">FOOTER &amp; PENUTUP</h2>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label for="kota_tgl" class="field-label">Kota &amp; Tanggal</label>
+            <input
+              type="text"
+              id="kota_tgl"
+              placeholder="Payakumbuh, [Tanggal]"
+              class="field-input"
+              oninput="markEditing(); saveDraft(); updatePreview();"
+            />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="nama_kepala" class="field-label">Nama Kepala &amp; Gelar Resmi</label>
+              <input
+                type="text"
+                id="nama_kepala"
+                value="Elfiandi, A.Md.I.P., S.H., M.H."
+                class="field-input"
+                oninput="markEditing(); saveDraft(); updatePreview();"
+              />
+            </div>
+            <div>
+              <label for="nip" class="field-label">NIP</label>
+              <input
+                type="text"
+                id="nip"
+                value="197503311997031001"
+                class="field-input font-mono"
+                oninput="markEditing(); saveDraft(); updatePreview();"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="h-full">
+      <div class="letterhead sticky top-6 max-h-[calc(100vh-160px)] overflow-y-auto">
+        <div class="letterhead-top">
+          <div class="letterhead-seal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/></svg>
+          </div>
+          <p class="text-[0.65rem] font-semibold tracking-wider uppercase" style="color:var(--muted);">Kementerian Imigrasi &amp; Pemasyarakatan</p>
+          <p class="font-display font-semibold text-sm" style="color:var(--navy);">Lapas Kelas IIB Tanjung Pati</p>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <p class="text-xs font-semibold tracking-wide uppercase" style="color:var(--muted);">Pratinjau Pesan WhatsApp</p>
+          </div>
+          <div id="live-preview" class="whatsapp-bubble">
+            <p class="text-center italic" style="color:#5b5b5b;">Isi data pada form untuk melihat pratinjau…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- STICKY ACTION BAR -->
+<div class="sticky-actions">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2.5">
+      <button onclick="generateReport()" class="btn-primary px-6 py-3 text-sm">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        Buat Laporan
+      </button>
+      <button onclick="copyReport()" id="copyBtn" class="btn-secondary px-6 py-3 text-sm">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Salin
+      </button>
+      <button onclick="resetFields()" class="btn-ghost px-5 py-3 text-sm">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+        Reset
+      </button>
+    </div>
+  </div>
+</div>
+
+<textarea id="output_report" readonly class="hidden"></textarea>
+
+<script>
+    const defaultValues = {};
+    const smartCorrectionMap = {
+      'astekpam': 'Astekpam',
+      'karupam': 'Karupam',
+      'wbp': 'WBP',
+      'sikonik': 'SIKONIK',
+      'kalapas': 'Kalapas',
+      'kplp': 'KPLP',
+      'brandgang': 'Brandgang',
+      'rupam': 'Rupam'
+    };
+
+    let isDirty = false;
+
+    function getFieldIds() {
+      return ['kegiatan', 'tanggal_waktu', 'waktu_jam', 'tempat', 'uraian_utama', 'pelaksana', 'kota_tgl', 'nama_kepala', 'nip'];
+    }
+
+    function setStatusBadge(state) {
+      const badge = document.getElementById('status-badge');
+      if (state === 'READY_TO_COPY') {
+        badge.innerHTML = `<span class="status-dot" style="background:#2E7D46;"></span><span>Siap disalin</span>`;
+      } else if (state === 'EDITING') {
+        badge.innerHTML = `<span class="status-dot pulse" style="background:#D9A441;"></span><span>Mengedit…</span>`;
+      } else if (state === 'DRAFT_SAVED') {
+        badge.innerHTML = `<span class="status-dot" style="background:#2E7D46;"></span><span>Draf tersimpan</span>`;
+      } else {
+        badge.innerHTML = `<span class="status-dot" style="background:var(--maroon);"></span><span>Belum dibuat</span>`;
+      }
+    }
+
+    function updateStatusBadge() {
+      const output = document.getElementById('output_report').value.trim();
+      const draftExists = !!localStorage.getItem('laporan_atensi_draft');
+      if (output) {
+        if (isDirty) return setStatusBadge('EDITING');
+        return setStatusBadge('READY_TO_COPY');
+      }
+      if (draftExists && !isDirty) return setStatusBadge('DRAFT_SAVED');
+      if (isDirty) return setStatusBadge('EDITING');
+      return setStatusBadge('NOT_GENERATED');
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const t = now.toLocaleTimeString('id-ID');
+      document.getElementById('realtime-clock').textContent = t;
+      const m = document.getElementById('realtime-clock-mobile');
+      if (m) m.textContent = t;
+    }
+
+    function formatTanggalId(dateObj) {
+      const weekdays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+      return `${weekdays[dateObj.getDay()]}, ${String(dateObj.getDate()).padStart(2, '0')} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+    }
+
+    function gunakan_hari_ini() {
+      const today = new Date();
+      const formattedDate = formatTanggalId(today);
+      document.getElementById('tanggal_waktu').value = formattedDate;
+
+      const kotaInput = document.getElementById('kota_tgl');
+      kotaInput.value = `Payakumbuh, ${formattedDate}`;
+
+      markEditing();
+      saveDraft();
+      updatePreview();
+    }
+
+    function checkSmartCorrection() {
+      const textarea = document.getElementById('uraian_utama');
+      let original = textarea.value;
+      if (!original) {
+        document.getElementById('correction-list').innerHTML = '';
+        return;
+      }
+
+      let correctedContent = original;
+      const corrections = [];
+
+      for (const [wrong, correct] of Object.entries(smartCorrectionMap)) {
+        const regexWordBoundary = new RegExp(`\\b${wrong}\\b`, 'gi');
+        if (regexWordBoundary.test(correctedContent)) {
+          correctedContent = correctedContent.replace(regexWordBoundary, correct);
+          corrections.push({ wrong, correct });
+        }
+      }
+
+      if (correctedContent !== original) {
+        const start = textarea.selectionStart;
+        textarea.value = correctedContent;
+        textarea.setSelectionRange(start, start);
+      }
+
+      const correctionList = document.getElementById('correction-list');
+      correctionList.innerHTML = corrections.map(c => `<span class="correction-tag">Auto-koreksi: ${c.wrong} → ${c.correct}</span>`).join('');
+    }
+
+    function formatUraianUtama(uraianUtama) {
+      return uraianUtama.split('\n')
+        .map(line => {
+          let trimmed = line.trim();
+          if (trimmed.startsWith('-')) {
+            let content = trimmed.substring(1).trim();
+            if (content.length > 0) content = content.charAt(0).toUpperCase() + content.slice(1);
+            if (content.endsWith(',')) content = content.slice(0, -1).trim();
+            if (content.length > 0 && !['.', '?', '!'].includes(content.slice(-1))) content += '.';
+            return `- ${content}`;
+          }
+          return trimmed;
+        })
+        .filter(line => line.length > 0)
+        .join('\n');
+    }
+
+    function updatePreview() {
+      const preview = document.getElementById('live-preview');
+      const kegiatan = document.getElementById('kegiatan').value;
+      const tanggal = document.getElementById('tanggal_waktu').value;
+      const jam = document.getElementById('waktu_jam').value;
+      const tempat = document.getElementById('tempat').value;
+      const uraianUtama = document.getElementById('uraian_utama').value;
+      const pelaksana = document.getElementById('pelaksana').value;
+      const kotaTgl = document.getElementById('kota_tgl').value;
+      const namaKepala = document.getElementById('nama_kepala').value;
+
+      const safe = (s, placeholder) => (s && s.trim() ? s : placeholder);
+
+      preview.innerText = `*LAPORAN ATENSI PIMPINAN*
+
+*I. KEGIATAN*
+${safe(kegiatan, '(belum diisi)')}
+
+*II. WAKTU & TEMPAT*
+📅 : ${safe(tanggal, '(belum diisi)')}
+🕐 : ${safe(jam, '(belum diisi)')}
+📍 : ${safe(tempat, '(belum diisi)')}
+
+*III. URAIAN KEGIATAN*
+${uraianUtama ? formatUraianUtama(uraianUtama) : '(uraian belum diisi)'}
+
+${pelaksana}
+
+*IV. PENUTUP*
+${safe(kotaTgl, '(kota & tanggal belum diisi)')}
+Kepala,
+
+${safe(namaKepala, '(nama kepala belum diisi)')}`;
+    }
+
+    function validateFields() {
+      let allValid = true;
+      const errorMessages = [];
+      const messageDiv = document.getElementById('validation_message');
+      messageDiv.classList.add('hidden');
+
+      getFieldIds().forEach(id => {
+        const element = document.getElementById(id);
+        if (element && element.value.trim() === '') {
+          allValid = false;
+          element.style.borderColor = 'var(--maroon)';
+          errorMessages.push(id.replace(/_/g, ' ').toUpperCase());
+        } else if (element) {
+          element.style.borderColor = '';
+        }
+      });
+
+      if (!allValid) {
+        messageDiv.classList.remove('hidden');
+        messageDiv.textContent = `Mohon lengkapi kolom: ${errorMessages.join(', ')}`;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return false;
+      }
+      return true;
+    }
+
+    function saveDraft() {
+      const draft = {};
+      getFieldIds().forEach(id => { draft[id] = document.getElementById(id).value; });
+      localStorage.setItem('laporan_atensi_draft', JSON.stringify(draft));
+      updateStatusBadge();
+    }
+
+    function loadDraft() {
+      const draftJson = localStorage.getItem('laporan_atensi_draft');
+      if (!draftJson) return false;
+      const draft = JSON.parse(draftJson);
+      getFieldIds().forEach(id => { if (draft[id] !== undefined) document.getElementById(id).value = draft[id]; });
+      return true;
+    }
+
+    function generateReport() {
+      if (!validateFields()) return;
+
+      const kegiatan = document.getElementById('kegiatan').value.toUpperCase();
+      const tanggalWaktu = document.getElementById('tanggal_waktu').value;
+      const waktuJam = document.getElementById('waktu_jam').value;
+      const tempat = document.getElementById('tempat').value;
+      const uraianUtama = document.getElementById('uraian_utama').value;
+      const pelaksana = document.getElementById('pelaksana').value;
+      const kotaTgl = document.getElementById('kota_tgl').value;
+      const namaKepala = document.getElementById('nama_kepala').value;
+      const nip = document.getElementById('nip').value;
+
+      let pelaksanaFormatted = pelaksana.trim();
+      if (!pelaksanaFormatted.endsWith('.')) pelaksanaFormatted += '.';
+
+      const report = `*LAPORAN ATENSI PIMPINAN*
+
+Kepada Yth :
+1. Direktur Jenderal Pemasyarakatan
+2. Kepala Kantor Wilayah
+Direktorat Jenderal Pemasyarakatan Sumatera Barat
+
+Bersama ini dengan hormat kami laporkan pelaksanaan kegiatan sebagai berikut :
+
+*I. KEGIATAN*
+${kegiatan}
+
+*II. WAKTU & TEMPAT*
+📅 : ${tanggalWaktu}
+🕐 : ${waktuJam}
+📍 : ${tempat}
+
+*III. URAIAN KEGIATAN*
+1. Menindaklanjuti perintah dari Bapak Direktur Jenderal Pemasyarakatan. Berikut uraian kegiatan Lapas Kelas IIB Tanjung Pati pada hari ini:
+${formatUraianUtama(uraianUtama)}
+
+2. ${pelaksanaFormatted}
+
+3. Kegiatan berjalan dengan aman dan tertib.
+
+*IV. PENUTUP*
+Demikian laporan atensi ini disampaikan, selanjutnya mohon petunjuk dan arahan pimpinan.
+
+${kotaTgl}
+Kepala,
+
+Ttd
+
+${namaKepala}
+NIP. ${nip}`;
+
+      document.getElementById('output_report').value = report;
+      document.getElementById('live-preview').innerText = report;
+      isDirty = false;
+      updateStatusBadge();
+      document.getElementById('copyBtn').innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Salin`;
+    }
+
+    function showCopiedState() {
+      const btn = document.getElementById('copyBtn');
+      btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Tersalin`;
+      setTimeout(() => {
+        btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Salin`;
+      }, 2000);
+      isDirty = false;
+      updateStatusBadge();
+    }
+
+    function fallbackCopy(text) {
+      const tempArea = document.createElement('textarea');
+      tempArea.value = text;
+      tempArea.style.position = 'fixed';
+      tempArea.style.opacity = '0';
+      document.body.appendChild(tempArea);
+      tempArea.focus();
+      tempArea.select();
+      let success = false;
+      try {
+        success = document.execCommand('copy');
+      } catch (err) {
+        success = false;
+      }
+      document.body.removeChild(tempArea);
+      return success;
+    }
+
+    function copyReport() {
+      const output = document.getElementById('output_report');
+      if (output.value.trim() === "") generateReport();
+
+      const text = output.value;
+
+      if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          showCopiedState();
+        }).catch(() => {
+          if (fallbackCopy(text)) {
+            showCopiedState();
+          } else {
+            alert('Gagal menyalin otomatis. Silakan salin manual dari kotak teks di bawah (Ctrl+A lalu Ctrl+C).');
+          }
+        });
+      } else {
+        if (fallbackCopy(text)) {
+          showCopiedState();
+        } else {
+          alert('Gagal menyalin otomatis. Silakan salin manual dari kotak teks di bawah (Ctrl+A lalu Ctrl+C).');
+        }
+      }
+    }
+
+    function resetFields() {
+      getFieldIds().forEach(id => {
+        if (defaultValues[id] !== undefined) {
+          document.getElementById(id).value = defaultValues[id];
+          document.getElementById(id).style.borderColor = '';
+        }
+      });
+      localStorage.removeItem('laporan_atensi_draft');
+      document.getElementById('output_report').value = '';
+      isDirty = false;
+      document.getElementById('validation_message').classList.add('hidden');
+      document.getElementById('correction-list').innerHTML = '';
+      updatePreview();
+      updateStatusBadge();
+    }
+
+    function markEditing() {
+      isDirty = true;
+      updateStatusBadge();
+    }
+
+    window.addEventListener('load', () => {
+      getFieldIds().forEach(id => { defaultValues[id] = document.getElementById(id).value; });
+      loadDraft();
+      updateClock();
+      setInterval(updateClock, 1000);
+      updatePreview();
+      updateStatusBadge();
+    });
+</script>
+</body>
+</html>

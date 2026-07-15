@@ -1,0 +1,2429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Portal Operasional Terintegrasi (SIMAP) — Lapas Kelas IIB Tanjung Pati</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #F0EEE9;
+    --surface: #FFFFFF;
+    --surface-alt: #F9F8F5;
+    --surface-hover: #F2EFE9;
+    --navy: #0F1F38;
+    --navy-2: #1B3459;
+    --navy-light: #284B7E;
+    --gold: #C59B27;
+    --gold-soft: #F0E6D2;
+    --gold-border: #D8C395;
+    --maroon: #7A2331;
+    --maroon-soft: #FBEAEA;
+    --ink: #1E232C;
+    --muted: #646C7A;
+    --line: #DFD8C6;
+  }
+
+  * { font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+  .font-display { font-family: 'Source Serif 4', serif; }
+  .font-mono { font-family: 'IBM Plex Mono', monospace; }
+
+  body { background: var(--bg); color: var(--ink); }
+
+  /* NAVIGATION & ACTIVE STATES */
+  .nav-item {
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+  }
+  .nav-item:hover { background: rgba(255, 255, 255, 0.08); }
+  .nav-item.active {
+    background: rgba(197, 155, 39, 0.15);
+    border-left-color: var(--gold);
+    color: #FFFFFF;
+    font-weight: 600;
+  }
+
+  .bottom-nav-item {
+    transition: all 0.2s ease;
+    border-top: 3px solid transparent;
+  }
+  .bottom-nav-item.active {
+    border-top-color: var(--gold);
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* SECTION CARDS */
+  .doc-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(15, 31, 56, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .doc-card:focus-within {
+    border-color: var(--navy-2);
+    box-shadow: 0 4px 16px rgba(15, 31, 56, 0.08);
+  }
+
+  .numeral-chip {
+    width: 32px; height: 32px;
+    background: var(--gold-soft);
+    border: 1px solid var(--gold-border);
+    color: var(--navy);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  /* FORM INPUTS */
+  .field-input, .field-select, .field-textarea {
+    width: 100%;
+    background: var(--surface-alt);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.875rem;
+    color: var(--ink);
+    outline: none;
+    transition: all 0.15s ease;
+  }
+  .field-input:focus, .field-select:focus, .field-textarea:focus {
+    border-color: var(--navy-2);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(27, 52, 89, 0.1);
+  }
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  /* BUTTONS */
+  .btn-primary {
+    background: var(--navy);
+    color: #FFFFFF;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid var(--navy);
+    padding: 0.65rem 1.25rem;
+    transition: all 0.15s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .btn-primary:hover { background: var(--navy-2); border-color: var(--navy-2); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  .btn-gold {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    border-radius: 8px;
+    border: 1px solid var(--gold);
+    padding: 0.65rem 1.25rem;
+    transition: all 0.15s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .btn-gold:hover { background: #D4AB36; }
+  .btn-gold:active { transform: translateY(1px); }
+
+  .btn-outline {
+    border: 1px solid var(--navy);
+    color: var(--navy);
+    background: transparent;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    padding: 0.5rem 0.85rem;
+    transition: all 0.15s ease;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-outline:hover { background: var(--navy); color: #FFFFFF; }
+
+  .btn-secondary {
+    background: var(--surface-alt);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.65rem 1.1rem;
+    transition: all 0.15s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .btn-secondary:hover { background: var(--line); }
+
+  /* STATUS BADGE */
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.25);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+  .status-dot { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; }
+  .status-dot.pulse { animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  /* WHATSAPP BUBBLE PREVIEW */
+  .whatsapp-bubble {
+    background: #DCF8C6;
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    word-wrap: break-word;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: #111B21;
+  }
+
+  /* LETTERHEAD PREVIEW */
+  .letterhead {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letterhead-top {
+    border-bottom: 2px solid var(--navy);
+    padding: 1.1rem 1.25rem 0.9rem;
+    text-align: center;
+    position: relative;
+    background: var(--surface-alt);
+  }
+  .letterhead-seal {
+    width: 44px; height: 44px;
+    margin: 0 auto 0.5rem;
+    border: 2px solid var(--maroon);
+    border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--maroon);
+  }
+
+  .correction-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--navy);
+    background: var(--gold-soft);
+    border: 1px solid var(--gold-border);
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    display: inline-flex; align-items: center; gap: 0.3rem;
+  }
+
+  /* AUTOCOMPLETE LIST */
+  .ac-list { max-height: 230px; }
+  @keyframes flash { 0% { background-color: #bbf7d0; } 100% { background-color: transparent; } }
+  .flash { animation: flash 0.9s ease-out; }
+
+  /* TAB VIEW TRANSITION */
+  .tab-view { display: none; opacity: 0; transition: opacity 0.2s ease-in-out; }
+  .tab-view.active { display: block; opacity: 1; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+</style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row pb-16 md:pb-0">
+
+<!-- ==================== DESKTOP SIDEBAR ==================== -->
+<aside class="hidden md:flex flex-col w-64 flex-shrink-0 z-30" style="background: var(--navy); border-right: 2px solid var(--gold);">
+  <div class="p-5 border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 font-display font-bold text-lg" style="background: var(--gold); color: var(--navy);">
+        P
+      </div>
+      <div class="min-w-0">
+        <h1 class="text-sm font-bold text-white tracking-wide truncate font-display">SIMAP TANJUNG PATI</h1>
+        <p class="text-[11px] leading-tight truncate" style="color: var(--gold-soft);">Lapas Kelas IIB Tanjung Pati</p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto text-sm text-slate-300">
+    <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Navigasi Utama</div>
+    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+      <span>Dashboard Utama</span>
+    </button>
+    <button onclick="switchTab('atensi')" id="nav-atensi" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span>Laporan Atensi Pimpinan</span>
+    </button>
+    <button onclick="switchTab('piket')" id="nav-piket" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+      <span>Reminder Piket Harian</span>
+    </button>
+
+    <div class="pt-4 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Manajemen & Sistem</div>
+    <button onclick="switchTab('database')" id="nav-database" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Database Petugas & Kamus</span>
+    </button>
+    <button onclick="switchTab('history')" id="nav-history" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Riwayat & Backup Data</span>
+    </button>
+  </nav>
+
+  <div class="p-4 border-t border-white/10 text-xs text-slate-400 space-y-1">
+    <div class="flex items-center justify-between">
+      <span>Status Sistem:</span>
+      <span id="sidebar-cloud-status" class="text-emerald-400 font-semibold flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Offline Ready
+      </span>
+    </div>
+    <p class="text-[11px] text-slate-500">Versi 1.0 Terintegrasi</p>
+  </div>
+</aside>
+
+<!-- ==================== MOBILE BOTTOM NAV ==================== -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center py-1.5 px-2 shadow-lg" style="background: var(--navy); border-top: 2px solid var(--gold);">
+  <button onclick="switchTab('dashboard')" id="botnav-dashboard" class="bottom-nav-item active flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+    <span>Home</span>
+  </button>
+  <button onclick="switchTab('atensi')" id="botnav-atensi" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+    <span>Atensi</span>
+  </button>
+  <button onclick="switchTab('piket')" id="botnav-piket" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+    <span>Piket</span>
+  </button>
+  <button onclick="switchTab('database')" id="botnav-database" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    <span>Database</span>
+  </button>
+  <button onclick="switchTab('history')" id="botnav-history" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span>Riwayat</span>
+  </button>
+</nav>
+
+<!-- ==================== MAIN CONTENT AREA ==================== -->
+<div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center justify-between shadow-sm" style="background: var(--navy); border-bottom: 2px solid var(--gold);">
+    <div class="flex items-center gap-3">
+      <div class="md:hidden w-8 h-8 rounded bg-amber-400 flex items-center justify-center font-display font-bold text-slate-900 text-sm">
+        P
+      </div>
+      <div>
+        <h2 id="top-header-title" class="text-base font-bold text-white tracking-wide font-display">Dashboard Utama</h2>
+        <p class="text-xs hidden sm:block" style="color: var(--gold-soft);">Sistem Informasi Manajemen Atensi &amp; Piket — Lapas Kelas IIB Tanjung Pati</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-4 text-right">
+      <div class="font-mono text-sm font-semibold" style="color: var(--gold-soft);" id="clock-wib">00:00:00 WIB</div>
+      <div id="top-status-pill" class="status-pill hidden sm:inline-flex">
+        <span id="top-status-dot" class="status-dot pulse" style="background: #D9A441;"></span>
+        <span id="top-status-text">Siap (Mode Lokal)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-20 md:bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- CONTENT CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- =========================================================
+         TAB 1: DASHBOARD UTAMA
+         ========================================================= -->
+    <div id="view-dashboard" class="tab-view active space-y-6">
+      
+      <!-- WELCOME BANNER -->
+      <div class="doc-card p-6 relative overflow-hidden" style="background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%); color: #FFFFFF; border-color: var(--gold);">
+        <div class="relative z-10 max-w-3xl space-y-2">
+          <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded" style="background: var(--gold); color: var(--navy);">Portal Resmi Kemenkumham / Kemenimipas</span>
+          <h2 class="text-xl sm:text-2xl font-bold font-display">Selamat Datang di Portal Operasional Terintegrasi</h2>
+          <p class="text-sm text-slate-200 leading-relaxed">
+            Sistem terpadu untuk menyusun <strong>Laporan Atensi Pimpinan</strong> dan <strong>Reminder Piket Harian</strong> di lingkungan Lembaga Pemasyarakatan Kelas IIB Tanjung Pati. Semua data tersimpan aman di peramban Anda.
+          </p>
+          <div class="pt-3 flex flex-wrap gap-3">
+            <button onclick="switchTab('atensi')" class="btn-gold text-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              Buat Laporan Atensi
+            </button>
+            <button onclick="switchTab('piket')" class="btn-secondary text-sm !bg-white/10 !text-white !border-white/20 hover:!bg-white/20">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+              Jadwal &amp; Reminder Piket
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS GRID -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="doc-card p-5 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Total Petugas</p>
+            <h3 id="stat-total-officers" class="text-2xl font-bold font-display mt-1" style="color: var(--navy);">0</h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">Tersebar di 5 Kategori Piket</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+          </div>
+        </div>
+
+        <div class="doc-card p-5 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Kamus Auto-Koreksi</p>
+            <h3 id="stat-corrections" class="text-2xl font-bold font-display mt-1" style="color: var(--navy);">0</h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">Istilah teknis pemasyarakatan</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+        </div>
+
+        <div class="doc-card p-5 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Draf Laporan Atensi</p>
+            <h3 id="stat-draft-status" class="text-lg font-bold font-display mt-1 text-emerald-700">Kosong</h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">Auto-save localStorage aktif</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="M9 15l3 3 3-3"/></svg>
+          </div>
+        </div>
+
+        <div class="doc-card p-5 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Riwayat Tersimpan</p>
+            <h3 id="stat-history-count" class="text-2xl font-bold font-display mt-1" style="color: var(--navy);">0</h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">Laporan &amp; reminder disalin</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-700">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANDUAN CEPAT & JAM DINAS -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="doc-card p-5 space-y-3">
+          <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <h3 class="font-bold text-sm font-display" style="color: var(--navy);">Jadwal &amp; Ketentuan Jam Dinas Piket</h3>
+          </div>
+          <ul class="text-xs text-slate-600 space-y-2.5">
+            <li class="flex items-start gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-600 mt-1 shrink-0"></span>
+              <div><strong>Regu Pengamanan (Piket Malam):</strong> Pukul 17.30 - 07.30 WIB. Serah terima dilaksanakan sebelum apel malam di area halaman/kplp.</div>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-600 mt-1 shrink-0"></span>
+              <div><strong>Regu Pengamanan (Piket Siang):</strong> Pukul 07.30 - 17.30 WIB. Apel serah terima pagi bersama jajaran perwira piket.</div>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-600 mt-1 shrink-0"></span>
+              <div><strong>Piket Kunjungan &amp; Layanan Barang:</strong> Pukul 09.00 - 11.30 WIB (Pagi) &amp; 13.30 - 15.00 WIB (Siang).</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="doc-card p-5 space-y-3">
+          <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <h3 class="font-bold text-sm font-display" style="color: var(--navy);">Fitur Unggulan SIMAP</h3>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+              <strong class="block text-slate-800 mb-0.5">⚡ Smart Auto-Correction</strong>
+              <p class="text-slate-500">Ketik singkatan seperti <code>wbp</code> atau <code>astekpam</code>, sistem otomatis mengoreksi ke format baku resmi.</p>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+              <strong class="block text-slate-800 mb-0.5">⚠️ Deteksi Bertugas Ganda</strong>
+              <p class="text-slate-500">Mencegah bentrok jadwal jika satu petugas terpilih di 2 kategori piket dalam hari yang sama.</p>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+              <strong class="block text-slate-800 mb-0.5">💾 Auto-Save &amp; Backup</strong>
+              <p class="text-slate-500">Semua draf otomatis tersimpan. Ekspor data backup dalam format JSON kapan saja.</p>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+              <strong class="block text-slate-800 mb-0.5">📱 Format WhatsApp Rapi</strong>
+              <p class="text-slate-500">Output langsung siap disalin dengan format bold, emoji, dan penomoran standar WA.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =========================================================
+         TAB 2: LAPORAN ATENSI PIMPINAN
+         ========================================================= -->
+    <div id="view-atensi" class="tab-view space-y-6">
+      
+      <div id="atensi-validation-msg" class="hidden p-4 rounded-lg text-sm bg-red-50 border-l-4 border-red-700 text-red-800 font-medium"></div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-6">
+        
+        <!-- FORM ATENSI -->
+        <div class="space-y-4">
+          
+          <!-- I. KEGIATAN -->
+          <div class="doc-card p-5">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="numeral-chip">I</span>
+              <label for="at_kegiatan" class="text-sm font-bold tracking-wide" style="color: var(--navy);">KEGIATAN UTAMA</label>
+            </div>
+            <input
+              type="text"
+              id="at_kegiatan"
+              value="PELAKSANAAN TUGAS LAPAS KELAS IIB TANJUNG PATI DI PAYAKUMBUH"
+              class="field-input uppercase font-semibold"
+              oninput="onAtensiInput()"
+            />
+          </div>
+
+          <!-- II. WAKTU & TEMPAT -->
+          <div class="doc-card p-5">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="numeral-chip">II</span>
+              <h3 class="text-sm font-bold tracking-wide" style="color: var(--navy);">WAKTU &amp; TEMPAT</h3>
+            </div>
+            <div class="space-y-4">
+              <div>
+                <label for="at_tanggal" class="field-label">Hari &amp; Tanggal</label>
+                <div class="flex gap-2 flex-wrap">
+                  <input
+                    type="text"
+                    id="at_tanggal"
+                    placeholder="Contoh: Rabu, 01 Juli 2026"
+                    class="field-input flex-1 min-w-[200px]"
+                    oninput="onAtensiInput()"
+                  />
+                  <button type="button" onclick="setAtensiHariIni()" class="btn-outline text-xs">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                    Hari Ini
+                  </button>
+                  <button type="button" onclick="setAtensiKemarin()" class="btn-outline text-xs">
+                    Kemarin
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="at_jam" class="field-label">Jam Dinas</label>
+                  <select id="at_jam" class="field-select" onchange="onAtensiInput()">
+                    <option value="07.30 - 17.30 WIB">07.30 - 17.30 WIB (Siang)</option>
+                    <option value="17.30 - 07.30 WIB" selected>17.30 - 07.30 WIB (Malam)</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="at_tempat" class="field-label">Tempat</label>
+                  <input
+                    type="text"
+                    id="at_tempat"
+                    value="LAPAS KELAS IIB TANJUNG PATI"
+                    class="field-input"
+                    oninput="onAtensiInput()"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- III. URAIAN KEGIATAN -->
+          <div class="doc-card p-5">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <span class="numeral-chip">III</span>
+                <h3 class="text-sm font-bold tracking-wide" style="color: var(--navy);">URAIAN KEGIATAN</h3>
+              </div>
+              <span class="text-[11px] font-semibold text-slate-400">Gunakan "-" untuk poin</span>
+            </div>
+
+            <!-- QUICK TEMPLATES -->
+            <div class="mb-3">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1.5">⚡ Sisipkan Kalimat Cepat (Template):</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="insertAtensiTemplate('Apel Serah Terima Tugas Regu Pengamanan berjalan aman dan lengkap.')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Apel Serah Terima</button>
+                <button type="button" onclick="insertAtensiTemplate('Melaksanakan kontrol keliling blok hunian dan area brandgang.')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Kontrol Brandgang</button>
+                <button type="button" onclick="insertAtensiTemplate('Pelayanan kunjungan tatap muka dan penitipan barang berjalan tertib.')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Pelayanan Kunjungan</button>
+                <button type="button" onclick="insertAtensiTemplate('Kondisi lapas dalam keadaan aman, tertib, dan terkendali.')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Situasi Aman</button>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <textarea
+                id="at_uraian"
+                placeholder="- Apel Serah Terima Regu Pengamanan...&#10;- Kontrol keliling area blok dan brandgang...&#10;- Kondisi WBP lengkap dan sehat..."
+                class="field-textarea min-h-44 font-sans text-sm"
+                oninput="onAtensiUraianInput()"
+              ></textarea>
+              <div id="atensi-correction-list" class="mt-2 flex flex-wrap gap-1.5"></div>
+            </div>
+
+            <div>
+              <label for="at_pelaksana" class="field-label">Pelaksana Kegiatan</label>
+              <select id="at_pelaksana" class="field-select" onchange="onAtensiInput()">
+                <option value="Kegiatan ini dilaksanakan oleh Kepala Lapas (Kalapas), Kepala Kesatuan Pengamanan Lembaga Pemasyarakatan (Ka.KPLP), Perwira piket Bankam, Karupam, staf KPLP, beserta anggota jaga.">Regu Pengamanan (Piket Malam/Rutin)</option>
+                <option value="Kegiatan ini dilaksanakan oleh Kalapas dan Jajaran, Karupam beserta anggota jaga, Pegawai dan staff beserta CPNS dan Peserta Magang.">Jajaran/Staff Kantor (Apel Pagi/Khusus)</option>
+                <option value="Kegiatan ini dilaksanakan oleh Perwira Piket, Tim Penggeledahan Barang dan Orang, serta Petugas Layanan Kunjungan.">Piket Layanan Kunjungan &amp; Penggeledahan</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- IV. FOOTER -->
+          <div class="doc-card p-5">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="numeral-chip">IV</span>
+              <h3 class="text-sm font-bold tracking-wide" style="color: var(--navy);">PENUTUP &amp; TANDATANGAN</h3>
+            </div>
+            <div class="space-y-4">
+              <div>
+                <label for="at_kota" class="field-label">Kota &amp; Tanggal Laporan</label>
+                <input
+                  type="text"
+                  id="at_kota"
+                  placeholder="Payakumbuh, [Tanggal]"
+                  class="field-input"
+                  oninput="onAtensiInput()"
+                />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="at_nama_kepala" class="field-label">Nama Kepala / Pejabat Penandatangan</label>
+                  <input
+                    type="text"
+                    id="at_nama_kepala"
+                    value="Elfiandi, A.Md.I.P., S.H., M.H."
+                    class="field-input"
+                    oninput="onAtensiInput()"
+                  />
+                </div>
+                <div>
+                  <label for="at_nip" class="field-label">NIP</label>
+                  <input
+                    type="text"
+                    id="at_nip"
+                    value="197503311997031001"
+                    class="field-input font-mono"
+                    oninput="onAtensiInput()"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div class="doc-card p-4 flex flex-wrap gap-3 justify-between items-center bg-slate-50">
+            <div class="flex gap-2">
+              <button onclick="generateAndCopyAtensi()" id="btn-copy-atensi" class="btn-primary text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Buat &amp; Salin Laporan
+              </button>
+              <button onclick="saveAtensiToHistoryManual()" class="btn-gold text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Simpan ke Riwayat
+              </button>
+            </div>
+            <button onclick="resetAtensiForm()" class="btn-secondary text-xs text-red-600 border-red-200 hover:bg-red-50">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+              Reset Form
+            </button>
+          </div>
+
+        </div>
+
+        <!-- LIVE PREVIEW PANEL -->
+        <div class="h-full">
+          <div class="letterhead sticky top-20 max-h-[calc(100vh-110px)] overflow-y-auto">
+            <div class="letterhead-top">
+              <div class="letterhead-seal">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/></svg>
+              </div>
+              <p class="text-[0.65rem] font-bold tracking-wider uppercase text-slate-500">Kementerian Imigrasi &amp; Pemasyarakatan RI</p>
+              <p class="font-display font-bold text-sm sm:text-base" style="color: var(--navy);">Lapas Kelas IIB Tanjung Pati</p>
+            </div>
+            <div class="p-5 space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Pratinjau Pesan WhatsApp</p>
+                </div>
+                <span class="text-[10px] text-slate-400 font-mono">Real-time sync</span>
+              </div>
+              
+              <div id="atensi-live-preview" class="whatsapp-bubble font-sans">
+                <p class="text-center italic text-slate-500 py-4">Isi data pada form di samping untuk melihat pratinjau pesan resmi…</p>
+              </div>
+
+              <p class="text-[11px] text-slate-400 text-center pt-2">
+                Format teks menggunakan asterisk (*) otomatis tebal (Bold) ketika disalin ke WhatsApp.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================================
+         TAB 3: REMINDER PIKET HARIAN
+         ========================================================= -->
+    <div id="view-piket" class="tab-view space-y-6">
+
+      <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-6">
+        
+        <!-- FORM PIKET -->
+        <div class="space-y-4">
+          
+          <!-- HEADER & TANGGAL -->
+          <div class="doc-card p-5 space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Header Pesan Reminder</label>
+              <textarea id="pk_header" rows="2"
+                class="field-textarea text-sm resize-none font-semibold"
+                placeholder="MOHON IZIN MENGINGATKAN PIKET PERWIRA, PIKET KUNJUNGAN &amp; PENGGELEDAHAN BARANG"
+                oninput="onPiketInput()"></textarea>
+              <p class="text-[11px] text-slate-400 mt-1">Kosongkan untuk menggunakan judul standar Lapas.</p>
+            </div>
+
+            <div class="border-t border-slate-200 pt-3">
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Pilih Tanggal Penugasan</label>
+              <div class="flex gap-2 mb-2.5">
+                <button type="button" data-shift="0" class="dateShiftBtn flex-1 text-xs font-bold py-2 rounded-lg bg-navy text-white" style="background: var(--navy);">Hari Ini</button>
+                <button type="button" data-shift="1" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Besok</button>
+                <button type="button" data-shift="2" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Lusa</button>
+              </div>
+              <input type="date" id="pk_date" class="field-input text-sm font-semibold" onchange="onPiketDateChange()">
+              <div class="mt-2.5 text-center rounded-lg py-2 text-sm font-bold border" style="background: var(--gold-soft); border-color: var(--gold-border); color: var(--navy);" id="pk_date_display">—</div>
+            </div>
+          </div>
+
+          <!-- KATEGORI PIKET CONTAINER -->
+          <div id="piket-categories-container" class="space-y-4"></div>
+
+          <!-- TAMBAH KATEGORI BARU -->
+          <div class="doc-card p-4 border-dashed border-2 flex items-center justify-between bg-slate-50/50">
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wide text-slate-600">Perlu Kategori Piket Lain?</h4>
+              <p class="text-[11px] text-slate-400">Tambahkan pos/tugas baru jika ada kegiatan insidentil</p>
+            </div>
+            <button onclick="openCustomCategoryModal()" class="btn-outline text-xs !py-1.5">
+              + Kategori Baru
+            </button>
+          </div>
+
+        </div>
+
+        <!-- PREVIEW PIKET -->
+        <div class="h-full">
+          <div class="doc-card sticky top-20 max-h-[calc(100vh-110px)] overflow-y-auto p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-600">Preview Output Reminder</p>
+              </div>
+              <span id="pk-warn-badge" class="hidden text-[10px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full animate-bounce">
+                ⚠️ Ada Petugas Ganda
+              </span>
+            </div>
+
+            <!-- CATATAN SOP EDITABLE -->
+            <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold uppercase tracking-wide text-slate-500">SOP / Catatan Kunjungan (Bisa Diedit):</span>
+                <button onclick="resetCatatanSop()" class="text-[10px] text-blue-600 hover:underline">Reset SOP Default</button>
+              </div>
+              <textarea id="pk_catatan_sop" rows="4" class="w-full text-xs bg-white border border-slate-300 rounded p-2 focus:ring-1 focus:ring-blue-500 font-sans" oninput="onPiketInput()">1. Kunjungan pagi dimulai pukul 09.00 - 11.00 WIB
+2. Pelayanan titipan barang dimulai pukul 09.00 - 11.30 WIB
+3. Petugas piket yang bertugas harap selalu mematuhi peraturan
+4. Petugas piket harap selalu berkoordinasi dengan Piket Perwira Kunjungan</textarea>
+            </div>
+
+            <pre id="pk-output-box" class="font-mono whitespace-pre-wrap text-[13px] leading-relaxed bg-slate-50 border border-slate-200 rounded-xl p-4 min-h-[160px] text-slate-800"></pre>
+
+            <div class="pt-2 space-y-2.5">
+              <button onclick="copyPiketOutput()" id="btn-copy-piket" class="btn-gold w-full py-3 text-sm font-bold shadow-md">
+                📋 Salin Output Reminder Piket
+              </button>
+              <div class="flex gap-2">
+                <button onclick="savePiketToHistoryManual()" class="btn-secondary flex-1 text-xs">
+                  Simpan ke Riwayat
+                </button>
+                <button onclick="resetPiketForm()" class="btn-secondary flex-1 text-xs text-red-600 hover:bg-red-50">
+                  Reset Jadwal
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================================
+         TAB 4: DATABASE PETUGAS & KAMUS AUTO-KOREKSI
+         ========================================================= -->
+    <div id="view-database" class="tab-view space-y-6">
+      
+      <!-- SUPABASE CLOUD CONFIGURATION CARD -->
+      <div class="doc-card p-5 space-y-4" style="border-left: 4px solid var(--gold); background: var(--surface-alt);">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 class="font-display font-bold text-base text-navy flex items-center gap-2">
+              <span>☁️ Pengaturan Sinkronisasi Supabase Cloud (Real-time Database)</span>
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Hubungkan portal ini ke Supabase agar penambahan petugas dan kamus langsung sinkron ke seluruh perangkat pegawai Lapas.
+            </p>
+          </div>
+          <div id="cfg-cloud-status-badge" class="px-2.5 py-1 rounded-full text-xs font-bold border shrink-0 bg-slate-100 text-slate-600 border-slate-300">
+            📴 Mode Lokal (Offline)
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+          <div>
+            <label class="field-label">Supabase Project URL</label>
+            <input type="text" id="cfg-supa-url" placeholder="https://xyzabc.supabase.co" class="field-input !bg-white font-mono text-xs">
+          </div>
+          <div>
+            <label class="field-label">Supabase Anon Key (Public Key)</label>
+            <input type="password" id="cfg-supa-key" placeholder="eyJhbGciOiJIUzI1NiIsIn..." class="field-input !bg-white font-mono text-xs">
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-slate-200">
+          <div class="text-[11px] text-slate-500 italic">
+            💡 Kunci tersimpan aman di browser Anda. Belum punya kunci? <span class="font-semibold text-navy">Jalankan file <code class="font-mono bg-amber-100 text-amber-900 px-1 rounded">supabase_schema.sql</code> di SQL Editor Supabase Anda.</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="disconnectSupabaseConfig()" type="button" class="btn-secondary text-xs text-red-600 hover:bg-red-50">
+              Putuskan &amp; Pakai Lokal
+            </button>
+            <button onclick="saveSupabaseConfig()" type="button" class="btn-gold text-xs">
+              💾 Simpan &amp; Hubungkan Cloud
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-NAVIGATION TABS -->
+      <div class="flex border-b border-slate-300 gap-6">
+        <button onclick="switchDbSubTab('petugas')" id="subtab-btn-petugas" class="pb-3 text-sm font-bold text-navy border-b-2 border-navy">
+          👥 Daftar &amp; Database Petugas (<span id="db-total-count">0</span>)
+        </button>
+        <button onclick="switchDbSubTab('kamus')" id="subtab-btn-kamus" class="pb-3 text-sm font-semibold text-slate-500 border-b-2 border-transparent hover:text-navy">
+          ⚡ Kamus Smart Auto-Correction (<span id="kamus-total-count">0</span>)
+        </button>
+      </div>
+
+      <!-- SUB-VIEW 1: PETUGAS DATABASE -->
+      <div id="subview-petugas" class="space-y-4">
+        
+        <!-- ADD OFFICER BAR & FILTER -->
+        <div class="doc-card p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-slate-50">
+          <div class="flex flex-1 gap-2 items-center">
+            <select id="db-filter-category" class="field-select !w-44 text-xs font-semibold" onchange="renderOfficersDatabase()">
+              <option value="ALL">Semua Kategori</option>
+              <option value="PERWIRA">Perwira Piket</option>
+              <option value="PB">Penggeledahan Barang (PB)</option>
+              <option value="PO">Penggeledahan Orang (PO)</option>
+              <option value="PD">Pendaftaran / PD</option>
+              <option value="WARTELSUSPAS">Wartelsuspas</option>
+            </select>
+            <input type="text" id="db-search-input" placeholder="Cari nama atau gelar pegawai..." class="field-input text-xs" oninput="renderOfficersDatabase()">
+          </div>
+          <div class="flex gap-2">
+            <button onclick="openAddOfficerModal()" class="btn-primary text-xs shrink-0">
+              + Tambah Petugas Baru
+            </button>
+            <button onclick="resetOfficersToSeed()" class="btn-secondary text-xs text-red-600 hover:bg-red-50 shrink-0">
+              Reset ke Data Asli Lapas
+            </button>
+          </div>
+        </div>
+
+        <!-- OFFICERS TABLE -->
+        <div class="doc-card overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="bg-slate-100 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                  <th class="py-3 px-4 w-12 text-center">No</th>
+                  <th class="py-3 px-4 w-44">Kategori Tugas</th>
+                  <th class="py-3 px-4">Nama Lengkap &amp; Gelar Resmi</th>
+                  <th class="py-3 px-4 w-32 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="db-officers-table-body" class="divide-y divide-slate-200">
+                <!-- Dynamic Content -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUB-VIEW 2: KAMUS AUTO-KOREKSI -->
+      <div id="subview-kamus" class="hidden space-y-4">
+        
+        <div class="doc-card p-4 flex flex-col sm:flex-row gap-3 items-center justify-between bg-slate-50">
+          <div class="text-xs text-slate-600">
+            Kamus ini bekerja otomatis pada saat Anda mengetik di kolom <strong>Uraian Kegiatan Laporan Atensi</strong>. Setiap singkatan/kata salah akan langsung diubah ke format baku.
+          </div>
+          <div class="flex gap-2 shrink-0">
+            <button onclick="openAddCorrectionModal()" class="btn-gold text-xs">
+              + Tambah Kata Kunci Koreksi
+            </button>
+            <button onclick="resetCorrectionsToSeed()" class="btn-secondary text-xs text-red-600 hover:bg-red-50">
+              Reset Kamus Default
+            </button>
+          </div>
+        </div>
+
+        <div class="doc-card overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="bg-slate-100 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                  <th class="py-3 px-4 w-12 text-center">No</th>
+                  <th class="py-3 px-4 w-64">Singkatan / Kata Salah (Ketik Ini)</th>
+                  <th class="py-3 px-4">Hasil Koreksi Baku (Otomatis Menjadi Ini)</th>
+                  <th class="py-3 px-4 w-28 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="db-corrections-table-body" class="divide-y divide-slate-200">
+                <!-- Dynamic Content -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================================
+         TAB 5: RIWAYAT & BACKUP DATA
+         ========================================================= -->
+    <div id="view-history" class="tab-view space-y-6">
+      
+      <!-- BACKUP & RESTORE CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="doc-card p-5 border-l-4" style="border-left-color: var(--navy);">
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-bold text-base font-display" style="color: var(--navy);">Ekspor Data Cadangan (.json)</h3>
+              <p class="text-xs text-slate-500 mt-1">Unduh seluruh database pegawai, kamus auto-koreksi, dan riwayat laporan sebagai file cadangan untuk dipindahkan ke komputer/HP lain.</p>
+            </div>
+            <div class="p-2.5 rounded-lg bg-blue-50 text-blue-700">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </div>
+          </div>
+          <button onclick="exportBackupData()" class="btn-primary text-xs mt-4">
+            Unduh File Backup JSON
+          </button>
+        </div>
+
+        <div class="doc-card p-5 border-l-4 border-emerald-600">
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-bold text-base font-display text-emerald-900">Impor &amp; Pulihkan Data</h3>
+              <p class="text-xs text-slate-500 mt-1">Pilih file backup (.json) yang sebelumnya telah diunduh untuk memulihkan seluruh database dan riwayat ke perangkat ini.</p>
+            </div>
+            <div class="p-2.5 rounded-lg bg-emerald-50 text-emerald-700">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-2">
+            <input type="file" id="import-file-input" accept=".json" class="hidden" onchange="importBackupData(event)">
+            <button onclick="document.getElementById('import-file-input').click()" class="btn-secondary text-xs font-bold border-emerald-300 text-emerald-800 hover:bg-emerald-50">
+              Pilih File Backup &amp; Pulihkan...
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORY LIST -->
+      <div class="doc-card p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+          <div>
+            <h3 class="font-bold text-base font-display" style="color: var(--navy);">Riwayat Laporan &amp; Reminder Tersimpan</h3>
+            <p class="text-xs text-slate-500">Daftar pesan resmi yang pernah disalin atau disimpan</p>
+          </div>
+          <div class="flex gap-2 items-center w-full sm:w-auto">
+            <select id="history-filter-type" class="field-select text-xs !py-1.5" onchange="renderHistoryLog()">
+              <option value="ALL">Semua Jenis</option>
+              <option value="ATENSI">Laporan Atensi</option>
+              <option value="PIKET">Reminder Piket</option>
+            </select>
+            <button onclick="clearAllHistory()" class="btn-secondary text-xs text-red-600 hover:bg-red-50 shrink-0 !py-1.5">
+              Hapus Semua Riwayat
+            </button>
+          </div>
+        </div>
+
+        <div id="history-list-container" class="space-y-3">
+          <!-- Dynamic History Items -->
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- MODAL: ADD/EDIT OFFICER -->
+<div id="modal-officer" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+  <div class="doc-card w-full max-w-md p-6 space-y-4 bg-white">
+    <h3 class="font-bold text-base font-display" style="color: var(--navy);" id="modal-officer-title">Tambah Petugas Baru</h3>
+    <div class="space-y-3 text-sm">
+      <div>
+        <label class="field-label">Kategori Tugas</label>
+        <select id="modal-off-category" class="field-select">
+          <option value="PERWIRA">Perwira Piket</option>
+          <option value="PB">Penggeledahan Barang (PB)</option>
+          <option value="PO">Penggeledahan Orang (PO)</option>
+          <option value="PD">Pendaftaran / PD</option>
+          <option value="WARTELSUSPAS">Pengawasan Wartelsuspas</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">Nama Lengkap Beserta Gelar Resmi</label>
+        <input type="text" id="modal-off-name" placeholder="Contoh: AHMAD HIZBULLAH, S.TR.PAS" class="field-input uppercase font-semibold">
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+      <button onclick="closeOfficerModal()" class="btn-secondary text-xs">Batal</button>
+      <button onclick="saveOfficerModal()" class="btn-primary text-xs">Simpan Petugas</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ADD CORRECTION KEY -->
+<div id="modal-correction" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+  <div class="doc-card w-full max-w-md p-6 space-y-4 bg-white">
+    <h3 class="font-bold text-base font-display" style="color: var(--navy);">Tambah Kata Kunci Koreksi</h3>
+    <div class="space-y-3 text-sm">
+      <div>
+        <label class="field-label">Kata Salah / Singkatan (yang diketik)</label>
+        <input type="text" id="modal-corr-key" placeholder="Contoh: kamtib" class="field-input font-mono lowercase">
+      </div>
+      <div>
+        <label class="field-label">Hasil Koreksi Baku (otomatis berubah menjadi)</label>
+        <input type="text" id="modal-corr-val" placeholder="Contoh: Kamtib" class="field-input font-semibold">
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+      <button onclick="closeCorrectionModal()" class="btn-secondary text-xs">Batal</button>
+      <button onclick="saveCorrectionModal()" class="btn-gold text-xs">Simpan Kamus</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ADD CUSTOM PIKET CATEGORY -->
+<div id="modal-custom-cat" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+  <div class="doc-card w-full max-w-md p-6 space-y-4 bg-white">
+    <h3 class="font-bold text-base font-display" style="color: var(--navy);">Tambah Kategori Piket Baru</h3>
+    <div class="space-y-3 text-sm">
+      <div>
+        <label class="field-label">Kode Kategori (Singkat, tanpa spasi)</label>
+        <input type="text" id="modal-cat-key" placeholder="Contoh: BANKAM" class="field-input uppercase font-mono">
+      </div>
+      <div>
+        <label class="field-label">Nama Lengkap Kategori</label>
+        <input type="text" id="modal-cat-label" placeholder="Contoh: Piket Bantuan Keamanan" class="field-input font-semibold">
+      </div>
+      <div>
+        <label class="field-label">Tema Warna Aksen</label>
+        <select id="modal-cat-color" class="field-select">
+          <option value="blue">Biru (Blue)</option>
+          <option value="rose">Merah (Rose)</option>
+          <option value="violet">Ungu (Violet)</option>
+          <option value="teal">Tosca (Teal)</option>
+          <option value="amber">Emas/Kuning (Amber)</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+      <button onclick="closeCustomCategoryModal()" class="btn-secondary text-xs">Batal</button>
+      <button onclick="saveCustomCategoryModal()" class="btn-primary text-xs">Buat Kategori</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: VIEW HISTORY DETAIL -->
+<div id="modal-history-detail" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+  <div class="doc-card w-full max-w-2xl p-6 space-y-4 bg-white max-h-[85vh] flex flex-col">
+    <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+      <div>
+        <span id="hist-modal-type-badge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider"></span>
+        <h3 id="hist-modal-title" class="font-bold text-base font-display mt-1 text-slate-800"></h3>
+        <p id="hist-modal-time" class="text-xs text-slate-400"></p>
+      </div>
+      <button onclick="closeHistoryDetailModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+    </div>
+    <div class="flex-1 overflow-y-auto bg-slate-50 p-4 rounded-lg border border-slate-200 font-mono text-xs leading-relaxed whitespace-pre-wrap text-slate-800" id="hist-modal-content"></div>
+    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 shrink-0">
+      <button onclick="closeHistoryDetailModal()" class="btn-secondary text-xs">Tutup</button>
+      <button onclick="copyHistoryModalContent()" class="btn-gold text-xs">📋 Salin Ulang Pesan Ini</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- =========================================================================
+     JAVASCRIPT CORE ENGINE & LOGIC
+     ========================================================================= -->
+<script>
+/* ============================================================
+   1. STORAGE ENGINE (StoreManager)
+   ============================================================ */
+const STORAGE_KEYS = {
+  DB: 'simap_db_officers_v1',
+  CORRECTIONS: 'simap_corrections_v1',
+  ATENSI_DRAFT: 'simap_atensi_draft_v1',
+  PIKET_HEADER: 'simap_piket_header_v1',
+  PIKET_ROWS: 'simap_piket_rows_v1',
+  HISTORY: 'simap_history_log_v1',
+  CUSTOM_CATS: 'simap_custom_cats_v1',
+  CLOUD_CONFIG: 'simap_cloud_config_v1'
+};
+
+const SEED_OFFICERS = {
+  PERWIRA: [
+    'NOFIA YONDRI, SH', 'JERI GUNTARA, SH', 'MUHAMMAD HAFIZ, SH', 'HANIF BUDI NUGROHO, S.TR.PAS',
+    'WIYATA MANDALA, SH', 'ADEKA FITRIA, SH', 'DESI ANWAR, SH'
+  ],
+  PB: [
+    'NOVRIADY, SH', 'RIDHA IKHWANUS', 'HANDOKO', 'ZULFIKRI ANSHORI', 'DANIEL J.W. SIHOMBING',
+    'ANJANI DWIKI KURNIAWAN', 'TEDI SEPDIAN, SH', 'JEFFY GUSHENDRA', 'FUAD MHD THAUFIK',
+    'ZENO AULIA ANUGRAH', 'PRATAMA YOSHANANDA', 'ATHAL RAFIF AIMI', 'AHMAD HIZBULLAH, S.TR.PAS', 'M. AMANDA'
+  ],
+  PO: [
+    'HARDI HAFIS', 'EKA RAHMADHAN PUTRA', 'RIDOWAN KOLIF', 'M. TAUFIT HIDAYAT', 'ZIO ALHADI',
+    'DIO ALIF UTAMA', 'RIZKY PUTRA GUSFAR', 'RESTIARA AZARAH, S.KEP, NERS', 'DWI FITRIA YENI',
+    'NOVELLA RAHMI', 'PUTRI LAVENA', 'KEZZIA PUTRI WAZANE'
+  ],
+  PD: [
+    'HARDI HAFIS', 'EKA RAHMADHAN PUTRA', 'RIDOWAN KOLIF', 'M. TAUFIT HIDAYAT', 'ZIO ALHADI',
+    'DIO ALIF UTAMA', 'RIZKY PUTRA GUSFAR', 'RESTIARA AZARAH, S.KEP, NERS', 'DWI FITRIA YENI',
+    'NOVELLA RAHMI', 'PUTRI LAVENA', 'KEZZIA PUTRI WAZANE'
+  ],
+  WARTELSUSPAS: [
+    'NOVRIADY, SH', 'HANDOKO', 'DANIEL J.W. SIHOMBING', 'TEDI SEPDIAN, SH', 'FUAD MHD THAUFIK',
+    'PRATAMA YOSHANANDA', 'AHMAD HIZBULLAH, S.TR.PAS', 'HARDI HAFIS', 'M. AMANDA', 'EKA RAHMADHAN PUTRA',
+    'ZENO AULIA ANUGRAH', 'RIDHA IKHWANUS', 'JEFFY GUSHENDRA', 'ZELFI AFRUL', 'RIDOWAN KOLIF',
+    'M. TAUFIT HIDAYAT', 'ZIO ALHADI', 'ZULFIKRI ANSHORI', 'DIO ALIF UTAMA',
+    'ANJANI DWIKI KURNIAWAN', 'ATHAL RAFIF AIMI', 'RIZKY PUTRA GUSFAR'
+  ]
+};
+
+const SEED_CORRECTIONS = {
+  'astekpam': 'Astekpam',
+  'karupam': 'Karupam',
+  'wbp': 'WBP',
+  'sikonik': 'SIKONIK',
+  'kalapas': 'Kalapas',
+  'kplp': 'KPLP',
+  'brandgang': 'Brandgang',
+  'rupam': 'Rupam',
+  'bankam': 'Bankam',
+  'kamtib': 'Kamtib',
+  'blok hunian': 'Blok Hunian',
+  'p2u': 'P2U'
+};
+
+const DEFAULT_CATEGORIES = [
+  { key: 'PERWIRA', label: 'Perwira Piket', color: 'blue' },
+  { key: 'PB', label: 'Penggeledahan Barang (PB)', color: 'rose' },
+  { key: 'PO', label: 'Penggeledahan Orang (PO)', color: 'violet' },
+  { key: 'PD', label: 'Pendaftaran (SDP) / PD', color: 'teal' },
+  { key: 'WARTELSUSPAS', label: 'Pengawasan Wartelsuspas', color: 'amber' }
+];
+
+let SIMAP_DB = {};
+let SIMAP_CORRECTIONS = {};
+let SIMAP_CUSTOM_CATS = [];
+let PIKET_ROWS_STATE = {};
+let SIMAP_CLOUD = { 
+  url: 'https://mzbwssfkukfvusefwzqk.supabase.co', 
+  key: 'sb_publishable__sLfvo2GwTwmvkp_lbyJXw_3oZaWpSb' 
+};
+let supabaseClient = null;
+
+function loadGlobalStore() {
+  // Load Local first for instant response
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.DB);
+    SIMAP_DB = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(SEED_OFFICERS));
+  } catch(e) { SIMAP_DB = JSON.parse(JSON.stringify(SEED_OFFICERS)); }
+
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.CORRECTIONS);
+    SIMAP_CORRECTIONS = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(SEED_CORRECTIONS));
+  } catch(e) { SIMAP_CORRECTIONS = JSON.parse(JSON.stringify(SEED_CORRECTIONS)); }
+
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.CUSTOM_CATS);
+    SIMAP_CUSTOM_CATS = raw ? JSON.parse(raw) : [];
+  } catch(e) { SIMAP_CUSTOM_CATS = []; }
+
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.CLOUD_CONFIG);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.url && parsed.key) SIMAP_CLOUD = parsed;
+    }
+  } catch(e) {}
+
+  initSupabaseClientAndSync();
+}
+
+function initSupabaseClientAndSync() {
+  if (SIMAP_CLOUD.url && SIMAP_CLOUD.key && window.supabase) {
+    try {
+      supabaseClient = window.supabase.createClient(SIMAP_CLOUD.url, SIMAP_CLOUD.key);
+      updateCloudStatusBadge(true);
+      fetchFromSupabaseCloud();
+    } catch(err) {
+      console.warn('Gagal menginisialisasi Supabase:', err);
+      updateCloudStatusBadge(false);
+    }
+  } else {
+    updateCloudStatusBadge(false);
+  }
+}
+
+function updateCloudStatusBadge(isCloud) {
+  const sideStatus = document.getElementById('sidebar-cloud-status');
+  const topText = document.getElementById('top-status-text');
+  const topDot = document.getElementById('top-status-dot');
+  const cfgBadge = document.getElementById('cfg-cloud-status-badge');
+  
+  if (sideStatus) {
+    sideStatus.innerHTML = isCloud ?
+      `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Cloud Connected` :
+      `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Offline Ready`;
+  }
+  if (topText) topText.textContent = isCloud ? 'Siap (Cloud Sync)' : 'Siap (Mode Lokal)';
+  if (topDot) topDot.style.background = isCloud ? '#10B981' : '#D9A441';
+  if (cfgBadge) {
+    cfgBadge.className = isCloud ? 
+      'px-2.5 py-1 rounded-full text-xs font-bold border shrink-0 bg-emerald-100 text-emerald-800 border-emerald-300' :
+      'px-2.5 py-1 rounded-full text-xs font-bold border shrink-0 bg-slate-100 text-slate-600 border-slate-300';
+    cfgBadge.textContent = isCloud ? '⚡ Terhubung ke Cloud' : '📴 Mode Lokal (Offline)';
+  }
+}
+
+async function fetchFromSupabaseCloud() {
+  if (!supabaseClient) return;
+  try {
+    const { data: offData, error: offErr } = await supabaseClient.from('officers').select('*');
+    if (!offErr && offData && offData.length > 0) {
+      const newDb = {};
+      offData.forEach(row => {
+        if (!newDb[row.category_key]) newDb[row.category_key] = [];
+        newDb[row.category_key].push(row.name);
+      });
+      SIMAP_DB = newDb;
+      localStorage.setItem(STORAGE_KEYS.DB, JSON.stringify(SIMAP_DB));
+      renderOfficersDatabase();
+      renderDashboardStats();
+    }
+
+    const { data: corrData, error: corrErr } = await supabaseClient.from('corrections').select('*');
+    if (!corrErr && corrData && corrData.length > 0) {
+      const newCorr = {};
+      corrData.forEach(row => { newCorr[row.key] = row.value; });
+      SIMAP_CORRECTIONS = newCorr;
+      localStorage.setItem(STORAGE_KEYS.CORRECTIONS, JSON.stringify(SIMAP_CORRECTIONS));
+      renderCorrectionsDatabase();
+    }
+
+    const { data: catData, error: catErr } = await supabaseClient.from('custom_categories').select('*');
+    if (!catErr && catData) {
+      SIMAP_CUSTOM_CATS = catData;
+      localStorage.setItem(STORAGE_KEYS.CUSTOM_CATS, JSON.stringify(SIMAP_CUSTOM_CATS));
+      renderPiketCategories();
+    }
+  } catch(e) { console.warn('Supabase fetch error:', e); }
+}
+
+function saveOfficersStore() {
+  localStorage.setItem(STORAGE_KEYS.DB, JSON.stringify(SIMAP_DB));
+  if (supabaseClient) {
+    const rows = [];
+    Object.entries(SIMAP_DB).forEach(([catKey, names]) => {
+      names.forEach(name => rows.push({ category_key: catKey, name }));
+    });
+    supabaseClient.from('officers').upsert(rows, { onConflict: 'category_key,name' }).then();
+  }
+}
+
+function saveCorrectionsStore() {
+  localStorage.setItem(STORAGE_KEYS.CORRECTIONS, JSON.stringify(SIMAP_CORRECTIONS));
+  if (supabaseClient) {
+    const rows = Object.entries(SIMAP_CORRECTIONS).map(([key, value]) => ({ key, value }));
+    supabaseClient.from('corrections').upsert(rows, { onConflict: 'key' }).then();
+  }
+}
+
+function saveCustomCatsStore() {
+  localStorage.setItem(STORAGE_KEYS.CUSTOM_CATS, JSON.stringify(SIMAP_CUSTOM_CATS));
+  if (supabaseClient) {
+    supabaseClient.from('custom_categories').upsert(SIMAP_CUSTOM_CATS, { onConflict: 'key' }).then();
+  }
+}
+
+function saveSupabaseConfig() {
+  const url = document.getElementById('cfg-supa-url').value.trim();
+  const key = document.getElementById('cfg-supa-key').value.trim();
+  if (!url || !key) {
+    showToast('Project URL dan Anon Key wajib diisi!', 'error');
+    return;
+  }
+  SIMAP_CLOUD = { url, key };
+  localStorage.setItem(STORAGE_KEYS.CLOUD_CONFIG, JSON.stringify(SIMAP_CLOUD));
+  initSupabaseClientAndSync();
+  showToast('Koneksi Supabase Cloud berhasil disimpan dan dihubungkan!');
+}
+
+function disconnectSupabaseConfig() {
+  if (!confirm('Putuskan koneksi dari Supabase Cloud dan gunakan mode lokal sepenuhnya?')) return;
+  SIMAP_CLOUD = { url: '', key: '' };
+  supabaseClient = null;
+  localStorage.removeItem(STORAGE_KEYS.CLOUD_CONFIG);
+  document.getElementById('cfg-supa-url').value = '';
+  document.getElementById('cfg-supa-key').value = '';
+  updateCloudStatusBadge(false);
+  showToast('Koneksi Supabase diputuskan. Aplikasi berjalan di mode lokal.');
+}
+
+function getAllCategories() { return [...DEFAULT_CATEGORIES, ...SIMAP_CUSTOM_CATS]; }
+
+/* ============================================================
+   2. UI TOAST & NOTIFICATION SYSTEM
+   ============================================================ */
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  const bgColor = type === 'success' ? 'bg-navy border-gold' : 'bg-red-800 border-red-400';
+  toast.className = `p-3.5 rounded-xl shadow-2xl border text-white text-sm font-semibold flex items-center gap-2.5 transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto ${bgColor}`;
+  toast.style.background = type === 'success' ? 'var(--navy)' : '#991B1B';
+  toast.style.borderColor = type === 'success' ? 'var(--gold)' : '#F87171';
+
+  toast.innerHTML = `
+    <span class="text-base">${type === 'success' ? '✅' : '⚠️'}</span>
+    <span>${message}</span>
+  `;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.remove('translate-y-2', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+  }, 20);
+
+  setTimeout(() => {
+    toast.classList.remove('translate-y-0', 'opacity-100');
+    toast.classList.add('translate-y-2', 'opacity-0');
+    setTimeout(() => toast.remove(), 300);
+  }, 2800);
+}
+
+/* ============================================================
+   3. NAVIGATION TAB SYSTEM
+   ============================================================ */
+function switchTab(tabId) {
+  // Hide all tab views
+  document.querySelectorAll('.tab-view').forEach(view => {
+    view.classList.remove('active');
+  });
+  // Show selected tab
+  const activeView = document.getElementById(`view-${tabId}`);
+  if (activeView) activeView.classList.add('active');
+
+  // Update Desktop Nav
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  const activeNav = document.getElementById(`nav-${tabId}`);
+  if (activeNav) activeNav.classList.add('active');
+
+  // Update Mobile Botnav
+  document.querySelectorAll('.bottom-nav-item').forEach(item => item.classList.remove('active'));
+  const activeBotNav = document.getElementById(`botnav-${tabId}`);
+  if (activeBotNav) activeBotNav.classList.add('active');
+
+  // Update Header Title
+  const titles = {
+    dashboard: 'Dashboard Utama SIMAP',
+    atensi: 'Generator Laporan Atensi Pimpinan',
+    piket: 'Generator Reminder Piket Harian',
+    database: 'Manajemen Database & Kamus Koreksi',
+    history: 'Riwayat Tersimpan & Backup Data'
+  };
+  document.getElementById('top-header-title').textContent = titles[tabId] || 'Portal Operasional';
+
+  // Refresh data on enter
+  if (tabId === 'dashboard') renderDashboardStats();
+  if (tabId === 'database') {
+    renderOfficersDatabase();
+    if (document.getElementById('cfg-supa-url')) {
+      document.getElementById('cfg-supa-url').value = SIMAP_CLOUD.url || '';
+      document.getElementById('cfg-supa-key').value = SIMAP_CLOUD.key || '';
+    }
+  }
+  if (tabId === 'history') renderHistoryLog();
+  if (tabId === 'piket') renderPiketCategories();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   4. CLOCK WIB & DASHBOARD STATS
+   ============================================================ */
+function startClock() {
+  function update() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const el = document.getElementById('clock-wib');
+    if (el) el.textContent = `${timeStr} WIB`;
+  }
+  update();
+  setInterval(update, 1000);
+}
+
+function renderDashboardStats() {
+  // Total Officers
+  const allNames = new Set();
+  Object.values(SIMAP_DB).forEach(arr => {
+    if (Array.isArray(arr)) arr.forEach(name => allNames.add(name));
+  });
+  document.getElementById('stat-total-officers').textContent = allNames.size;
+
+  // Corrections
+  document.getElementById('stat-corrections').textContent = Object.keys(SIMAP_CORRECTIONS).length;
+
+  // Draft status
+  const atensiDraft = localStorage.getItem(STORAGE_KEYS.ATENSI_DRAFT);
+  const draftBadge = document.getElementById('stat-draft-status');
+  if (atensiDraft) {
+    draftBadge.textContent = 'Ada Draf Aktif';
+    draftBadge.className = 'text-lg font-bold font-display mt-1 text-amber-600';
+  } else {
+    draftBadge.textContent = 'Kosong';
+    draftBadge.className = 'text-lg font-bold font-display mt-1 text-emerald-700';
+  }
+
+  // History count
+  let hist = [];
+  try { hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e){}
+  document.getElementById('stat-history-count').textContent = hist.length;
+}
+
+/* ============================================================
+   5. MODUL LAPORAN ATENSI PIMPINAN
+   ============================================================ */
+function getAtensiFieldIds() {
+  return ['at_kegiatan', 'at_tanggal', 'at_jam', 'at_tempat', 'at_uraian', 'at_pelaksana', 'at_kota', 'at_nama_kepala', 'at_nip'];
+}
+
+function formatTanggalId(dateObj) {
+  const weekdays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  return `${weekdays[dateObj.getDay()]}, ${String(dateObj.getDate()).padStart(2, '0')} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+}
+
+function setAtensiHariIni() {
+  const today = new Date();
+  const formatted = formatTanggalId(today);
+  document.getElementById('at_tanggal').value = formatted;
+  document.getElementById('at_kota').value = `Payakumbuh, ${formatted}`;
+  onAtensiInput();
+}
+
+function setAtensiKemarin() {
+  const yest = new Date();
+  yest.setDate(yest.getDate() - 1);
+  const formatted = formatTanggalId(yest);
+  document.getElementById('at_tanggal').value = formatted;
+  document.getElementById('at_kota').value = `Payakumbuh, ${formatted}`;
+  onAtensiInput();
+}
+
+function insertAtensiTemplate(text) {
+  const textarea = document.getElementById('at_uraian');
+  const current = textarea.value.trim();
+  if (current === '') {
+    textarea.value = `- ${text}\n`;
+  } else {
+    textarea.value = `${current}\n- ${text}\n`;
+  }
+  onAtensiUraianInput();
+}
+
+function formatUraianUtama(uraian) {
+  return uraian.split('\n')
+    .map(line => {
+      let trimmed = line.trim();
+      if (trimmed.startsWith('-')) {
+        let content = trimmed.substring(1).trim();
+        if (content.length > 0) content = content.charAt(0).toUpperCase() + content.slice(1);
+        if (content.endsWith(',')) content = content.slice(0, -1).trim();
+        if (content.length > 0 && !['.', '?', '!'].includes(content.slice(-1))) content += '.';
+        return `- ${content}`;
+      }
+      return trimmed;
+    })
+    .filter(line => line.length > 0)
+    .join('\n');
+}
+
+function onAtensiUraianInput() {
+  const textarea = document.getElementById('at_uraian');
+  let original = textarea.value;
+  if (!original) {
+    document.getElementById('atensi-correction-list').innerHTML = '';
+    onAtensiInput();
+    return;
+  }
+
+  let corrected = original;
+  const triggered = [];
+
+  for (const [wrong, correct] of Object.entries(SIMAP_CORRECTIONS)) {
+    const reg = new RegExp(`\\b${wrong}\\b`, 'gi');
+    if (reg.test(corrected)) {
+      corrected = corrected.replace(reg, correct);
+      triggered.push({ wrong, correct });
+    }
+  }
+
+  if (corrected !== original) {
+    const start = textarea.selectionStart;
+    textarea.value = corrected;
+    textarea.setSelectionRange(start, start);
+  }
+
+  const listEl = document.getElementById('atensi-correction-list');
+  listEl.innerHTML = triggered.map(t => `<span class="correction-tag">Auto-koreksi: ${t.wrong} → ${t.correct}</span>`).join('');
+
+  onAtensiInput();
+}
+
+function onAtensiInput() {
+  // Save draft
+  const draft = {};
+  getAtensiFieldIds().forEach(id => {
+    const el = document.getElementById(id);
+    if (el) draft[id] = el.value;
+  });
+  localStorage.setItem(STORAGE_KEYS.ATENSI_DRAFT, JSON.stringify(draft));
+
+  // Update Preview
+  const kegiatan = document.getElementById('at_kegiatan').value;
+  const tanggal = document.getElementById('at_tanggal').value;
+  const jam = document.getElementById('at_jam').value;
+  const tempat = document.getElementById('at_tempat').value;
+  const uraian = document.getElementById('at_uraian').value;
+  const pelaksana = document.getElementById('at_pelaksana').value;
+  const kota = document.getElementById('at_kota').value;
+  const nama = document.getElementById('at_nama_kepala').value;
+
+  const safe = (s, p) => (s && s.trim() ? s : p);
+
+  const preview = document.getElementById('atensi-live-preview');
+  preview.innerText = `*LAPORAN ATENSI PIMPINAN*
+
+*I. KEGIATAN*
+${safe(kegiatan, '(kegiatan belum diisi)')}
+
+*II. WAKTU & TEMPAT*
+📅 : ${safe(tanggal, '(tanggal belum diisi)')}
+🕐 : ${safe(jam, '(jam dinas belum dipilih)')}
+📍 : ${safe(tempat, '(tempat belum diisi)')}
+
+*III. URAIAN KEGIATAN*
+${uraian ? formatUraianUtama(uraian) : '(uraian kegiatan belum diisi)'}
+
+${pelaksana}
+
+*IV. PENUTUP*
+${safe(kota, '(kota & tanggal belum diisi)')}
+Kepala,
+
+${safe(nama, '(nama kepala belum diisi)')}`;
+
+  // Hide validation error if any
+  document.getElementById('atensi-validation-msg').classList.add('hidden');
+}
+
+function loadAtensiDraft() {
+  const raw = localStorage.getItem(STORAGE_KEYS.ATENSI_DRAFT);
+  if (!raw) return;
+  try {
+    const draft = JSON.parse(raw);
+    getAtensiFieldIds().forEach(id => {
+      const el = document.getElementById(id);
+      if (el && draft[id] !== undefined) el.value = draft[id];
+    });
+    onAtensiInput();
+  } catch(e){}
+}
+
+function resetAtensiForm() {
+  if (!confirm('Apakah Anda yakin ingin mengosongkan seluruh form Laporan Atensi?')) return;
+  document.getElementById('at_kegiatan').value = 'PELAKSANAAN TUGAS LAPAS KELAS IIB TANJUNG PATI DI PAYAKUMBUH';
+  document.getElementById('at_tanggal').value = '';
+  document.getElementById('at_jam').selectedIndex = 1;
+  document.getElementById('at_tempat').value = 'LAPAS KELAS IIB TANJUNG PATI';
+  document.getElementById('at_uraian').value = '';
+  document.getElementById('at_pelaksana').selectedIndex = 0;
+  document.getElementById('at_kota').value = '';
+  document.getElementById('at_nama_kepala').value = 'Elfiandi, A.Md.I.P., S.H., M.H.';
+  document.getElementById('at_nip').value = '197503311997031001';
+
+  localStorage.removeItem(STORAGE_KEYS.ATENSI_DRAFT);
+  document.getElementById('atensi-correction-list').innerHTML = '';
+  onAtensiInput();
+  showToast('Formulir Laporan Atensi berhasil direset', 'success');
+}
+
+function generateAtensiFullReportText() {
+  const kegiatan = document.getElementById('at_kegiatan').value.toUpperCase();
+  const tanggal = document.getElementById('at_tanggal').value;
+  const jam = document.getElementById('at_jam').value;
+  const tempat = document.getElementById('at_tempat').value;
+  const uraian = document.getElementById('at_uraian').value;
+  const pelaksana = document.getElementById('at_pelaksana').value;
+  const kota = document.getElementById('at_kota').value;
+  const nama = document.getElementById('at_nama_kepala').value;
+  const nip = document.getElementById('at_nip').value;
+
+  let pelaksanaFormatted = pelaksana.trim();
+  if (!pelaksanaFormatted.endsWith('.')) pelaksanaFormatted += '.';
+
+  return `*LAPORAN ATENSI PIMPINAN*
+
+Kepada Yth :
+1. Direktur Jenderal Pemasyarakatan
+2. Kepala Kantor Wilayah
+Direktorat Jenderal Pemasyarakatan Sumatera Barat
+
+Bersama ini dengan hormat kami laporkan pelaksanaan kegiatan sebagai berikut :
+
+*I. KEGIATAN*
+${kegiatan}
+
+*II. WAKTU & TEMPAT*
+📅 : ${tanggal}
+🕐 : ${jam}
+📍 : ${tempat}
+
+*III. URAIAN KEGIATAN*
+1. Menindaklanjuti perintah dari Bapak Direktur Jenderal Pemasyarakatan. Berikut uraian kegiatan Lapas Kelas IIB Tanjung Pati pada hari ini:
+${formatUraianUtama(uraian)}
+
+2. ${pelaksanaFormatted}
+
+3. Kegiatan berjalan dengan aman dan tertib.
+
+*IV. PENUTUP*
+Demikian laporan atensi ini disampaikan, selanjutnya mohon petunjuk dan arahan pimpinan.
+
+${kota}
+Kepala,
+
+Ttd
+
+${nama}
+NIP. ${nip}`;
+}
+
+function generateAndCopyAtensi() {
+  // Validate required fields
+  const required = ['at_kegiatan', 'at_tanggal', 'at_uraian', 'at_kota', 'at_nama_kepala'];
+  const msgEl = document.getElementById('atensi-validation-msg');
+  let valid = true;
+
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.style.borderColor = 'var(--maroon)';
+      valid = false;
+    } else {
+      el.style.borderColor = '';
+    }
+  });
+
+  if (!valid) {
+    msgEl.textContent = 'Mohon lengkapi kolom yang berwarna merah sebelum menyalin laporan!';
+    msgEl.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  const fullReport = generateAtensiFullReportText();
+
+  // Copy to clipboard
+  copyToClipboardHelper(fullReport, () => {
+    const btn = document.getElementById('btn-copy-atensi');
+    const origHtml = btn.innerHTML;
+    btn.innerHTML = `✅ Tersalin ke Clipboard!`;
+    setTimeout(() => btn.innerHTML = origHtml, 2000);
+
+    // Auto save history
+    addHistoryEntry('ATENSI', `Laporan Atensi (${document.getElementById('at_tanggal').value})`, fullReport);
+    showToast('Laporan Atensi berhasil disalin & disimpan ke riwayat!');
+  });
+}
+
+function saveAtensiToHistoryManual() {
+  if (!document.getElementById('at_uraian').value.trim()) {
+    showToast('Uraian kegiatan masih kosong!', 'error');
+    return;
+  }
+  const fullReport = generateAtensiFullReportText();
+  addHistoryEntry('ATENSI', `Laporan Atensi (${document.getElementById('at_tanggal').value || 'Tanpa Tanggal'})`, fullReport);
+  showToast('Laporan berhasil disimpan ke halaman Riwayat!');
+}
+
+/* ============================================================
+   6. MODUL REMINDER PIKET HARIAN
+   ============================================================ */
+const colorMapStyles = {
+  blue: { bg: 'bg-blue-50', text: 'text-blue-800', border: 'border-blue-200', btn: 'text-blue-700 bg-blue-50 hover:bg-blue-100 border-blue-300' },
+  rose: { bg: 'bg-rose-50', text: 'text-rose-800', border: 'border-rose-200', btn: 'text-rose-700 bg-rose-50 hover:bg-rose-100 border-rose-300' },
+  violet: { bg: 'bg-violet-50', text: 'text-violet-800', border: 'border-violet-200', btn: 'text-violet-700 bg-violet-50 hover:bg-violet-100 border-violet-300' },
+  teal: { bg: 'bg-teal-50', text: 'text-teal-800', border: 'border-teal-200', btn: 'text-teal-700 bg-teal-50 hover:bg-teal-100 border-teal-300' },
+  amber: { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200', btn: 'text-amber-700 bg-amber-50 hover:bg-amber-100 border-amber-300' }
+};
+
+const HARI_ID = ['MINGGU','SENIN','SELASA','RABU','KAMIS',"JUM'AT",'SABTU'];
+const BULAN_ID = ['','JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+
+function initPiketState() {
+  const cats = getAllCategories();
+  cats.forEach(c => {
+    if (!PIKET_ROWS_STATE[c.key]) PIKET_ROWS_STATE[c.key] = [''];
+    if (!SIMAP_DB[c.key]) SIMAP_DB[c.key] = [];
+  });
+}
+
+function renderPiketCategories() {
+  initPiketState();
+  const container = document.getElementById('piket-categories-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const cats = getAllCategories();
+  cats.forEach(cat => {
+    const st = colorMapStyles[cat.color] || colorMapStyles.blue;
+    const section = document.createElement('section');
+    section.className = `doc-card overflow-hidden border ${st.border}`;
+    section.innerHTML = `
+      <div class="${st.bg} px-4 py-2.5 flex items-center justify-between border-b ${st.border}">
+        <h3 class="text-xs font-bold uppercase tracking-wider ${st.text}">${cat.label}</h3>
+        <span class="text-[10px] font-bold ${st.text} bg-white/80 px-2 py-0.5 rounded-full border ${st.border}" id="pk-count-${cat.key}">0 orang</span>
+      </div>
+      <div class="p-3 space-y-2.5" id="pk-rows-${cat.key}"></div>
+      <div class="px-3 pb-3">
+        <button type="button" onclick="addPiketRow('${cat.key}')" class="w-full text-xs font-bold py-2 rounded-lg border border-dashed ${st.btn} transition-all">
+          + Tambah Petugas ${cat.label}
+        </button>
+      </div>
+    `;
+    container.appendChild(section);
+    renderPiketRowsForCategory(cat.key);
+  });
+
+  generatePiketOutput();
+}
+
+function renderPiketRowsForCategory(catKey) {
+  const wrap = document.getElementById(`pk-rows-${catKey}`);
+  if (!wrap) return;
+  wrap.innerHTML = '';
+
+  const rows = PIKET_ROWS_STATE[catKey] || [];
+  const filledCount = rows.filter(Boolean).length;
+  const countBadge = document.getElementById(`pk-count-${catKey}`);
+  if (countBadge) countBadge.textContent = `${filledCount} orang`;
+
+  rows.forEach((val, idx) => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'relative';
+    rowEl.innerHTML = `
+      <div class="flex gap-2 items-center">
+        <span class="text-xs font-mono text-slate-400 w-5 text-right shrink-0">${idx + 1}.</span>
+        <div class="relative flex-1">
+          <input type="text" autocomplete="off"
+            class="pkAcInput field-input !py-1.5 text-xs font-semibold"
+            data-cat="${catKey}" data-idx="${idx}"
+            placeholder="Cari atau ketik nama petugas..." value="${val || ''}"
+            oninput="onPiketAutocompleteInput(this)"
+            onfocus="openPiketDropdown(this)">
+          <div class="pkAcDropdown hidden absolute z-30 mt-1 w-full bg-white border border-slate-300 rounded-lg shadow-xl overflow-y-auto ac-list"></div>
+        </div>
+        <button type="button" onclick="removePiketRow('${catKey}', ${idx})" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-100 text-slate-400 hover:bg-red-100 hover:text-red-600 font-bold text-xs shrink-0">✕</button>
+      </div>
+      <div class="pkDupWarning hidden text-[11px] text-red-600 font-bold mt-1 ml-7 flex items-center gap-1">
+        <span>⚠️</span> <span>Nama ini sudah dipilih di kategori ini.</span>
+      </div>
+    `;
+    wrap.appendChild(rowEl);
+  });
+
+  checkPiketDuplicates(catKey);
+}
+
+function addPiketRow(catKey) {
+  PIKET_ROWS_STATE[catKey].push('');
+  renderPiketRowsForCategory(catKey);
+  generatePiketOutput();
+}
+
+function removePiketRow(catKey, idx) {
+  PIKET_ROWS_STATE[catKey].splice(idx, 1);
+  if (PIKET_ROWS_STATE[catKey].length === 0) PIKET_ROWS_STATE[catKey].push('');
+  renderPiketRowsForCategory(catKey);
+  generatePiketOutput();
+}
+
+function setPiketRowValue(catKey, idx, name) {
+  PIKET_ROWS_STATE[catKey][idx] = name;
+  renderPiketRowsForCategory(catKey);
+  generatePiketOutput();
+}
+
+function openPiketDropdown(input) {
+  const cat = input.dataset.cat;
+  const idx = parseInt(input.dataset.idx);
+  const dropdown = input.parentElement.querySelector('.pkAcDropdown');
+  const query = input.value.trim().toUpperCase();
+  const list = SIMAP_DB[cat] || [];
+  const filtered = query ? list.filter(n => n.toUpperCase().includes(query)) : list;
+
+  let html = '';
+  filtered.slice(0, 45).forEach(name => {
+    html += `<div class="px-3 py-2 text-xs hover:bg-amber-50 cursor-pointer font-medium text-slate-800 border-b border-slate-100 last:border-none flex justify-between items-center" onmousedown="setPiketRowValue('${cat}', ${idx}, '${name.replace(/'/g, "\\'")}')">
+      <span>${name}</span>
+      <span class="text-[10px] text-slate-400 uppercase">${cat}</span>
+    </div>`;
+  });
+
+  const exactExists = list.some(n => n.toUpperCase() === query);
+  if (query && !exactExists) {
+    html += `<div class="px-3 py-2.5 text-xs text-emerald-700 font-bold hover:bg-emerald-50 cursor-pointer border-t border-slate-200" onmousedown="addNewOfficerAndSelect('${cat}', ${idx}, '${query.replace(/'/g, "\\'")}')">
+      + Tambah "${query}" ke Database ${cat}
+    </div>`;
+  }
+
+  if (!html) html = `<div class="px-3 py-2 text-xs text-slate-400 italic">Tidak ditemukan. Ketik nama lalu pilih opsi tambah.</div>`;
+
+  dropdown.innerHTML = html;
+  dropdown.classList.remove('hidden');
+}
+
+function onPiketAutocompleteInput(input) {
+  const cat = input.dataset.cat;
+  const idx = parseInt(input.dataset.idx);
+  PIKET_ROWS_STATE[cat][idx] = input.value.toUpperCase();
+  openPiketDropdown(input);
+  generatePiketOutput();
+  checkPiketDuplicates(cat);
+}
+
+function addNewOfficerAndSelect(catKey, idx, name) {
+  if (!SIMAP_DB[catKey].includes(name)) {
+    SIMAP_DB[catKey].push(name);
+    saveOfficersStore();
+    showToast(`Petugas "${name}" berhasil ditambahkan ke database ${catKey}`);
+  }
+  setPiketRowValue(catKey, idx, name);
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.classList.contains('pkAcInput')) {
+    document.querySelectorAll('.pkAcDropdown').forEach(d => d.classList.add('hidden'));
+  }
+});
+
+function checkPiketDuplicates(catKey) {
+  const wrap = document.getElementById(`pk-rows-${catKey}`);
+  if (!wrap) return;
+  const vals = (PIKET_ROWS_STATE[catKey] || []).map(v => (v || '').trim().toUpperCase());
+
+  wrap.querySelectorAll('.pkDupWarning').forEach((warnEl, idx) => {
+    const name = vals[idx];
+    if (!name) { warnEl.classList.add('hidden'); return; }
+    const count = vals.filter(v => v === name).length;
+    if (count > 1) {
+      warnEl.classList.remove('hidden');
+    } else {
+      warnEl.classList.add('hidden');
+    }
+  });
+}
+
+function checkCrossCategoryDuplicates() {
+  const nameToCats = {};
+  const cats = getAllCategories();
+  cats.forEach(cat => {
+    const uniqueInCat = new Set((PIKET_ROWS_STATE[cat.key] || []).map(v => (v || '').trim().toUpperCase()).filter(Boolean));
+    uniqueInCat.forEach(name => {
+      if (!nameToCats[name]) nameToCats[name] = new Set();
+      nameToCats[name].add(cat.label);
+    });
+  });
+  const crossDupes = Object.entries(nameToCats).filter(([name, set]) => set.size > 1);
+  return crossDupes;
+}
+
+function toLocalISO(d) {
+  const tz = d.getTimezoneOffset() * 60000;
+  return new Date(d - tz).toISOString().slice(0, 10);
+}
+
+function setPiketDateByShift(shift) {
+  const d = new Date();
+  d.setDate(d.getDate() + shift);
+  const dateInput = document.getElementById('pk_date');
+  if (dateInput) dateInput.value = toLocalISO(d);
+  updatePiketDateDisplay();
+
+  document.querySelectorAll('.dateShiftBtn').forEach(btn => {
+    const active = parseInt(btn.dataset.shift) === shift;
+    btn.className = `dateShiftBtn flex-1 text-xs font-bold py-2 rounded-lg ${active ? 'bg-navy text-white' : 'bg-slate-100 text-slate-700 border border-slate-300'}`;
+    if (active) btn.style.background = 'var(--navy)';
+    else btn.style.background = '#F1F5F9';
+  });
+}
+
+function onPiketDateChange() {
+  document.querySelectorAll('.dateShiftBtn').forEach(btn => {
+    btn.className = 'dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300';
+    btn.style.background = '#F1F5F9';
+  });
+  updatePiketDateDisplay();
+}
+
+function updatePiketDateDisplay() {
+  const dateInput = document.getElementById('pk_date');
+  const display = document.getElementById('pk_date_display');
+  if (!dateInput || !display) return;
+  if (!dateInput.value) { display.textContent = '—'; return; }
+  const [y, m, day] = dateInput.value.split('-').map(Number);
+  const d = new Date(y, m - 1, day);
+  const text = `${HARI_ID[d.getDay()]}, ${day} ${BULAN_ID[m]} ${y}`;
+  display.textContent = text;
+  generatePiketOutput();
+}
+
+function onPiketInput() { generatePiketOutput(); }
+
+function resetCatatanSop() {
+  document.getElementById('pk_catatan_sop').value = `1. Kunjungan pagi dimulai pukul 09.00 - 11.00 WIB\n2. Pelayanan titipan barang dimulai pukul 09.00 - 11.30 WIB\n3. Petugas piket yang bertugas harap selalu mematuhi peraturan\n4. Petugas piket harap selalu berkoordinasi dengan Piket Perwira Kunjungan`;
+  generatePiketOutput();
+}
+
+function generatePiketOutput() {
+  const headerInput = document.getElementById('pk_header');
+  const display = document.getElementById('pk_date_display');
+  const outputBox = document.getElementById('pk-output-box');
+  const warnBadge = document.getElementById('pk-warn-badge');
+  if (!outputBox) return;
+
+  const header = (headerInput && headerInput.value.trim()) ? headerInput.value.trim() : 'MOHON IZIN MENGINGATKAN PIKET PERWIRA, PIKET KUNJUNGAN & PENGGELEDAHAN BARANG';
+  const dateLine = (display && display.textContent !== '—') ? display.textContent : '';
+
+  let out = `${header}\n\n${dateLine}\n`;
+
+  const cats = getAllCategories();
+  cats.forEach(cat => {
+    const names = (PIKET_ROWS_STATE[cat.key] || []).map(n => (n || '').trim().toUpperCase()).filter(Boolean);
+    if (names.length === 0) return;
+    out += `\n*${cat.label}*\n`;
+    names.forEach((n, i) => { out += `${i + 1}. ${n}\n`; });
+  });
+
+  const catatanText = document.getElementById('pk_catatan_sop').value.trim();
+  if (catatanText) {
+    out += `\n*Catatan :*\n${catatanText}\n`;
+  }
+  out += `\nTerima Kasih 🙏🙏`;
+
+  outputBox.textContent = out;
+
+  const crossDupes = checkCrossCategoryDuplicates();
+  if (crossDupes.length > 0 && warnBadge) {
+    warnBadge.classList.remove('hidden');
+    const msg = crossDupes.map(([n, c]) => `${n} (${[...c].join(' & ')})`).join(', ');
+    warnBadge.title = `Petugas terpilih ganda: ${msg}`;
+  } else if (warnBadge) {
+    warnBadge.classList.add('hidden');
+  }
+}
+
+function copyPiketOutput() {
+  const out = document.getElementById('pk-output-box').textContent;
+  copyToClipboardHelper(out, () => {
+    const btn = document.getElementById('btn-copy-piket');
+    const origHtml = btn.innerHTML;
+    btn.innerHTML = `✅ Tersalin ke Clipboard!`;
+    setTimeout(() => btn.innerHTML = origHtml, 2000);
+
+    const display = document.getElementById('pk_date_display').textContent;
+    addHistoryEntry('PIKET', `Reminder Piket (${display || 'Tanpa Tanggal'})`, out);
+    showToast('Reminder Piket berhasil disalin & disimpan ke riwayat!');
+  });
+}
+
+function savePiketToHistoryManual() {
+  const out = document.getElementById('pk-output-box').textContent;
+  const display = document.getElementById('pk_date_display').textContent;
+  addHistoryEntry('PIKET', `Reminder Piket (${display || 'Tanpa Tanggal'})`, out);
+  showToast('Reminder berhasil disimpan ke halaman Riwayat!');
+}
+
+function resetPiketForm() {
+  if (!confirm('Apakah Anda yakin ingin mereset seluruh nama petugas dan jadwal di form piket?')) return;
+  const cats = getAllCategories();
+  cats.forEach(c => PIKET_ROWS_STATE[c.key] = ['']);
+  setPiketDateByShift(0);
+  renderPiketCategories();
+  showToast('Jadwal piket berhasil direset', 'success');
+}
+
+/* ============================================================
+   7. MODUL DATABASE PETUGAS & KAMUS AUTO-KOREKSI
+   ============================================================ */
+function switchDbSubTab(tabName) {
+  const btnPetugas = document.getElementById('subtab-btn-petugas');
+  const btnKamus = document.getElementById('subtab-btn-kamus');
+  const viewPetugas = document.getElementById('subview-petugas');
+  const viewKamus = document.getElementById('subview-kamus');
+
+  if (tabName === 'petugas') {
+    btnPetugas.className = 'pb-3 text-sm font-bold text-navy border-b-2 border-navy';
+    btnPetugas.style.borderColor = 'var(--navy)';
+    btnKamus.className = 'pb-3 text-sm font-semibold text-slate-500 border-b-2 border-transparent hover:text-navy';
+    viewPetugas.classList.remove('hidden');
+    viewKamus.classList.add('hidden');
+    renderOfficersDatabase();
+  } else {
+    btnKamus.className = 'pb-3 text-sm font-bold text-navy border-b-2 border-navy';
+    btnKamus.style.borderColor = 'var(--navy)';
+    btnPetugas.className = 'pb-3 text-sm font-semibold text-slate-500 border-b-2 border-transparent hover:text-navy';
+    viewKamus.classList.remove('hidden');
+    viewPetugas.classList.add('hidden');
+    renderCorrectionsDatabase();
+  }
+}
+
+function renderOfficersDatabase() {
+  const tbody = document.getElementById('db-officers-table-body');
+  const filterCat = document.getElementById('db-filter-category').value;
+  const query = (document.getElementById('db-search-input').value || '').trim().toUpperCase();
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  let count = 0;
+  let rowNo = 1;
+
+  const cats = getAllCategories();
+  cats.forEach(cat => {
+    if (filterCat !== 'ALL' && filterCat !== cat.key) return;
+    const list = SIMAP_DB[cat.key] || [];
+    list.forEach(name => {
+      if (query && !name.toUpperCase().includes(query)) return;
+      count++;
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-amber-50/50 transition-colors border-b border-slate-100 last:border-none';
+      tr.innerHTML = `
+        <td class="py-3 px-4 font-mono text-xs text-slate-400 text-center">${rowNo++}</td>
+        <td class="py-3 px-4">
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700">${cat.label}</span>
+        </td>
+        <td class="py-3 px-4 font-semibold text-slate-800">${name}</td>
+        <td class="py-3 px-4 text-right space-x-2">
+          <button onclick="deleteOfficerFromDb('${cat.key}', '${name.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-red-600 font-bold text-sm px-2 py-1 rounded hover:bg-red-50">Hapus</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });
+
+  if (count === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-xs text-slate-400 italic">Tidak ada petugas ditemukan sesuai pencarian.</td></tr>`;
+  }
+  document.getElementById('db-total-count').textContent = count;
+}
+
+function deleteOfficerFromDb(catKey, name) {
+  if (!confirm(`Hapus petugas "${name}" dari kategori ${catKey}?`)) return;
+  SIMAP_DB[catKey] = (SIMAP_DB[catKey] || []).filter(n => n !== name);
+  saveOfficersStore();
+  renderOfficersDatabase();
+  showToast(`Petugas "${name}" berhasil dihapus dari database`);
+}
+
+function resetOfficersToSeed() {
+  if (!confirm('Peringatan: Reset database akan mengembalikan daftar perwira & petugas ke data asli bawaan Lapas Tanjung Pati (Juli 2026). Data yang baru Anda tambahkan akan hilang. Lanjutkan?')) return;
+  SIMAP_DB = JSON.parse(JSON.stringify(SEED_OFFICERS));
+  saveOfficersStore();
+  renderOfficersDatabase();
+  showToast('Database berhasil dikembalikan ke data asli Lapas', 'success');
+}
+
+function openAddOfficerModal() {
+  const select = document.getElementById('modal-off-category');
+  select.innerHTML = '';
+  getAllCategories().forEach(c => {
+    select.innerHTML += `<option value="${c.key}">${c.label}</option>`;
+  });
+  document.getElementById('modal-off-name').value = '';
+  document.getElementById('modal-officer').classList.remove('hidden');
+}
+
+function closeOfficerModal() { document.getElementById('modal-officer').classList.add('hidden'); }
+
+function saveOfficerModal() {
+  const catKey = document.getElementById('modal-off-category').value;
+  const name = document.getElementById('modal-off-name').value.trim().toUpperCase();
+  if (!name) { showToast('Nama petugas tidak boleh kosong!', 'error'); return; }
+
+  if (!SIMAP_DB[catKey]) SIMAP_DB[catKey] = [];
+  if (SIMAP_DB[catKey].includes(name)) {
+    showToast(`Petugas "${name}" sudah ada di kategori ini!`, 'error');
+    return;
+  }
+
+  SIMAP_DB[catKey].push(name);
+  saveOfficersStore();
+  closeOfficerModal();
+  renderOfficersDatabase();
+  showToast(`Petugas "${name}" berhasil ditambahkan!`);
+}
+
+function renderCorrectionsDatabase() {
+  const tbody = document.getElementById('db-corrections-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  const entries = Object.entries(SIMAP_CORRECTIONS);
+  document.getElementById('kamus-total-count').textContent = entries.length;
+
+  if (entries.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-xs text-slate-400 italic">Kamus auto-koreksi kosong.</td></tr>`;
+    return;
+  }
+
+  entries.forEach(([key, val], idx) => {
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-amber-50/50 transition-colors border-b border-slate-100 last:border-none';
+    tr.innerHTML = `
+      <td class="py-3 px-4 font-mono text-xs text-slate-400 text-center">${idx + 1}</td>
+      <td class="py-3 px-4 font-mono font-bold text-red-700">${key}</td>
+      <td class="py-3 px-4 font-bold text-emerald-800">→ ${val}</td>
+      <td class="py-3 px-4 text-right">
+        <button onclick="deleteCorrectionFromDb('${key.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-red-600 font-bold text-sm px-2 py-1 rounded hover:bg-red-50">Hapus</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function deleteCorrectionFromDb(key) {
+  if (!confirm(`Hapus kata kunci auto-koreksi "${key}"?`)) return;
+  delete SIMAP_CORRECTIONS[key];
+  saveCorrectionsStore();
+  renderCorrectionsDatabase();
+  showToast(`Kata kunci "${key}" berhasil dihapus`);
+}
+
+function resetCorrectionsToSeed() {
+  if (!confirm('Kembalikan kamus auto-koreksi ke daftar default (astekpam, wbp, karupam, dll)?')) return;
+  SIMAP_CORRECTIONS = JSON.parse(JSON.stringify(SEED_CORRECTIONS));
+  saveCorrectionsStore();
+  renderCorrectionsDatabase();
+  showToast('Kamus auto-koreksi berhasil direset', 'success');
+}
+
+function openAddCorrectionModal() {
+  document.getElementById('modal-corr-key').value = '';
+  document.getElementById('modal-corr-val').value = '';
+  document.getElementById('modal-correction').classList.remove('hidden');
+}
+
+function closeCorrectionModal() { document.getElementById('modal-correction').classList.add('hidden'); }
+
+function saveCorrectionModal() {
+  const key = document.getElementById('modal-corr-key').value.trim().toLowerCase();
+  const val = document.getElementById('modal-corr-val').value.trim();
+  if (!key || !val) { showToast('Kata salah dan hasil koreksi wajib diisi!', 'error'); return; }
+
+  SIMAP_CORRECTIONS[key] = val;
+  saveCorrectionsStore();
+  closeCorrectionModal();
+  renderCorrectionsDatabase();
+  showToast(`Kamus "${key} → ${val}" berhasil disimpan!`);
+}
+
+/* ============================================================
+   8. CUSTOM PIKET CATEGORIES
+   ============================================================ */
+function openCustomCategoryModal() {
+  document.getElementById('modal-cat-key').value = '';
+  document.getElementById('modal-cat-label').value = '';
+  document.getElementById('modal-custom-cat').classList.remove('hidden');
+}
+function closeCustomCategoryModal() { document.getElementById('modal-custom-cat').classList.add('hidden'); }
+
+function saveCustomCategoryModal() {
+  const key = document.getElementById('modal-cat-key').value.trim().toUpperCase().replace(/\s+/g, '_');
+  const label = document.getElementById('modal-cat-label').value.trim();
+  const color = document.getElementById('modal-cat-color').value;
+
+  if (!key || !label) { showToast('Kode dan nama kategori wajib diisi!', 'error'); return; }
+  if (getAllCategories().some(c => c.key === key)) { showToast('Kode kategori tersebut sudah ada!', 'error'); return; }
+
+  SIMAP_CUSTOM_CATS.push({ key, label, color });
+  saveCustomCatsStore();
+  SIMAP_DB[key] = [];
+  saveOfficersStore();
+  closeCustomCategoryModal();
+  renderPiketCategories();
+  showToast(`Kategori baru "${label}" berhasil dibuat!`);
+}
+
+/* ============================================================
+   9. RIWAYAT LOG & BACKUP DATA
+   ============================================================ */
+function addHistoryEntry(type, title, content) {
+  let hist = [];
+  try { hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e){}
+  const entry = {
+    id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+    type,
+    title,
+    timestamp: new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB',
+    content
+  };
+  hist.unshift(entry);
+  if (hist.length > 50) hist = hist.slice(0, 50); // keep last 50
+  localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(hist));
+  if (supabaseClient) {
+    supabaseClient.from('history_logs').upsert({
+      id: entry.id,
+      type: entry.type,
+      title: entry.title,
+      timestamp_str: entry.timestamp,
+      content: entry.content
+    }, { onConflict: 'id' }).then();
+  }
+}
+
+function renderHistoryLog() {
+  const container = document.getElementById('history-list-container');
+  const filterType = document.getElementById('history-filter-type').value;
+  if (!container) return;
+  container.innerHTML = '';
+
+  let hist = [];
+  try { hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e){}
+
+  const filtered = hist.filter(item => filterType === 'ALL' || item.type === filterType);
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="p-8 text-center text-xs text-slate-400 italic border rounded-lg">Belum ada riwayat laporan yang disalin atau disimpan.</div>`;
+    return;
+  }
+
+  filtered.forEach(item => {
+    const isAtensi = item.type === 'ATENSI';
+    const badgeColor = isAtensi ? 'bg-blue-100 text-blue-800 border-blue-200' : 'bg-amber-100 text-amber-800 border-amber-200';
+    const cardEl = document.createElement('div');
+    cardEl.className = 'doc-card p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white hover:bg-slate-50 transition-colors';
+    
+    const excerpt = item.content.split('\n').slice(0, 3).join(' ... ');
+
+    cardEl.innerHTML = `
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${badgeColor}">${isAtensi ? 'Laporan Atensi' : 'Reminder Piket'}</span>
+          <span class="text-xs text-slate-400">${item.timestamp}</span>
+        </div>
+        <h4 class="font-bold text-sm text-slate-800 truncate">${item.title}</h4>
+        <p class="text-xs text-slate-500 truncate font-mono mt-0.5">${excerpt}</p>
+      </div>
+      <div class="flex gap-2 shrink-0 self-end sm:self-center">
+        <button onclick="viewHistoryDetail('${item.id}')" class="btn-outline text-xs !py-1.5">
+          Lihat &amp; Salin
+        </button>
+        <button onclick="deleteHistoryItem('${item.id}')" class="text-slate-400 hover:text-red-600 px-2 py-1.5 rounded font-bold text-xs">
+          Hapus
+        </button>
+      </div>
+    `;
+    container.appendChild(cardEl);
+  });
+}
+
+function viewHistoryDetail(id) {
+  let hist = [];
+  try { hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e){}
+  const item = hist.find(h => h.id === id);
+  if (!item) return;
+
+  document.getElementById('hist-modal-type-badge').textContent = item.type === 'ATENSI' ? 'Laporan Atensi Pimpinan' : 'Reminder Piket Harian';
+  document.getElementById('hist-modal-type-badge').className = item.type === 'ATENSI' ? 'px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-800' : 'px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800';
+  document.getElementById('hist-modal-title').textContent = item.title;
+  document.getElementById('hist-modal-time').textContent = 'Disimpan pada: ' + item.timestamp;
+  document.getElementById('hist-modal-content').textContent = item.content;
+
+  document.getElementById('modal-history-detail').classList.remove('hidden');
+}
+
+function closeHistoryDetailModal() { document.getElementById('modal-history-detail').classList.add('hidden'); }
+
+function copyHistoryModalContent() {
+  const content = document.getElementById('hist-modal-content').textContent;
+  copyToClipboardHelper(content, () => {
+    showToast('Pesan dari riwayat berhasil disalin ke clipboard!');
+  });
+}
+
+function deleteHistoryItem(id) {
+  let hist = [];
+  try { hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e){}
+  hist = hist.filter(h => h.id !== id);
+  localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(hist));
+  renderHistoryLog();
+  showToast('Item riwayat berhasil dihapus');
+}
+
+function clearAllHistory() {
+  if (!confirm('Apakah Anda yakin ingin menghapus seluruh riwayat laporan tersimpan?')) return;
+  localStorage.removeItem(STORAGE_KEYS.HISTORY);
+  renderHistoryLog();
+  showToast('Seluruh riwayat berhasil dibersihkan');
+}
+
+function exportBackupData() {
+  const backup = {
+    version: '1.0-SIMAP',
+    timestamp: new Date().toISOString(),
+    officers: SIMAP_DB,
+    corrections: SIMAP_CORRECTIONS,
+    customCategories: SIMAP_CUSTOM_CATS,
+    history: JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]')
+  };
+
+  const jsonStr = JSON.stringify(backup, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const dateStr = new Date().toISOString().slice(0, 10);
+  a.download = `backup-simap-tanjung-pati-${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('File backup berhasil diunduh!');
+}
+
+function importBackupData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data || !data.officers) {
+        alert('Format file JSON tidak valid atau rusak!');
+        return;
+      }
+
+      if (confirm('Pulihkan data dari file backup? Ini akan menggantikan database dan riwayat saat ini dengan data dari file cadangan.')) {
+        SIMAP_DB = data.officers;
+        SIMAP_CORRECTIONS = data.corrections || SEED_CORRECTIONS;
+        SIMAP_CUSTOM_CATS = data.customCategories || [];
+        saveOfficersStore();
+        saveCorrectionsStore();
+        saveCustomCatsStore();
+        if (data.history) localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(data.history));
+
+        renderDashboardStats();
+        renderOfficersDatabase();
+        renderHistoryLog();
+        renderPiketCategories();
+        showToast('Data berhasil dipulihkan secara sempurna!', 'success');
+      }
+    } catch (err) {
+      alert('Gagal membaca file backup JSON.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* ============================================================
+   10. HELPER CLIPBOARD
+   ============================================================ */
+function copyToClipboardHelper(text, onSuccess) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
+  } else {
+    fallbackCopy(text, onSuccess);
+  }
+}
+
+function fallbackCopy(text, onSuccess) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand('copy');
+    onSuccess();
+  } catch (err) {
+    alert('Gagal menyalin otomatis. Silakan salin manual dengan menekan Ctrl+C pada teks output.');
+  }
+  document.body.removeChild(ta);
+}
+
+/* ============================================================
+   11. INITIALIZATION ON LOAD
+   ============================================================ */
+window.addEventListener('DOMContentLoaded', () => {
+  loadGlobalStore();
+  startClock();
+  setPiketDateByShift(0);
+  renderDashboardStats();
+  loadAtensiDraft();
+  renderPiketCategories();
+});
+</script>
+</body>
+</html>
