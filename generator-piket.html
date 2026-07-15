@@ -50,6 +50,20 @@
     </div>
     <input type="date" id="dateInput" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400">
     <div class="mt-2 text-center bg-amber-50 border border-amber-200 rounded-lg py-2 text-sm font-bold text-amber-800" id="dateDisplay">—</div>
+
+    <!-- SMART AUTO-FILL CONTROLS -->
+    <div class="mt-3 p-3 rounded-xl border border-amber-200/80 bg-amber-50/60 space-y-2.5">
+      <div class="flex items-center justify-between">
+        <label class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer select-none">
+          <input type="checkbox" id="gen_auto_fill_on_date" checked class="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer">
+          <span>⚡ Otomatis Isi &amp; Acak Petugas Saat Tanggal Dipilih</span>
+        </label>
+        <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-emerald-500/15 text-emerald-700 border border-emerald-500/30">Auto</span>
+      </div>
+      <button type="button" onclick="autoFillGenFromDb(false)" class="w-full py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm border bg-slate-900 text-amber-400 border-amber-400 hover:bg-slate-800">
+        ⚡ Acak &amp; Isi Otomatis Petugas Piket Hari Ini Sekarang
+      </button>
+    </div>
   </section>
 
   <!-- ===== CATEGORIES CONTAINER ===== -->
@@ -354,6 +368,10 @@ function setDateByShift(shift) {
     const active = parseInt(b.dataset.shift) === shift;
     b.className = `dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg ${active ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 border border-slate-300'}`;
   });
+  const autoCheckbox = document.getElementById('gen_auto_fill_on_date');
+  if (autoCheckbox && autoCheckbox.checked) {
+    autoFillGenFromDb(true);
+  }
 }
 
 function updateDateDisplay() {
@@ -371,7 +389,58 @@ document.querySelectorAll('.dateShiftBtn').forEach(btn => {
 dateInput.addEventListener('change', () => {
   document.querySelectorAll('.dateShiftBtn').forEach(b => b.className = 'dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300');
   updateDateDisplay();
+  const autoCheckbox = document.getElementById('gen_auto_fill_on_date');
+  if (autoCheckbox && autoCheckbox.checked) {
+    autoFillGenFromDb(true);
+  }
 });
+
+function autoFillGenFromDb(isQuiet = false) {
+  const db = loadDB();
+  let seedNum = 0;
+  if (dateInput && dateInput.value) {
+    const [y, m, day] = dateInput.value.split('-').map(Number);
+    seedNum = (y * 1000 + m * 50 + day);
+  } else {
+    const now = new Date();
+    seedNum = (now.getFullYear() * 1000 + (now.getMonth() + 1) * 50 + now.getDate());
+  }
+
+  CATEGORIES.forEach((cat, catIdx) => {
+    const dbList = db[cat.key] || [];
+    if (dbList.length === 0) return;
+
+    let neededCount = 1;
+    if (cat.key === 'PERWIRA') neededCount = 1;
+    else if (cat.key === 'WARTELSUSPAS') neededCount = Math.min(2, dbList.length);
+    else if (cat.key === 'PB' || cat.key === 'PO' || cat.key === 'PD') neededCount = Math.min(2, dbList.length);
+
+    const picked = [];
+    const rotationStep = isQuiet ? 0 : Math.floor(Math.random() * dbList.length);
+    const startIndex = (seedNum + catIdx * 3 + rotationStep) % dbList.length;
+    
+    for (let i = 0; i < neededCount; i++) {
+      const idx = (startIndex + i) % dbList.length;
+      if (!picked.includes(dbList[idx])) {
+        picked.push(dbList[idx]);
+      }
+    }
+
+    const section = document.querySelector(`[data-category="${cat.key}"]`);
+    if (section) {
+      const rowsContainer = section.querySelector('.rows-container');
+      if (rowsContainer) rowsContainer.innerHTML = '';
+      picked.forEach(name => {
+        addRow(cat.key, name);
+      });
+    }
+  });
+
+  generateOutput();
+  if (!isQuiet) {
+    showToast('⚡ Petugas piket berhasil diisi otomatis dari database!');
+  }
+}
 
 /* ============================================================
    HEADER
@@ -453,8 +522,19 @@ copyBtn.addEventListener('click', async () => {
    INIT
 ============================================================ */
 setDateByShift(0);
-CATEGORIES.forEach(cat => addRow(cat.key));
-generateOutput();
+if (!document.querySelector('.row-input')?.value) {
+  setTimeout(() => {
+    const autoCheckbox = document.getElementById('gen_auto_fill_on_date');
+    if (autoCheckbox && autoCheckbox.checked && typeof autoFillGenFromDb === 'function') {
+      autoFillGenFromDb(true);
+    } else {
+      CATEGORIES.forEach(cat => addRow(cat.key));
+      generateOutput();
+    }
+  }, 50);
+} else {
+  generateOutput();
+}
 </script>
 </body>
 </html>
