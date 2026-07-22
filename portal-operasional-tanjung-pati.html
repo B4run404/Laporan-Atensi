@@ -348,6 +348,10 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
       <span>Reminder Piket Harian</span>
     </button>
+    <button onclick="switchTab('humas')" id="nav-humas" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+      <span>Humas &amp; Rilis Berita</span>
+    </button>
 
     <div class="pt-4 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Manajemen & Sistem</div>
     <button onclick="switchTab('database')" id="nav-database" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
@@ -390,6 +394,10 @@
   <button onclick="switchTab('piket')" id="botnav-piket" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
     <span>Piket</span>
+  </button>
+  <button onclick="switchTab('humas')" id="botnav-humas" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"/><path d="M18 14h-8"/><path d="M10 6h8v4h-8V6Z"/></svg>
+    <span>Humas</span>
   </button>
   <button onclick="switchTab('database')" id="botnav-database" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
@@ -1015,8 +1023,163 @@
                   Reset Jadwal
                 </button>
               </div>
+        </div>
+
+      </div>
+
+      <!-- =========================================================
+           TAB: HUMAS & AI RILIS BERITA KEMENIMIPAS
+           ========================================================= -->
+      <div id="view-humas" class="tab-view space-y-6">
+        
+        <!-- HEADER BANNER -->
+        <div class="doc-card p-5 border-l-4 border-amber-500 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">Kemenimipas Humas Suite</span>
+              <span class="text-xs text-slate-400 font-mono">Ditjen PAS Standard</span>
+            </div>
+            <h2 class="text-lg font-bold text-white font-display mt-1">AI Generator Rilis Berita &amp; Humas Kedinasan</h2>
+            <p class="text-xs text-slate-300">Buat artikel rilis berita 5W+1H, caption media sosial, dan broadcast WhatsApp dalam sekali input.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- INPUT FORM -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="doc-card p-5 space-y-4">
+              <h3 class="font-bold text-sm text-white tracking-wide uppercase font-display border-b border-white/10 pb-2.5">
+                1. Input Data Kegiatan Humas
+              </h3>
+
+              <div>
+                <label class="field-label">Judul / Nama Kegiatan Kedinasan *</label>
+                <input type="text" id="hm_judul" class="field-input" placeholder="contoh: Pelatihan Pertanian Hidroponik WBP" oninput="generateHumasNews()" />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="field-label">Kategori Kegiatan</label>
+                  <select id="hm_kategori" class="field-select" onchange="generateHumasNews()">
+                    <option value="PEMBINAAN_KEMANDIRIAN">Pembinaan Kemandirian &amp; Vokasi WBP</option>
+                    <option value="PEMBINAAN_KEROHANIAN">Pembinaan Kerohanian &amp; Mental</option>
+                    <option value="PENGAMANAN_RAZIA">Pengamanan &amp; Razia Blok Jaga</option>
+                    <option value="KESEHATAN_MEDIS">Pelayanan Kesehatan &amp; Rujukan Medis</option>
+                    <option value="LAYANAN_KUNJUNGAN">Layanan Kunjungan &amp; Penitipan</option>
+                    <option value="HUMAS_SINERGI">Sinergi Instansi &amp; Kehumasan Umum</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="field-label">Waktu Pelaksanaan</label>
+                  <select id="hm_waktu" class="field-select" onchange="generateHumasNews()">
+                    <option value="Pagi hari">Pagi Hari (08.00 - 11.30 WIB)</option>
+                    <option value="Siang hari">Siang Hari (13.00 - 15.30 WIB)</option>
+                    <option value="Sore hari">Sore Hari (16.00 - 18.00 WIB)</option>
+                    <option value="Malam hari">Malam Hari (19.30 - 21.00 WIB)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="field-label">Tanggal Acara</label>
+                  <input type="date" id="hm_tanggal" class="field-input" onchange="generateHumasNews()" />
+                </div>
+                <div>
+                  <label class="field-label">Lokasi Acara</label>
+                  <input type="text" id="hm_lokasi" class="field-input" value="Lapas Kelas IIB Tanjung Pati" oninput="generateHumasNews()" />
+                </div>
+              </div>
+
+              <div>
+                <label class="field-label">Pejabat / Tokoh yang Hadir</label>
+                <input type="text" id="hm_pejabat" class="field-input" placeholder="contoh: Kalapas Tanjung Pati, KPLP, Kasi Binadik, Perwakilan Kemenag" oninput="generateHumasNews()" />
+              </div>
+
+              <div>
+                <label class="field-label">Poin Utama &amp; Uraian Singkat *</label>
+                <textarea id="hm_poin" rows="3" class="field-textarea" placeholder="contoh: 30 WBP mengikuti pelatihan hidroponik. Pelatihan berlangsung interaktif dan seluruh WBP mendapatkan sertifikat." oninput="generateHumasNews()"></textarea>
+              </div>
+
+              <div>
+                <label class="field-label">Kutipan / Statement Pejabat (Opsional)</label>
+                <textarea id="hm_quote" rows="2" class="field-textarea" placeholder="contoh: 'Pelatihan ini bertujuan agar WBP memiliki keahlian mandiri saat kembali ke masyarakat', ujar Kalapas Tanjung Pati." oninput="generateHumasNews()"></textarea>
+              </div>
+
+              <div class="flex gap-2 pt-2">
+                <button onclick="generateHumasNews()" class="btn-gold flex-1 text-xs font-bold">
+                  ⚡ Hasilkan Berita &amp; Caption
+                </button>
+                <button onclick="resetHumasForm()" class="btn-secondary text-xs text-red-400 border-red-500/30 hover:bg-red-950/40">
+                  Reset
+                </button>
+              </div>
             </div>
           </div>
+
+          <!-- GENERATED OUTPUTS -->
+          <div class="lg:col-span-7 space-y-4">
+            
+            <!-- OUTPUT CARD -->
+            <div class="doc-card p-5 space-y-4">
+              <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <h3 class="font-bold text-sm text-white tracking-wide uppercase font-display">
+                  2. Hasil Generasi Otomatis
+                </h3>
+                <span class="text-[10px] text-amber-400 font-mono">Kemenimipas Verified Format</span>
+              </div>
+
+              <!-- NEWS ARTICLE PRESS RELEASE -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span> Artikel Berita Media Massa (5W+1H)
+                  </span>
+                  <button onclick="copyHumasOutput('news')" class="btn-outline text-[11px] !py-1 !px-2.5">
+                    📋 Salin Artikel
+                  </button>
+                </div>
+                <div id="hm-news-output" class="bg-slate-950/80 border border-white/10 rounded-xl p-4 font-serif text-sm text-slate-200 leading-relaxed whitespace-pre-wrap min-h-[160px]">
+                  <p class="text-slate-500 italic text-center py-6">Isi data kegiatan pada form di samping untuk menghasilkan artikel berita rilis pers…</p>
+                </div>
+              </div>
+
+              <!-- CAPTION MEDIA SOSIAL -->
+              <div class="space-y-2 pt-2 border-t border-white/10">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span> Caption Media Sosial (Instagram / FB)
+                  </span>
+                  <button onclick="copyHumasOutput('caption')" class="btn-outline text-[11px] !py-1 !px-2.5">
+                    📱 Salin Caption IG
+                  </button>
+                </div>
+                <div id="hm-caption-output" class="bg-slate-950/80 border border-white/10 rounded-xl p-4 font-sans text-xs text-slate-200 leading-relaxed whitespace-pre-wrap min-h-[100px]">
+                  <p class="text-slate-500 italic text-center py-4">Pratinjau caption Instagram lengkap dengan hashtag resmi Kemenimipas…</p>
+                </div>
+              </div>
+
+              <!-- BROADCAST WA -->
+              <div class="space-y-2 pt-2 border-t border-white/10">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Broadcast WhatsApp Mitra Media
+                  </span>
+                  <button onclick="copyHumasOutput('wa')" class="btn-outline text-[11px] !py-1 !px-2.5">
+                    💬 Salin Broadcast WA
+                  </button>
+                </div>
+                <div id="hm-wa-output" class="whatsapp-bubble text-xs min-h-[90px]">
+                  <p class="text-slate-400 italic text-center py-3">Pratinjau pesan broadcast WhatsApp untuk grup kedinasan &amp; wartawan…</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
 
       </div>
@@ -1716,6 +1879,7 @@ function switchTab(tabId) {
     dashboard: 'Dashboard Utama SIMAP',
     atensi: 'Generator Laporan Atensi Pimpinan',
     piket: 'Generator Reminder Piket Harian',
+    humas: 'Kehumasan & AI Generator Rilis Berita',
     database: 'Manajemen Database & Kamus Koreksi',
     history: 'Riwayat Tersimpan & Backup Data'
   };
@@ -1732,8 +1896,117 @@ function switchTab(tabId) {
   }
   if (tabId === 'history') renderHistoryLog();
   if (tabId === 'piket') renderPiketCategories();
+  if (tabId === 'humas') generateHumasNews();
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   3B. AI HUMAS & PRESS RELEASE GENERATOR (KEMENIMIPAS)
+   ============================================================ */
+function generateHumasNews() {
+  const judul = (document.getElementById('hm_judul')?.value || '').trim();
+  const kategori = document.getElementById('hm_kategori')?.value || 'PEMBINAAN_KEMANDIRIAN';
+  const waktu = document.getElementById('hm_waktu')?.value || 'Pagi hari';
+  const tglInput = document.getElementById('hm_tanggal')?.value;
+  const lokasi = (document.getElementById('hm_lokasi')?.value || 'Lapas Kelas IIB Tanjung Pati').trim();
+  const pejabat = (document.getElementById('hm_pejabat')?.value || '').trim();
+  const poin = (document.getElementById('hm_poin')?.value || '').trim();
+  const quote = (document.getElementById('hm_quote')?.value || '').trim();
+
+  const newsOutputEl = document.getElementById('hm-news-output');
+  const captionOutputEl = document.getElementById('hm-caption-output');
+  const waOutputEl = document.getElementById('hm-wa-output');
+
+  if (!judul && !poin) {
+    if (newsOutputEl) newsOutputEl.innerHTML = '<p class="text-slate-500 italic text-center py-6">Isi judul dan poin utama kegiatan untuk menghasilkan artikel berita rilis pers…</p>';
+    if (captionOutputEl) captionOutputEl.innerHTML = '<p class="text-slate-500 italic text-center py-4">Pratinjau caption Instagram lengkap dengan hashtag resmi Kemenimipas…</p>';
+    if (waOutputEl) waOutputEl.innerHTML = '<p class="text-slate-400 italic text-center py-3">Pratinjau pesan broadcast WhatsApp untuk grup kedinasan &amp; wartawan…</p>';
+    return;
+  }
+
+  // Date formatting
+  const d = tglInput ? new Date(tglInput) : new Date();
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const dateFormatted = d.toLocaleDateString('id-ID', options);
+  const dayName = d.toLocaleDateString('id-ID', { weekday: 'long' });
+
+  const judulNews = judul ? judul.toUpperCase() : 'KEGIATAN KEDINASAN LAPAS TANJUNG PATI';
+
+  // 1. ARTIKEL BERITA 5W+1H (KEMENIMIPAS STANDARD)
+  let newsText = `*${judulNews}*\n\n`;
+  newsText += `*TANJUNG PATI* – Lembaga Pemasyarakatan (Lapas) Kelas IIB Tanjung Pati di bawah naungan Direktorat Jenderal Pemasyarakatan, Kementerian Imigrasi dan Pemasyarakatan (Kemenimipas) terus berkomitmen meningkatkan kualitas pelayanan dan pembinaan kedinasan.\n\n`;
+  newsText += `Pada ${dayName} (${dateFormatted}), Lapas Kelas IIB Tanjung Pati sukses menyelenggarakan kegiatan ${judul || 'kedinasan'} yang bertempat di ${lokasi}.\n\n`;
+  
+  if (poin) {
+    newsText += `Kegiatan yang berlangsung pada ${waktu} ini berjalan dengan lancar dan kondusif. ${poin}\n\n`;
+  }
+
+  if (pejabat) {
+    newsText += `Acara ini dihadiri langsung oleh ${pejabat} beserta jajaran petugas Lapas Tanjung Pati yang mengawal jalannya kegiatan dengan penuh kedisiplinan dan kewaspadaan.\n\n`;
+  }
+
+  if (quote) {
+    newsText += `"${quote}"\n\n`;
+  } else {
+    newsText += `Kegiatan ini merupakan wujud nyata komitmen Lapas Kelas IIB Tanjung Pati dalam mendukung program akselerasi Kementerian Imigrasi dan Pemasyarakatan (Kemenimipas) untuk mewujudkan pelayanan pemasyarakatan yang transparan, akuntabel, dan berdampak positif.\n\n`;
+  }
+
+  newsText += `Secara keseluruhan, kegiatan berakhir dalam keadaan aman, tertib, dan terkendali. (Humas Lapas Tanjung Pati - Kemenimipas)`;
+
+  // 2. CAPTION MEDIA SOSIAL (INSTAGRAM / FB)
+  let captionText = `✨ *${judul || 'KEGIATAN KEDINASAN LAPAS TANJUNG PATI'}* ✨\n\n`;
+  captionText += `Halo Sahabat Pemasyarakatan! 👋\n\n`;
+  captionText += `Pada ${dayName}, ${dateFormatted}, Lapas Kelas IIB Tanjung Pati Kemenimipas menyelenggarakan ${judul || 'kegiatan kedinasan'} di ${lokasi}.\n\n`;
+  if (poin) captionText += `📌 *Poin Utama:* ${poin}\n\n`;
+  if (quote) captionText += `🗣️ *Statement:* ${quote}\n\n`;
+  captionText += `Lapas Tanjung Pati berkomitmen memberikan pelayanan terbaik dan menjaga situasi keamanan tetap kondusif. 🇮🇩✨\n\n`;
+  captionText += `#Kemenimipas #DitjenPAS #LapasTanjungPati #PemasyarakatanPASTI #HumasPemasyarakatan #KabinetMerahPutih`;
+
+  // 3. BROADCAST WHATSAPP
+  let waText = `📢 *RILIS BERITA / SIARAN PERS HUMAS LAPAS TANJUNG PATI*\n`;
+  waText += `*KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN (KEMENIMIPAS)*\n\n`;
+  waText += `*Judul:* ${judul || 'Kegiatan Kedinasan'}\n`;
+  waText += `*Waktu:* ${dayName}, ${dateFormatted} (${waktu})\n`;
+  waText += `*Lokasi:* ${lokasi}\n\n`;
+  if (pejabat) waText += `*Hadir:* ${pejabat}\n`;
+  if (poin) waText += `*Uraian:* ${poin}\n\n`;
+  waText += `Status Keamanan: *AMAN & KONDUSIF*\n\n`;
+  waText += `_Humas Lapas Kelas IIB Tanjung Pati - Ditjen PAS Kemenimipas_`;
+
+  if (newsOutputEl) newsOutputEl.textContent = newsText;
+  if (captionOutputEl) captionOutputEl.textContent = captionText;
+  if (waOutputEl) waOutputEl.textContent = waText;
+}
+
+function copyHumasOutput(type) {
+  let targetEl;
+  let label = 'Teks';
+  if (type === 'news') { targetEl = document.getElementById('hm-news-output'); label = 'Artikel Berita'; }
+  if (type === 'caption') { targetEl = document.getElementById('hm-caption-output'); label = 'Caption Instagram'; }
+  if (type === 'wa') { targetEl = document.getElementById('hm-wa-output'); label = 'Pesan Broadcast WA'; }
+
+  if (!targetEl || !targetEl.textContent.trim()) {
+    showToast('Belum ada teks yang dihasilkan untuk disalin!', 'error');
+    return;
+  }
+
+  navigator.clipboard.writeText(targetEl.textContent).then(() => {
+    showToast(`✅ ${label} berhasil disalin ke clipboard!`);
+  }).catch(() => {
+    showToast('Gagal menyalin teks ke clipboard.', 'error');
+  });
+}
+
+function resetHumasForm() {
+  ['hm_judul', 'hm_pejabat', 'hm_poin', 'hm_quote'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const tgl = document.getElementById('hm_tanggal');
+  if (tgl) tgl.value = '';
+  generateHumasNews();
+  showToast('Form Humas telah direset');
 }
 
 /* ============================================================

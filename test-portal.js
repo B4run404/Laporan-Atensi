@@ -50,7 +50,7 @@ assertTest('Auth Guard script checks SIMAP_LOGGED_IN and redirects unauthorized 
 
 // 3. NAVIGATION & TAB VIEWS
 console.log('\n📌 Test Suite 3: Sidebar & Tab Views Navigation');
-const requiredTabs = ['dashboard', 'atensi', 'piket', 'database', 'history'];
+const requiredTabs = ['dashboard', 'atensi', 'piket', 'humas', 'database', 'history'];
 requiredTabs.forEach(tab => {
   const hasNavBtn = htmlContent.includes(`id="nav-${tab}"`);
   const hasBotNavBtn = htmlContent.includes(`id="botnav-${tab}"`);
@@ -71,6 +71,18 @@ requiredInputs.forEach(inputId => {
 assertTest("WhatsApp Live Preview container '#atensi-live-preview' exists", htmlContent.includes('id="atensi-live-preview"'));
 assertTest("Copy WhatsApp Button '#btn-copy-atensi' exists", htmlContent.includes('id="btn-copy-atensi"'));
 assertTest("Piket Output Textarea '#pk-output-box' exists", htmlContent.includes('id="pk-output-box"'));
+
+// 4B. HUMAS & PRESS RELEASE GENERATOR TESTS
+console.log('\n📌 Test Suite 4B: Humas AI Press Release Generator');
+const humasInputs = ['hm_judul', 'hm_kategori', 'hm_waktu', 'hm_tanggal', 'hm_lokasi', 'hm_pejabat', 'hm_poin', 'hm_quote'];
+humasInputs.forEach(inputId => {
+  assertTest(`Humas Form element '#${inputId}' exists`, htmlContent.includes(`id="${inputId}"`));
+});
+
+assertTest("Humas Press Release News Output '#hm-news-output' exists", htmlContent.includes('id="hm-news-output"'));
+assertTest("Humas Instagram Caption Output '#hm-caption-output' exists", htmlContent.includes('id="hm-caption-output"'));
+assertTest("Humas WhatsApp Broadcast Output '#hm-wa-output' exists", htmlContent.includes('id="hm-wa-output"'));
+assertTest("JS Function 'generateHumasNews()' exists", htmlContent.includes('function generateHumasNews()'));
 
 // 5. LOCAL STORAGE & OFFLINE FALLBACK
 console.log('\n📌 Test Suite 5: Local Storage & Offline Storage Logic');
