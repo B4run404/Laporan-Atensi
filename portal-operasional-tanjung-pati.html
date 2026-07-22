@@ -1023,159 +1023,161 @@
                   Reset Jadwal
                 </button>
               </div>
+            </div>
+          </div>
         </div>
 
       </div>
 
-      <!-- =========================================================
-           TAB: HUMAS & AI RILIS BERITA KEMENIMIPAS
-           ========================================================= -->
-      <div id="view-humas" class="tab-view space-y-6">
+    </div>
+
+    <!-- =========================================================
+         TAB: HUMAS & AI RILIS BERITA KEMENIMIPAS
+         ========================================================= -->
+    <div id="view-humas" class="tab-view space-y-6">
+      
+      <!-- HEADER BANNER -->
+      <div class="doc-card p-5 border-l-4 border-amber-500 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">Kemenimipas Humas Suite</span>
+            <span class="text-xs text-slate-400 font-mono">Ditjen PAS Standard</span>
+          </div>
+          <h2 class="text-lg font-bold text-white font-display mt-1">AI Generator Rilis Berita &amp; Humas Kedinasan</h2>
+          <p class="text-xs text-slate-300">Buat artikel rilis berita 5W+1H, caption media sosial, dan broadcast WhatsApp dalam sekali input.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- HEADER BANNER -->
-        <div class="doc-card p-5 border-l-4 border-amber-500 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">Kemenimipas Humas Suite</span>
-              <span class="text-xs text-slate-400 font-mono">Ditjen PAS Standard</span>
+        <!-- INPUT FORM -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="doc-card p-5 space-y-4">
+            <h3 class="font-bold text-sm text-white tracking-wide uppercase font-display border-b border-white/10 pb-2.5">
+              1. Input Data Kegiatan Humas
+            </h3>
+
+            <div>
+              <label class="field-label">Judul / Nama Kegiatan Kedinasan *</label>
+              <input type="text" id="hm_judul" class="field-input" placeholder="contoh: Pelatihan Pertanian Hidroponik WBP" oninput="generateHumasNews()" />
             </div>
-            <h2 class="text-lg font-bold text-white font-display mt-1">AI Generator Rilis Berita &amp; Humas Kedinasan</h2>
-            <p class="text-xs text-slate-300">Buat artikel rilis berita 5W+1H, caption media sosial, dan broadcast WhatsApp dalam sekali input.</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="field-label">Kategori Kegiatan</label>
+                <select id="hm_kategori" class="field-select" onchange="generateHumasNews()">
+                  <option value="PEMBINAAN_KEMANDIRIAN">Pembinaan Kemandirian &amp; Vokasi WBP</option>
+                  <option value="PEMBINAAN_KEROHANIAN">Pembinaan Kerohanian &amp; Mental</option>
+                  <option value="PENGAMANAN_RAZIA">Pengamanan &amp; Razia Blok Jaga</option>
+                  <option value="KESEHATAN_MEDIS">Pelayanan Kesehatan &amp; Rujukan Medis</option>
+                  <option value="LAYANAN_KUNJUNGAN">Layanan Kunjungan &amp; Penitipan</option>
+                  <option value="HUMAS_SINERGI">Sinergi Instansi &amp; Kehumasan Umum</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="field-label">Waktu Pelaksanaan</label>
+                <select id="hm_waktu" class="field-select" onchange="generateHumasNews()">
+                  <option value="Pagi hari">Pagi Hari (08.00 - 11.30 WIB)</option>
+                  <option value="Siang hari">Siang Hari (13.00 - 15.30 WIB)</option>
+                  <option value="Sore hari">Sore Hari (16.00 - 18.00 WIB)</option>
+                  <option value="Malam hari">Malam Hari (19.30 - 21.00 WIB)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="field-label">Tanggal Acara</label>
+                <input type="date" id="hm_tanggal" class="field-input" onchange="generateHumasNews()" />
+              </div>
+              <div>
+                <label class="field-label">Lokasi Acara</label>
+                <input type="text" id="hm_lokasi" class="field-input" value="Lapas Kelas IIB Tanjung Pati" oninput="generateHumasNews()" />
+              </div>
+            </div>
+
+            <div>
+              <label class="field-label">Pejabat / Tokoh yang Hadir</label>
+              <input type="text" id="hm_pejabat" class="field-input" placeholder="contoh: Kalapas Tanjung Pati, KPLP, Kasi Binadik, Perwakilan Kemenag" oninput="generateHumasNews()" />
+            </div>
+
+            <div>
+              <label class="field-label">Poin Utama &amp; Uraian Singkat *</label>
+              <textarea id="hm_poin" rows="3" class="field-textarea" placeholder="contoh: 30 WBP mengikuti pelatihan hidroponik. Pelatihan berlangsung interaktif dan seluruh WBP mendapatkan sertifikat." oninput="generateHumasNews()"></textarea>
+            </div>
+
+            <div>
+              <label class="field-label">Kutipan / Statement Pejabat (Opsional)</label>
+              <textarea id="hm_quote" rows="2" class="field-textarea" placeholder="contoh: 'Pelatihan ini bertujuan agar WBP memiliki keahlian mandiri saat kembali ke masyarakat', ujar Kalapas Tanjung Pati." oninput="generateHumasNews()"></textarea>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+              <button onclick="generateHumasNews()" class="btn-gold flex-1 text-xs font-bold">
+                ⚡ Hasilkan Berita &amp; Caption
+              </button>
+              <button onclick="resetHumasForm()" class="btn-secondary text-xs text-red-400 border-red-500/30 hover:bg-red-950/40">
+                Reset
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- GENERATED OUTPUTS -->
+        <div class="lg:col-span-7 space-y-4">
           
-          <!-- INPUT FORM -->
-          <div class="lg:col-span-5 space-y-4">
-            <div class="doc-card p-5 space-y-4">
-              <h3 class="font-bold text-sm text-white tracking-wide uppercase font-display border-b border-white/10 pb-2.5">
-                1. Input Data Kegiatan Humas
+          <!-- OUTPUT CARD -->
+          <div class="doc-card p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+              <h3 class="font-bold text-sm text-white tracking-wide uppercase font-display">
+                2. Hasil Generasi Otomatis
               </h3>
+              <span class="text-[10px] text-amber-400 font-mono">Kemenimipas Verified Format</span>
+            </div>
 
-              <div>
-                <label class="field-label">Judul / Nama Kegiatan Kedinasan *</label>
-                <input type="text" id="hm_judul" class="field-input" placeholder="contoh: Pelatihan Pertanian Hidroponik WBP" oninput="generateHumasNews()" />
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="field-label">Kategori Kegiatan</label>
-                  <select id="hm_kategori" class="field-select" onchange="generateHumasNews()">
-                    <option value="PEMBINAAN_KEMANDIRIAN">Pembinaan Kemandirian &amp; Vokasi WBP</option>
-                    <option value="PEMBINAAN_KEROHANIAN">Pembinaan Kerohanian &amp; Mental</option>
-                    <option value="PENGAMANAN_RAZIA">Pengamanan &amp; Razia Blok Jaga</option>
-                    <option value="KESEHATAN_MEDIS">Pelayanan Kesehatan &amp; Rujukan Medis</option>
-                    <option value="LAYANAN_KUNJUNGAN">Layanan Kunjungan &amp; Penitipan</option>
-                    <option value="HUMAS_SINERGI">Sinergi Instansi &amp; Kehumasan Umum</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label class="field-label">Waktu Pelaksanaan</label>
-                  <select id="hm_waktu" class="field-select" onchange="generateHumasNews()">
-                    <option value="Pagi hari">Pagi Hari (08.00 - 11.30 WIB)</option>
-                    <option value="Siang hari">Siang Hari (13.00 - 15.30 WIB)</option>
-                    <option value="Sore hari">Sore Hari (16.00 - 18.00 WIB)</option>
-                    <option value="Malam hari">Malam Hari (19.30 - 21.00 WIB)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="field-label">Tanggal Acara</label>
-                  <input type="date" id="hm_tanggal" class="field-input" onchange="generateHumasNews()" />
-                </div>
-                <div>
-                  <label class="field-label">Lokasi Acara</label>
-                  <input type="text" id="hm_lokasi" class="field-input" value="Lapas Kelas IIB Tanjung Pati" oninput="generateHumasNews()" />
-                </div>
-              </div>
-
-              <div>
-                <label class="field-label">Pejabat / Tokoh yang Hadir</label>
-                <input type="text" id="hm_pejabat" class="field-input" placeholder="contoh: Kalapas Tanjung Pati, KPLP, Kasi Binadik, Perwakilan Kemenag" oninput="generateHumasNews()" />
-              </div>
-
-              <div>
-                <label class="field-label">Poin Utama &amp; Uraian Singkat *</label>
-                <textarea id="hm_poin" rows="3" class="field-textarea" placeholder="contoh: 30 WBP mengikuti pelatihan hidroponik. Pelatihan berlangsung interaktif dan seluruh WBP mendapatkan sertifikat." oninput="generateHumasNews()"></textarea>
-              </div>
-
-              <div>
-                <label class="field-label">Kutipan / Statement Pejabat (Opsional)</label>
-                <textarea id="hm_quote" rows="2" class="field-textarea" placeholder="contoh: 'Pelatihan ini bertujuan agar WBP memiliki keahlian mandiri saat kembali ke masyarakat', ujar Kalapas Tanjung Pati." oninput="generateHumasNews()"></textarea>
-              </div>
-
-              <div class="flex gap-2 pt-2">
-                <button onclick="generateHumasNews()" class="btn-gold flex-1 text-xs font-bold">
-                  ⚡ Hasilkan Berita &amp; Caption
+            <!-- NEWS ARTICLE PRESS RELEASE -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-amber-400"></span> Artikel Berita Media Massa (5W+1H)
+                </span>
+                <button onclick="copyHumasOutput('news')" class="btn-outline text-[11px] !py-1 !px-2.5">
+                  📋 Salin Artikel
                 </button>
-                <button onclick="resetHumasForm()" class="btn-secondary text-xs text-red-400 border-red-500/30 hover:bg-red-950/40">
-                  Reset
-                </button>
+              </div>
+              <div id="hm-news-output" class="bg-slate-950/80 border border-white/10 rounded-xl p-4 font-serif text-sm text-slate-200 leading-relaxed whitespace-pre-wrap min-h-[160px]">
+                <p class="text-slate-500 italic text-center py-6">Isi data kegiatan pada form di samping untuk menghasilkan artikel berita rilis pers…</p>
               </div>
             </div>
-          </div>
 
-          <!-- GENERATED OUTPUTS -->
-          <div class="lg:col-span-7 space-y-4">
-            
-            <!-- OUTPUT CARD -->
-            <div class="doc-card p-5 space-y-4">
-              <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                <h3 class="font-bold text-sm text-white tracking-wide uppercase font-display">
-                  2. Hasil Generasi Otomatis
-                </h3>
-                <span class="text-[10px] text-amber-400 font-mono">Kemenimipas Verified Format</span>
+            <!-- CAPTION MEDIA SOSIAL -->
+            <div class="space-y-2 pt-2 border-t border-white/10">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-purple-400"></span> Caption Media Sosial (Instagram / FB)
+                </span>
+                <button onclick="copyHumasOutput('caption')" class="btn-outline text-[11px] !py-1 !px-2.5">
+                  📱 Salin Caption IG
+                </button>
               </div>
-
-              <!-- NEWS ARTICLE PRESS RELEASE -->
-              <div class="space-y-2">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-amber-400"></span> Artikel Berita Media Massa (5W+1H)
-                  </span>
-                  <button onclick="copyHumasOutput('news')" class="btn-outline text-[11px] !py-1 !px-2.5">
-                    📋 Salin Artikel
-                  </button>
-                </div>
-                <div id="hm-news-output" class="bg-slate-950/80 border border-white/10 rounded-xl p-4 font-serif text-sm text-slate-200 leading-relaxed whitespace-pre-wrap min-h-[160px]">
-                  <p class="text-slate-500 italic text-center py-6">Isi data kegiatan pada form di samping untuk menghasilkan artikel berita rilis pers…</p>
-                </div>
+              <div id="hm-caption-output" class="bg-slate-950/80 border border-white/10 rounded-xl p-4 font-sans text-xs text-slate-200 leading-relaxed whitespace-pre-wrap min-h-[100px]">
+                <p class="text-slate-500 italic text-center py-4">Pratinjau caption Instagram lengkap dengan hashtag resmi Kemenimipas…</p>
               </div>
+            </div>
 
-              <!-- CAPTION MEDIA SOSIAL -->
-              <div class="space-y-2 pt-2 border-t border-white/10">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-purple-400"></span> Caption Media Sosial (Instagram / FB)
-                  </span>
-                  <button onclick="copyHumasOutput('caption')" class="btn-outline text-[11px] !py-1 !px-2.5">
-                    📱 Salin Caption IG
-                  </button>
-                </div>
-                <div id="hm-caption-output" class="bg-slate-950/80 border border-white/10 rounded-xl p-4 font-sans text-xs text-slate-200 leading-relaxed whitespace-pre-wrap min-h-[100px]">
-                  <p class="text-slate-500 italic text-center py-4">Pratinjau caption Instagram lengkap dengan hashtag resmi Kemenimipas…</p>
-                </div>
+            <!-- BROADCAST WA -->
+            <div class="space-y-2 pt-2 border-t border-white/10">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Broadcast WhatsApp Mitra Media
+                </span>
+                <button onclick="copyHumasOutput('wa')" class="btn-outline text-[11px] !py-1 !px-2.5">
+                  💬 Salin Broadcast WA
+                </button>
               </div>
-
-              <!-- BROADCAST WA -->
-              <div class="space-y-2 pt-2 border-t border-white/10">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Broadcast WhatsApp Mitra Media
-                  </span>
-                  <button onclick="copyHumasOutput('wa')" class="btn-outline text-[11px] !py-1 !px-2.5">
-                    💬 Salin Broadcast WA
-                  </button>
-                </div>
-                <div id="hm-wa-output" class="whatsapp-bubble text-xs min-h-[90px]">
-                  <p class="text-slate-400 italic text-center py-3">Pratinjau pesan broadcast WhatsApp untuk grup kedinasan &amp; wartawan…</p>
-                </div>
+              <div id="hm-wa-output" class="whatsapp-bubble text-xs min-h-[90px]">
+                <p class="text-slate-400 italic text-center py-3">Pratinjau pesan broadcast WhatsApp untuk grup kedinasan &amp; wartawan…</p>
               </div>
-
             </div>
 
           </div>
