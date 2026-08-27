@@ -17,26 +17,29 @@
   @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap');
 
   :root {
-    --bg: #060D18;
-    --surface: rgba(13, 25, 44, 0.75);
-    --surface-alt: rgba(9, 18, 33, 0.9);
-    --surface-hover: rgba(22, 40, 68, 0.8);
+    --bg: #0A1220;
+    --surface: #132033;
+    --surface-alt: #1A2B40;
+    --surface-2: #1A2B40;
+    --surface-hover: #22364F;
     --navy: #0B1728;
     --navy-2: #142847;
     --navy-light: #1E3B68;
-    --gold: #D4AF37;
-    --gold-bright: #F5CB3A;
-    --gold-soft: rgba(212, 175, 55, 0.14);
-    --gold-border: rgba(212, 175, 55, 0.38);
-    --gold-glow: rgba(212, 175, 55, 0.25);
-    --maroon: #F43F5E;
-    --maroon-soft: rgba(244, 63, 94, 0.15);
+    --gold: #C9A227;
+    --gold-bright: #E8C547;
+    --gold-text: #E8C547;
+    --gold-soft: rgba(201, 162, 39, 0.16);
+    --gold-border: rgba(201, 162, 39, 0.42);
+    --gold-glow: rgba(201, 162, 39, 0.18);
+    --maroon: #E11D48;
+    --maroon-soft: rgba(225, 29, 72, 0.16);
     --emerald: #10B981;
-    --emerald-soft: rgba(16, 185, 129, 0.15);
-    --ink: #F8FAFC;
-    --muted: #94A3B8;
-    --line: rgba(255, 255, 255, 0.1);
-    --line-glow: rgba(212, 175, 55, 0.2);
+    --emerald-soft: rgba(16, 185, 129, 0.16);
+    --warning: #D97706;
+    --ink: #F1F5F9;
+    --muted: #A8B4C4;
+    --line: rgba(255, 255, 255, 0.12);
+    --line-glow: rgba(201, 162, 39, 0.18);
   }
 
   * { font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -44,14 +47,52 @@
   .font-heading { font-family: 'Outfit', -apple-system, sans-serif; }
   .font-mono { font-family: 'IBM Plex Mono', monospace; }
 
+  html { font-size: 16px; }
   body {
-    background: 
-      radial-gradient(ellipse 80% 60% at 50% -20%, rgba(30, 59, 104, 0.45), transparent 70%),
-      radial-gradient(circle at 90% 85%, rgba(212, 175, 55, 0.06), transparent 50%),
-      radial-gradient(circle at 10% 50%, rgba(20, 40, 71, 0.6) 0%, rgba(6, 13, 24, 0.98) 100%),
-      #060D18;
+    background:
+      radial-gradient(ellipse 70% 40% at 50% -10%, rgba(30, 59, 104, 0.28), transparent 65%),
+      #0A1220;
     color: var(--ink);
     min-height: 100vh;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .section-title {
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .date-chip {
+    min-height: 44px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+  .date-chip.is-active {
+    background: var(--navy-2);
+    border-color: var(--gold);
+    color: var(--gold-text);
+  }
+  .sidebar-panel { width: 16rem; transition: width 0.2s ease; }
+  .sidebar-panel.is-collapsed { width: 4.75rem; }
+  .sidebar-panel.is-collapsed .nav-label,
+  .sidebar-panel.is-collapsed .brand-text,
+  .sidebar-panel.is-collapsed .nav-group-label,
+  .sidebar-panel.is-collapsed .sidebar-footer-copy { display: none; }
+  .sidebar-panel.is-collapsed .nav-item { justify-content: center; padding-left: 0.75rem; padding-right: 0.75rem; }
+  .more-sheet { display: none; }
+  .more-sheet.open { display: block; }
+  .sync-banner {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.8125rem; color: var(--muted);
+  }
+  .dirty-dot {
+    width: 8px; height: 8px; border-radius: 999px;
+    background: var(--warning); display: inline-block;
   }
 
   /* NAVIGATION & ACTIVE STATES */
@@ -87,30 +128,20 @@
     background: rgba(212, 175, 55, 0.08);
   }
 
-  /* SECTION CARDS (Glassmorphism & Border Glow) */
+  /* SECTION CARDS */
   .doc-card {
     background: var(--surface);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.11);
-    border-radius: 16px;
-    box-shadow: 
-      0 12px 36px -4px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.45);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   .doc-card:hover {
-    border-color: rgba(212, 175, 55, 0.28);
-    box-shadow: 
-      0 16px 40px -4px rgba(0, 0, 0, 0.6),
-      0 0 20px rgba(212, 175, 55, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    border-color: rgba(201, 162, 39, 0.28);
   }
   .doc-card:focus-within {
     border-color: var(--gold);
-    box-shadow: 
-      0 0 25px rgba(212, 175, 55, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.22);
   }
 
   .numeral-chip {
@@ -133,9 +164,10 @@
     background: rgba(6, 13, 24, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 10px;
+    min-height: 44px;
     padding: 0.7rem 0.95rem;
-    font-size: 0.875rem;
-    color: #FFFFFF;
+    font-size: 0.9375rem;
+    color: var(--ink);
     outline: none;
     transition: all 0.2s ease;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
@@ -149,12 +181,11 @@
   }
   .field-label {
     display: block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: #CBD5E1;
-    text-transform: uppercase;
-    margin-bottom: 0.45rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
   }
 
   /* BUTTONS */
@@ -164,6 +195,7 @@
     font-weight: 600;
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
+    min-height: 44px;
     padding: 0.7rem 1.35rem;
     transition: all 0.2s ease;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
@@ -183,9 +215,10 @@
     font-weight: 700;
     border-radius: 10px;
     border: 1px solid var(--gold-bright);
+    min-height: 44px;
     padding: 0.7rem 1.35rem;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 18px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 14px rgba(201, 162, 39, 0.22);
     display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
   }
   .btn-gold:hover { 
@@ -200,8 +233,9 @@
     color: #FFFFFF;
     background: rgba(255, 255, 255, 0.04);
     font-weight: 600;
-    font-size: 0.825rem;
+    font-size: 0.875rem;
     border-radius: 8px;
+    min-height: 40px;
     padding: 0.55rem 0.95rem;
     transition: all 0.2s ease;
     display: inline-flex; align-items: center; gap: 0.45rem;
@@ -219,6 +253,7 @@
     border: 1px solid var(--line);
     font-weight: 600;
     border-radius: 10px;
+    min-height: 44px;
     padding: 0.7rem 1.2rem;
     transition: all 0.2s ease;
     display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
@@ -239,7 +274,7 @@
     padding: 0.3rem 0.85rem;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #FFFFFF;
+    color: var(--ink);
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
   .status-dot { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; }
@@ -288,7 +323,7 @@
   }
 
   .correction-tag {
-    font-size: 0.725rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--gold-bright);
     background: var(--gold-soft);
@@ -302,6 +337,8 @@
   .ac-list { max-height: 240px; }
   @keyframes flash { 0% { background-color: rgba(212, 175, 55, 0.35); } 100% { background-color: transparent; } }
   .flash { animation: flash 0.9s ease-out; }
+
+  button:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
 
   /* TAB VIEW TRANSITION */
   .tab-view { display: none; opacity: 0; transition: opacity 0.25s ease-in-out; }
@@ -321,118 +358,129 @@
 <body class="min-h-screen flex flex-col md:flex-row pb-16 md:pb-0">
 
 <!-- ==================== DESKTOP SIDEBAR ==================== -->
-<aside class="hidden md:flex flex-col w-64 flex-shrink-0 z-30" style="background: var(--navy); border-right: 2px solid var(--gold);">
-  <div class="p-5 border-b border-white/10">
+<aside id="app-sidebar" class="sidebar-panel hidden md:flex flex-col flex-shrink-0 z-30" style="background: var(--navy); border-right: 1px solid var(--gold);">
+  <div class="p-4 border-b border-white/10">
     <div class="flex items-center gap-3">
       <div class="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 font-display font-bold text-lg" style="background: var(--gold); color: var(--navy);">
         P
       </div>
-      <div class="min-w-0">
+      <div class="min-w-0 brand-text">
         <h1 class="text-sm font-bold text-white tracking-wide truncate font-display">SIMAP TANJUNG PATI</h1>
-        <p class="text-[11px] leading-tight truncate" style="color: var(--gold-soft);">Lapas Kelas IIB Tanjung Pati</p>
+        <p class="text-xs leading-tight truncate" style="color: var(--gold-text);">Lapas Kelas IIB Tanjung Pati</p>
       </div>
     </div>
+    <button type="button" onclick="toggleSidebarCollapse()" class="mt-3 w-full min-h-[40px] flex items-center justify-center gap-2 rounded-lg border border-white/15 text-xs font-semibold text-slate-200 hover:bg-white/5" title="Perkecil menu">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18 9 12l6-6"/></svg>
+      <span class="nav-label">Perkecil</span>
+    </button>
   </div>
 
   <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto text-sm text-slate-300">
-    <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Navigasi Utama</div>
-    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+    <div class="nav-group-label px-3 py-1.5 text-xs font-semibold tracking-wide text-slate-400">Operasional</div>
+    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left min-h-[44px]">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-      <span>Dashboard Utama</span>
+      <span class="nav-label">Dashboard</span>
     </button>
-    <button onclick="switchTab('atensi')" id="nav-atensi" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+    <button onclick="switchTab('atensi')" id="nav-atensi" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left min-h-[44px]">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      <span>Laporan Atensi Pimpinan</span>
+      <span class="nav-label">Laporan Atensi</span>
     </button>
-    <button onclick="switchTab('piket')" id="nav-piket" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+    <button onclick="switchTab('piket')" id="nav-piket" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left min-h-[44px]">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-      <span>Reminder Piket Harian</span>
+      <span class="nav-label">Reminder Piket</span>
     </button>
-    <button onclick="switchTab('humas')" id="nav-humas" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+    <button onclick="switchTab('humas')" id="nav-humas" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left min-h-[44px]">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-      <span>Humas &amp; Rilis Berita</span>
+      <span class="nav-label">Humas &amp; Rilis</span>
     </button>
 
-    <div class="pt-4 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Manajemen & Sistem</div>
-    <button onclick="switchTab('database')" id="nav-database" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+    <div class="nav-group-label pt-4 px-3 py-1.5 text-xs font-semibold tracking-wide text-slate-400">Manajemen &amp; Sistem</div>
+    <button onclick="switchTab('database')" id="nav-database" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left min-h-[44px]">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      <span>Database Petugas & Kamus</span>
+      <span class="nav-label">Petugas &amp; Kamus</span>
     </button>
-    <button onclick="switchTab('history')" id="nav-history" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left">
+    <button onclick="switchTab('history')" id="nav-history" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left min-h-[44px]">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span>Riwayat & Backup Data</span>
+      <span class="nav-label">Riwayat &amp; Cadangan</span>
     </button>
   </nav>
 
   <div class="p-4 border-t border-white/10 text-xs text-slate-400 space-y-2">
-    <div class="flex items-center justify-between">
-      <span>Status Sistem:</span>
+    <div class="sidebar-footer-copy flex items-center justify-between gap-2">
+      <span>Status:</span>
       <span id="sidebar-cloud-status" class="text-emerald-400 font-semibold flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Offline Ready
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Siap lokal
       </span>
     </div>
-    <div class="pt-1">
-      <button onclick="logoutSIMAP()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-red-900/50 hover:bg-red-800/80 border border-red-500/30 text-red-200 font-semibold transition-all shadow-sm">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Keluar (Logout)</span>
-      </button>
-    </div>
-    <p class="text-[11px] text-slate-500 text-center">Versi 1.0 Terintegrasi</p>
+    <button onclick="logoutSIMAP()" class="w-full min-h-[44px] flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-red-950/50 hover:bg-red-900/70 border border-red-500/30 text-red-200 font-semibold">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span class="nav-label">Keluar</span>
+    </button>
   </div>
 </aside>
 
 <!-- ==================== MOBILE BOTTOM NAV ==================== -->
-<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center py-1.5 px-2 shadow-lg" style="background: var(--navy); border-top: 2px solid var(--gold);">
-  <button onclick="switchTab('dashboard')" id="botnav-dashboard" class="bottom-nav-item active flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center py-1 px-1" style="background: var(--navy); border-top: 1px solid var(--gold);">
+  <button onclick="switchTab('dashboard')" id="botnav-dashboard" class="bottom-nav-item active flex flex-col items-center justify-center py-1 px-2 text-xs min-h-[48px] min-w-[48px] text-slate-300">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
     <span>Home</span>
   </button>
-  <button onclick="switchTab('atensi')" id="botnav-atensi" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
+  <button onclick="switchTab('atensi')" id="botnav-atensi" class="bottom-nav-item flex flex-col items-center justify-center py-1 px-2 text-xs min-h-[48px] min-w-[48px] text-slate-300">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
     <span>Atensi</span>
   </button>
-  <button onclick="switchTab('piket')" id="botnav-piket" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
+  <button onclick="switchTab('piket')" id="botnav-piket" class="bottom-nav-item flex flex-col items-center justify-center py-1 px-2 text-xs min-h-[48px] min-w-[48px] text-slate-300">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
     <span>Piket</span>
   </button>
-  <button onclick="switchTab('humas')" id="botnav-humas" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"/><path d="M18 14h-8"/><path d="M10 6h8v4h-8V6Z"/></svg>
-    <span>Humas</span>
-  </button>
-  <button onclick="switchTab('database')" id="botnav-database" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-    <span>Database</span>
-  </button>
-  <button onclick="switchTab('history')" id="botnav-history" class="bottom-nav-item flex flex-col items-center py-1 px-2 text-[10px] text-slate-300">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    <span>Riwayat</span>
+  <button type="button" id="botnav-more" onclick="toggleMoreSheet()" class="bottom-nav-item flex flex-col items-center justify-center py-1 px-2 text-xs min-h-[48px] min-w-[48px] text-slate-300">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+    <span>Lainnya</span>
   </button>
 </nav>
+
+<div id="more-sheet" class="more-sheet md:hidden fixed inset-0 z-40">
+  <button type="button" class="absolute inset-0 bg-black/50" onclick="closeMoreSheet()" aria-label="Tutup menu"></button>
+  <div class="absolute bottom-16 left-0 right-0 mx-2 mb-2 rounded-xl border p-3 space-y-1" style="background: var(--surface-alt); border-color: var(--line);">
+    <p class="text-xs font-semibold text-slate-400 px-2 pb-1">Menu lain</p>
+    <button onclick="switchTab('humas')" id="botnav-humas" class="bottom-nav-item w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-left min-h-[44px]">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"/><path d="M18 14h-8"/><path d="M10 6h8v4h-8V6Z"/></svg>
+      <span>Humas &amp; Rilis</span>
+    </button>
+    <button onclick="switchTab('database')" id="botnav-database" class="bottom-nav-item w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-left min-h-[44px]">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <span>Petugas &amp; Kamus</span>
+    </button>
+    <button onclick="switchTab('history')" id="botnav-history" class="bottom-nav-item w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-left min-h-[44px]">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Riwayat</span>
+    </button>
+    <button onclick="logoutSIMAP()" class="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-left min-h-[44px] text-red-300">
+      Keluar
+    </button>
+  </div>
+</div>
 
 <!-- ==================== MAIN CONTENT AREA ==================== -->
 <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
 
   <!-- TOP HEADER -->
-  <header class="sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center justify-between shadow-sm" style="background: var(--navy); border-bottom: 2px solid var(--gold);">
-    <div class="flex items-center gap-3">
-      <div class="md:hidden w-8 h-8 rounded bg-amber-400 flex items-center justify-center font-display font-bold text-slate-900 text-sm">
+  <header class="sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center justify-between" style="background: var(--navy); border-bottom: 1px solid var(--gold);">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="md:hidden w-10 h-10 rounded bg-amber-400 flex items-center justify-center font-display font-bold text-slate-900 text-sm">
         P
       </div>
-      <div>
-        <h2 id="top-header-title" class="text-base font-bold text-white tracking-wide font-display">Dashboard Utama</h2>
-        <p class="text-xs hidden sm:block" style="color: var(--gold-soft);">Sistem Informasi Manajemen Atensi &amp; Piket — Lapas Kelas IIB Tanjung Pati</p>
+      <div class="min-w-0">
+        <h2 id="top-header-title" class="text-base font-bold text-white tracking-wide font-display truncate">Dashboard</h2>
+        <p class="text-xs hidden sm:block truncate" style="color: var(--muted);">SIMAP — Lapas Kelas IIB Tanjung Pati</p>
       </div>
     </div>
     <div class="flex items-center gap-3 sm:gap-4 text-right">
-      <div class="font-mono text-sm font-semibold" style="color: var(--gold-soft);" id="clock-wib">00:00:00 WIB</div>
+      <div class="font-mono text-sm font-semibold" style="color: var(--gold-text);" id="clock-wib">00:00:00 WIB</div>
       <div id="top-status-pill" class="status-pill hidden sm:inline-flex">
-        <span id="top-status-dot" class="status-dot pulse" style="background: #D9A441;"></span>
+        <span id="top-status-dot" class="status-dot" style="background: #D9A441;"></span>
         <span id="top-status-text">Siap (Mode Lokal)</span>
       </div>
-      <button onclick="logoutSIMAP()" title="Keluar dari Portal" class="flex items-center gap-1.5 bg-red-950/60 hover:bg-red-900 border border-red-500/40 text-red-200 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span class="hidden md:inline">Keluar</span>
-      </button>
     </div>
   </header>
 
@@ -445,266 +493,94 @@
     <!-- =========================================================
          TAB 1: DASHBOARD UTAMA
          ========================================================= -->
-    <div id="view-dashboard" class="tab-view active space-y-6">
-      
-      <!-- WELCOME BANNER -->
-      <div class="doc-card p-6 relative overflow-hidden" style="background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%); color: #FFFFFF; border-color: var(--gold);">
-        <div class="relative z-10 max-w-3xl space-y-2">
-          <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded" style="background: var(--gold); color: var(--navy);">Portal Operasional Terintegrasi Lapas Tanjung Pati</span>
-          <h2 class="text-xl sm:text-2xl font-bold font-display">Selamat Datang di Portal Operasional Terintegrasi</h2>
-          <p class="text-sm text-slate-200 leading-relaxed">
-            Sistem terpadu untuk menyusun <strong>Laporan Atensi Pimpinan</strong> dan <strong>Reminder Piket Harian</strong> di lingkungan Lembaga Pemasyarakatan Kelas IIB Tanjung Pati. Semua data tersimpan aman di peramban Anda.
-          </p>
-          <div class="pt-3 flex flex-wrap gap-3">
-            <button onclick="switchTab('atensi')" class="btn-gold text-sm">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-              Buat Laporan Atensi
-            </button>
-            <button onclick="switchTab('piket')" class="btn-secondary text-sm !bg-white/10 !text-white !border-white/20 hover:!bg-white/20">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-              Jadwal &amp; Reminder Piket
-            </button>
-          </div>
+    <div id="view-dashboard" class="tab-view active space-y-5">
+
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+        <div class="space-y-1">
+          <p class="text-sm" style="color: var(--muted);" id="dash-greeting">Selamat bertugas</p>
+          <h2 class="text-xl sm:text-2xl font-bold font-display text-white">Operasional hari ini</h2>
+          <p class="text-sm" style="color: var(--muted);" id="dash-date-line">—</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="switchTab('atensi')" class="btn-gold text-sm">Buat Laporan Atensi</button>
+          <button onclick="switchTab('piket')" class="btn-secondary text-sm">Buat Reminder Piket</button>
+          <button onclick="switchTab('database')" class="btn-outline text-sm">Tambah Petugas</button>
         </div>
       </div>
 
-      <!-- DESKRIPSI KEGUNAAN MODUL & FITUR UTAMA PORTAL -->
-      <div class="space-y-3">
-        <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
-          <div class="flex items-center gap-2">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
-            <h3 class="text-base font-bold font-display tracking-wide text-white">Deskripsi & Kegunaan Modul Utama Portal</h3>
-          </div>
-          <span class="text-xs text-slate-400 hidden sm:inline">Klik tombol modul untuk menyusun laporan atau mengelola data</span>
+      <div class="doc-card px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="sync-banner">
+          <span id="dash-sync-dot" class="status-dot" style="background: var(--warning);"></span>
+          <span id="dash-sync-text">Mode lokal — data tersimpan di perangkat ini</span>
         </div>
+        <p class="text-xs font-mono" style="color: var(--muted);" id="dash-sync-time">Belum tersinkronkan ke cloud</p>
+      </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <!-- MODUL 1: LAPORAN ATENSI -->
-          <div class="doc-card p-5 flex flex-col justify-between hover:border-[var(--gold)] transition-all duration-300 group bg-gradient-to-b from-slate-900/90 to-slate-900/60 border border-slate-700/80 rounded-xl relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all"></div>
-            <div>
-              <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
-                </div>
-                <span id="stat-draft-status" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">Kosong</span>
-              </div>
-              <h4 class="font-bold text-sm text-white font-display mb-1.5 group-hover:text-[var(--gold)] transition-colors">1. Laporan Atensi Pimpinan</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Form penyusunan laporan harian situasional, rekap jumlah WBP, situasi keamanan, penguncian kamar hunian, dan giat lapas berformat resmi siap kirim ke pimpinan.
-              </p>
-            </div>
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
-              <span class="text-[11px] text-slate-400 font-mono">Standar Baku Kalapas</span>
-              <button onclick="switchTab('atensi')" class="text-xs font-semibold text-[var(--gold)] hover:underline flex items-center gap-1">
-                Buka Modul &rarr;
-              </button>
-            </div>
-          </div>
-
-          <!-- MODUL 2: GENERATOR & REMINDER PIKET -->
-          <div class="doc-card p-5 flex flex-col justify-between hover:border-[var(--gold)] transition-all duration-300 group bg-gradient-to-b from-slate-900/90 to-slate-900/60 border border-slate-700/80 rounded-xl relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition-all"></div>
-            <div>
-              <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950/60 text-amber-300 border border-amber-800/50">5 Kategori Piket</span>
-              </div>
-              <h4 class="font-bold text-sm text-white font-display mb-1.5 group-hover:text-[var(--gold)] transition-colors">2. Generator & Reminder Piket</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Sistem pengacakan dan penjadwalan regu pengamanan (Malam/Siang), perwira piket, & layanan kunjungan dengan proteksi otomatis anti-bentrok tugas ganda.
-              </p>
-            </div>
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
-              <span class="text-[11px] text-slate-400 font-mono">Format WhatsApp Rapi</span>
-              <button onclick="switchTab('piket')" class="text-xs font-semibold text-[var(--gold)] hover:underline flex items-center gap-1">
-                Buka Modul &rarr;
-              </button>
-            </div>
-          </div>
-
-          <!-- MODUL 3: DATABASE PETUGAS -->
-          <div class="doc-card p-5 flex flex-col justify-between hover:border-[var(--gold)] transition-all duration-300 group bg-gradient-to-b from-slate-900/90 to-slate-900/60 border border-slate-700/80 rounded-xl relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all"></div>
-            <div>
-              <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/60 text-emerald-300 border border-emerald-800/50"><span id="stat-total-officers">0</span> Petugas</span>
-              </div>
-              <h4 class="font-bold text-sm text-white font-display mb-1.5 group-hover:text-[var(--gold)] transition-colors">3. Database Personel & Regu</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Manajemen terpusat seluruh data pegawai, regu pengamanan, perwira, dan staf layanan. Memudahkan penambahan, rotasi, serta pemutakhiran personel di setiap pos.
-              </p>
-            </div>
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
-              <span class="text-[11px] text-slate-400 font-mono">Daftar Pegawai Aktif</span>
-              <button onclick="switchTab('piket')" class="text-xs font-semibold text-[var(--gold)] hover:underline flex items-center gap-1">
-                Kelola Data &rarr;
-              </button>
-            </div>
-          </div>
-
-          <!-- MODUL 4: KAMUS KOREKSI & BACKUP -->
-          <div class="doc-card p-5 flex flex-col justify-between hover:border-[var(--gold)] transition-all duration-300 group bg-gradient-to-b from-slate-900/90 to-slate-900/60 border border-slate-700/80 rounded-xl relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition-all"></div>
-            <div>
-              <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-950/60 text-purple-300 border border-purple-800/50"><span id="stat-corrections">0</span> Kosakata</span>
-              </div>
-              <h4 class="font-bold text-sm text-white font-display mb-1.5 group-hover:text-[var(--gold)] transition-colors">4. Kamus Auto-Koreksi & Backup</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Fitur pintar pengoreksi singkatan teknis pemasyarakatan (seperti WBP/Astekpam) secara otomatis, disertai backup lokal & sinkronisasi cloud Supabase real-time.
-              </p>
-            </div>
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
-              <span class="text-[11px] text-slate-400 font-mono">Auto-Correction & Sync</span>
-              <button onclick="switchTab('history')" class="text-xs font-semibold text-[var(--gold)] hover:underline flex items-center gap-1">
-                Kamus & Log &rarr;
-              </button>
-            </div>
-          </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div class="doc-card p-4 space-y-2">
+          <p class="text-xs font-semibold" style="color: var(--muted);">Laporan hari ini</p>
+          <p id="dash-today-atensi" class="text-sm font-semibold text-white leading-snug">Belum ada laporan tersimpan hari ini</p>
+          <button onclick="switchTab('atensi')" class="text-sm font-semibold" style="color: var(--gold-text);">Buka generator →</button>
+        </div>
+        <div class="doc-card p-4 space-y-2">
+          <p class="text-xs font-semibold" style="color: var(--muted);">Reminder piket berikutnya</p>
+          <p id="dash-next-piket" class="text-sm font-semibold text-white leading-snug">Belum ada reminder tersimpan</p>
+          <button onclick="switchTab('piket')" class="text-sm font-semibold" style="color: var(--gold-text);">Buka jadwal →</button>
+        </div>
+        <div class="doc-card p-4 space-y-2">
+          <p class="text-xs font-semibold" style="color: var(--muted);">Peringatan jadwal</p>
+          <p id="dash-conflict" class="text-sm font-semibold text-white leading-snug">Tidak ada petugas ganda pada form piket</p>
+        </div>
+        <div class="doc-card p-4 space-y-2">
+          <p class="text-xs font-semibold" style="color: var(--muted);">Data belum lengkap</p>
+          <p id="dash-incomplete" class="text-sm font-semibold text-white leading-snug">Semua draf atensi kosong</p>
         </div>
       </div>
 
-      <!-- STATISTIK & DIAGRAM PRODUKTIVITAS GENERATE PESAN/TEKS -->
-      <div class="doc-card p-6 border-l-4 border-l-[var(--gold)] space-y-5 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/95">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
-          <div>
-            <span class="inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-soft text-[var(--gold)] border border-gold-border mb-1">Analytics Dashboard</span>
-            <h3 class="text-lg font-bold font-display text-white">Statistik & Diagram Output Pesan yang Digenerate</h3>
-            <p class="text-xs text-slate-400">Rekapitulasi jumlah teks laporan dan reminder jadwal piket yang telah dihasilkan oleh sistem</p>
-          </div>
-          <button onclick="renderDashboardStats()" class="btn-outline text-xs self-start sm:self-center">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-            Perbarui Data
-          </button>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="doc-card p-4">
+          <p class="text-xs font-semibold" style="color: var(--muted);">Output tersimpan</p>
+          <p id="stat-history-count" class="text-3xl font-bold font-display text-white mt-1">0</p>
+          <p class="text-xs mt-1" style="color: var(--muted);">Dari riwayat yang sama</p>
         </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_1.3fr] gap-6 items-center">
-          <!-- DIAGRAM DONUT CHART.JS -->
-          <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex flex-col items-center justify-center relative min-h-[260px]">
-            <div class="w-full h-[220px] relative flex items-center justify-center">
-              <canvas id="simapActivityChart"></canvas>
-            </div>
-            <p class="text-[11px] text-slate-400 mt-2 italic text-center">*Proporsi pembuatan laporan berdasarkan riwayat tersimpan & tersalin</p>
-          </div>
-
-          <!-- KARTU COUNTER STATISTIK DETAIL -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wide text-slate-400">Total Output Digenerate</span>
-                <span class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                </span>
-              </div>
-              <div class="mt-3">
-                <span id="stat-history-count" class="text-3xl font-extrabold font-display text-white tracking-tight">0</span>
-                <span class="text-xs text-[var(--gold)] font-bold ml-1">Pesan / Teks</span>
-              </div>
-              <p class="text-[11px] text-slate-400 mt-2 border-t border-slate-800 pt-2">Seluruh laporan dan reminder yang telah dibuat & siap disalin.</p>
-            </div>
-
-            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wide text-slate-400">Laporan Atensi Pimpinan</span>
-                <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
-                </span>
-              </div>
-              <div class="mt-3">
-                <span id="stat-atensi-generated" class="text-3xl font-extrabold font-display text-emerald-400 tracking-tight">0</span>
-                <span class="text-xs text-slate-400 ml-1">Dokumen</span>
-              </div>
-              <p class="text-[11px] text-slate-400 mt-2 border-t border-slate-800 pt-2">Laporan situasional harian pengamanan & regu yang diterbitkan.</p>
-            </div>
-
-            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wide text-slate-400">Reminder Jadwal Piket</span>
-                <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                </span>
-              </div>
-              <div class="mt-3">
-                <span id="stat-piket-generated" class="text-3xl font-extrabold font-display text-amber-400 tracking-tight">0</span>
-                <span class="text-xs text-slate-400 ml-1">Pemberitahuan</span>
-              </div>
-              <p class="text-[11px] text-slate-400 mt-2 border-t border-slate-800 pt-2">Pesan reminder dinas & pergantian regu via WhatsApp.</p>
-            </div>
-
-            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wide text-slate-400">Efisiensi Waktu Kerja</span>
-                <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                </span>
-              </div>
-              <div class="mt-3">
-                <span id="stat-time-saved" class="text-3xl font-extrabold font-display text-purple-400 tracking-tight">0m</span>
-                <span class="text-xs text-slate-400 ml-1">Dihemat</span>
-              </div>
-              <p class="text-[11px] text-slate-400 mt-2 border-t border-slate-800 pt-2">Estimasi waktu yang dihemat dari otomatisasi penyusunan teks.</p>
-            </div>
-          </div>
+        <div class="doc-card p-4">
+          <p class="text-xs font-semibold" style="color: var(--muted);">Laporan Atensi</p>
+          <p id="stat-atensi-generated" class="text-3xl font-bold font-display mt-1" style="color: var(--emerald);">0</p>
+          <p class="text-xs mt-1" style="color: var(--muted);">Entri tipe ATENSI</p>
+        </div>
+        <div class="doc-card p-4">
+          <p class="text-xs font-semibold" style="color: var(--muted);">Reminder Piket</p>
+          <p id="stat-piket-generated" class="text-3xl font-bold font-display text-amber-300 mt-1">0</p>
+          <p class="text-xs mt-1" style="color: var(--muted);">Entri tipe PIKET</p>
+        </div>
+        <div class="doc-card p-4">
+          <p class="text-xs font-semibold" style="color: var(--muted);">Petugas</p>
+          <p class="mt-1"><span id="stat-total-officers" class="text-3xl font-bold font-display text-white">0</span></p>
+          <p class="text-xs mt-1" style="color: var(--muted);"><span id="stat-officer-placements">0</span> penempatan kategori · <span id="stat-corrections">0</span> kamus</p>
         </div>
       </div>
 
-      <!-- PANDUAN CEPAT & JAM DINAS -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-4">
         <div class="doc-card p-5 space-y-3">
-          <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <h3 class="font-bold text-sm font-display" style="color: var(--navy);">Jadwal &amp; Ketentuan Jam Dinas Piket</h3>
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="section-title font-display">Aktivitas terbaru</h3>
+            <button onclick="switchTab('history')" class="text-sm font-semibold" style="color: var(--gold-text);">Lihat riwayat</button>
           </div>
-          <ul class="text-xs text-slate-600 space-y-2.5">
-            <li class="flex items-start gap-2">
-              <span class="w-2 h-2 rounded-full bg-blue-600 mt-1 shrink-0"></span>
-              <div><strong>Regu Pengamanan (Piket Malam):</strong> Pukul 17.30 - 07.30 WIB. Serah terima dilaksanakan sebelum apel malam di area halaman/kplp.</div>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="w-2 h-2 rounded-full bg-amber-600 mt-1 shrink-0"></span>
-              <div><strong>Regu Pengamanan (Piket Siang):</strong> Pukul 07.30 - 17.30 WIB. Apel serah terima pagi bersama jajaran perwira piket.</div>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-600 mt-1 shrink-0"></span>
-              <div><strong>Piket Kunjungan &amp; Layanan Barang:</strong> Pukul 09.00 - 11.30 WIB (Pagi) &amp; 13.30 - 15.00 WIB (Siang).</div>
-            </li>
-          </ul>
+          <div id="dash-recent-list" class="space-y-2"></div>
         </div>
-
         <div class="doc-card p-5 space-y-3">
-          <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <h3 class="font-bold text-sm font-display" style="color: var(--navy);">Fitur Unggulan SIMAP</h3>
+          <div class="flex items-center justify-between">
+            <h3 class="section-title font-display">Komposisi output</h3>
+            <button onclick="renderDashboardStats()" class="btn-outline text-xs">Perbarui</button>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-              <strong class="block text-slate-800 mb-0.5">⚡ Smart Auto-Correction</strong>
-              <p class="text-slate-500">Ketik singkatan seperti <code>wbp</code> atau <code>astekpam</code>, sistem otomatis mengoreksi ke format baku resmi.</p>
-            </div>
-            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-              <strong class="block text-slate-800 mb-0.5">⚠️ Deteksi Bertugas Ganda</strong>
-              <p class="text-slate-500">Mencegah bentrok jadwal jika satu petugas terpilih di 2 kategori piket dalam hari yang sama.</p>
-            </div>
-            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-              <strong class="block text-slate-800 mb-0.5">💾 Auto-Save &amp; Backup</strong>
-              <p class="text-slate-500">Semua draf otomatis tersimpan. Ekspor data backup dalam format JSON kapan saja.</p>
-            </div>
-            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-              <strong class="block text-slate-800 mb-0.5">📱 Format WhatsApp Rapi</strong>
-              <p class="text-slate-500">Output langsung siap disalin dengan format bold, emoji, dan penomoran standar WA.</p>
-            </div>
+          <div class="h-[200px] relative">
+            <canvas id="simapActivityChart"></canvas>
           </div>
+          <p class="text-xs" style="color: var(--muted);">Diagram mengikuti jumlah di halaman Riwayat. Tidak memakai angka dummy.</p>
         </div>
       </div>
+
+      <p class="hidden"><span id="stat-draft-status">Kosong</span><span id="stat-time-saved">0m</span></p>
 
     </div>
 
@@ -713,7 +589,15 @@
          ========================================================= -->
     <div id="view-atensi" class="tab-view space-y-6">
       
-      <div id="atensi-validation-msg" class="hidden p-4 rounded-lg text-sm bg-red-50 border-l-4 border-red-700 text-red-800 font-medium"></div>
+      <div id="atensi-validation-msg" class="hidden p-4 rounded-lg text-sm border-l-4 font-medium" style="background: var(--maroon-soft); border-color: var(--maroon); color: #FECACA;"></div>
+
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-2 text-sm" id="atensi-dirty-status">
+          <span class="dirty-dot hidden" id="atensi-dirty-dot"></span>
+          <span id="atensi-dirty-text" style="color: var(--muted);">Draf tersimpan otomatis</span>
+        </div>
+        <p class="text-xs font-mono" id="atensi-ready-id" style="color: var(--muted);"></p>
+      </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-6">
         
@@ -724,7 +608,7 @@
           <div class="doc-card p-5">
             <div class="flex items-center gap-3 mb-4">
               <span class="numeral-chip">I</span>
-              <label for="at_kegiatan" class="text-sm font-bold tracking-wide" style="color: var(--navy);">KEGIATAN UTAMA</label>
+              <label for="at_kegiatan" class="section-title">Kegiatan utama</label>
             </div>
             <input
               type="text"
@@ -739,7 +623,7 @@
           <div class="doc-card p-5">
             <div class="flex items-center gap-3 mb-4">
               <span class="numeral-chip">II</span>
-              <h3 class="text-sm font-bold tracking-wide" style="color: var(--navy);">WAKTU &amp; TEMPAT</h3>
+              <h3 class="section-title">Waktu &amp; tempat</h3>
             </div>
             <div class="space-y-4">
               <div>
@@ -788,19 +672,19 @@
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-3">
                 <span class="numeral-chip">III</span>
-                <h3 class="text-sm font-bold tracking-wide" style="color: var(--navy);">URAIAN KEGIATAN</h3>
+                <h3 class="section-title">Uraian kegiatan</h3>
               </div>
-              <span class="text-[11px] font-semibold text-slate-400">Gunakan "-" untuk poin</span>
+              <span class="text-xs font-semibold" style="color: var(--muted);">Gunakan "-" untuk poin</span>
             </div>
 
             <!-- QUICK TEMPLATES -->
             <div class="mb-3">
-              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1.5">⚡ Sisipkan Kalimat Cepat (Template):</span>
+              <span class="text-xs font-semibold block mb-1.5" style="color: var(--muted);">Sisipkan kalimat cepat</span>
               <div class="flex flex-wrap gap-1.5">
-                <button type="button" onclick="insertAtensiTemplate('Apel Serah Terima Tugas Regu Pengamanan berjalan aman dan lengkap.')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Apel Serah Terima</button>
-                <button type="button" onclick="insertAtensiTemplate('Melaksanakan kontrol keliling blok hunian dan area brandgang.')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Kontrol Brandgang</button>
-                <button type="button" onclick="insertAtensiTemplate('Pelayanan kunjungan tatap muka dan penitipan barang berjalan tertib.')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Pelayanan Kunjungan</button>
-                <button type="button" onclick="insertAtensiTemplate('Kondisi lapas dalam keadaan aman, tertib, dan terkendali.')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Situasi Aman</button>
+                <button type="button" onclick="insertAtensiTemplate('Apel Serah Terima Tugas Regu Pengamanan berjalan aman dan lengkap.')" class="btn-outline text-xs">+ Apel Serah Terima</button>
+                <button type="button" onclick="insertAtensiTemplate('Melaksanakan kontrol keliling blok hunian dan area brandgang.')" class="btn-outline text-xs">+ Kontrol Brandgang</button>
+                <button type="button" onclick="insertAtensiTemplate('Pelayanan kunjungan tatap muka dan penitipan barang berjalan tertib.')" class="btn-outline text-xs">+ Pelayanan Kunjungan</button>
+                <button type="button" onclick="insertAtensiTemplate('Kondisi lapas dalam keadaan aman, tertib, dan terkendali.')" class="btn-outline text-xs">+ Situasi Aman</button>
               </div>
             </div>
 
@@ -828,7 +712,7 @@
           <div class="doc-card p-5">
             <div class="flex items-center gap-3 mb-4">
               <span class="numeral-chip">IV</span>
-              <h3 class="text-sm font-bold tracking-wide" style="color: var(--navy);">PENUTUP &amp; TANDATANGAN</h3>
+              <h3 class="section-title">Penutup &amp; tanda tangan</h3>
             </div>
             <div class="space-y-4">
               <div>
@@ -867,21 +751,18 @@
           </div>
 
           <!-- ACTION BUTTONS -->
-          <div class="doc-card p-4 flex flex-wrap gap-3 justify-between items-center bg-slate-50">
-            <div class="flex gap-2">
-              <button onclick="generateAndCopyAtensi()" id="btn-copy-atensi" class="btn-primary text-sm">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                Buat &amp; Salin Laporan
-              </button>
-              <button onclick="saveAtensiToHistoryManual()" class="btn-gold text-sm">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                Simpan ke Riwayat
-              </button>
+          <div class="doc-card p-4 space-y-3">
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="prepareAtensiReport()" id="btn-prepare-atensi" class="btn-primary text-sm">Buat Laporan</button>
+              <button type="button" onclick="generateAndCopyAtensi()" id="btn-copy-atensi" class="btn-gold text-sm" disabled>Salin ke WhatsApp</button>
             </div>
-            <button onclick="resetAtensiForm()" class="btn-secondary text-xs text-red-600 border-red-200 hover:bg-red-50">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
-              Reset Form
-            </button>
+            <div class="flex flex-wrap gap-2 justify-between items-center">
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="saveAtensiDraftManual()" class="btn-secondary text-sm">Simpan Draf</button>
+                <button type="button" onclick="saveAtensiToHistoryManual()" class="btn-outline text-sm">Simpan ke Riwayat</button>
+              </div>
+              <button type="button" onclick="resetAtensiForm()" class="btn-secondary text-sm text-red-300 border-red-500/30">Reset Form</button>
+            </div>
           </div>
 
         </div>
@@ -893,23 +774,23 @@
               <div class="letterhead-seal">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/></svg>
               </div>
-              <p class="text-[0.65rem] font-bold tracking-wider uppercase text-slate-500">Portal Operasional Terintegrasi</p>
-              <p class="font-display font-bold text-sm sm:text-base" style="color: var(--navy);">Lapas Kelas IIB Tanjung Pati</p>
+              <p class="text-xs font-bold tracking-wider uppercase" style="color: var(--muted);">Portal Operasional Terintegrasi</p>
+              <p class="font-display font-bold text-sm sm:text-base" style="color: var(--gold-text);">Lapas Kelas IIB Tanjung Pati</p>
             </div>
             <div class="p-5 space-y-3">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                  <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Pratinjau Pesan WhatsApp</p>
+                  <p class="text-xs font-bold tracking-wide" style="color: var(--muted);">Pratinjau pesan WhatsApp</p>
                 </div>
-                <span class="text-[10px] text-slate-400 font-mono">Real-time sync</span>
+                <span class="text-xs font-mono" style="color: var(--muted);">Langsung diperbarui</span>
               </div>
               
               <div id="atensi-live-preview" class="whatsapp-bubble font-sans">
                 <p class="text-center italic text-slate-500 py-4">Isi data pada form di samping untuk melihat pratinjau pesan resmi…</p>
               </div>
 
-              <p class="text-[11px] text-slate-400 text-center pt-2">
+              <p class="text-xs text-center pt-2" style="color: var(--muted);">
                 Format teks menggunakan asterisk (*) otomatis tebal (Bold) ketika disalin ke WhatsApp.
               </p>
             </div>
@@ -933,37 +814,36 @@
           <!-- HEADER & TANGGAL -->
           <div class="doc-card p-5 space-y-4">
             <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Header Pesan Reminder</label>
+              <label class="field-label">Header pesan reminder</label>
               <textarea id="pk_header" rows="2"
                 class="field-textarea text-sm resize-none font-semibold"
                 placeholder="MOHON IZIN MENGINGATKAN PIKET PERWIRA, PIKET KUNJUNGAN &amp; PENGGELEDAHAN BARANG"
                 oninput="onPiketInput()"></textarea>
-              <p class="text-[11px] text-slate-400 mt-1">Kosongkan untuk menggunakan judul standar Lapas.</p>
+              <p class="text-xs mt-1" style="color: var(--muted);">Kosongkan untuk menggunakan judul standar Lapas.</p>
             </div>
 
-            <div class="border-t border-slate-200 pt-3">
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Pilih Tanggal Penugasan</label>
+            <div class="border-t pt-3" style="border-color: var(--line);">
+              <label class="field-label">Pilih tanggal penugasan</label>
               <div class="flex gap-2 mb-2.5">
-                <button type="button" data-shift="0" onclick="setPiketShiftAndAutoFill(0)" class="dateShiftBtn flex-1 text-xs font-bold py-2 rounded-lg bg-navy text-white" style="background: var(--navy);">Hari Ini</button>
-                <button type="button" data-shift="1" onclick="setPiketShiftAndAutoFill(1)" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Besok</button>
-                <button type="button" data-shift="2" onclick="setPiketShiftAndAutoFill(2)" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Lusa</button>
+                <button type="button" data-shift="0" onclick="setPiketShiftAndAutoFill(0)" class="dateShiftBtn date-chip is-active flex-1">Hari Ini</button>
+                <button type="button" data-shift="1" onclick="setPiketShiftAndAutoFill(1)" class="dateShiftBtn date-chip flex-1">Besok</button>
+                <button type="button" data-shift="2" onclick="setPiketShiftAndAutoFill(2)" class="dateShiftBtn date-chip flex-1">Lusa</button>
               </div>
               <input type="date" id="pk_date" class="field-input text-sm font-semibold" onchange="onPiketDateChange()">
-              <div class="mt-2.5 text-center rounded-lg py-2 text-sm font-bold border" style="background: var(--gold-soft); border-color: var(--gold-border); color: var(--navy);" id="pk_date_display">—</div>
+              <div class="mt-2.5 text-center rounded-lg py-2 text-sm font-bold border" style="background: var(--gold-soft); border-color: var(--gold-border); color: var(--gold-text);" id="pk_date_display">—</div>
 
-              <!-- SMART AUTO-FILL CONTROLS -->
-              <div class="mt-3.5 p-3.5 rounded-xl border space-y-2.5 shadow-sm transition-all" style="background: rgba(15, 31, 56, 0.04); border-color: var(--gold-border);">
-                <div class="flex items-center justify-between">
-                  <label class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer select-none">
-                    <input type="checkbox" id="pk_auto_fill_on_date" checked onchange="onAutoFillToggleChange()" class="w-4 h-4 rounded border-slate-300 text-navy focus:ring-navy cursor-pointer">
-                    <span>⚡ Otomatis Isi &amp; Acak Petugas Saat Tanggal Dipilih</span>
+              <div class="mt-3.5 p-3.5 rounded-xl border space-y-2.5" style="border-color: var(--gold-border); background: var(--surface-alt);">
+                <div class="flex items-center justify-between gap-2">
+                  <label class="flex items-center gap-2 text-sm font-semibold cursor-pointer select-none">
+                    <input type="checkbox" id="pk_auto_fill_on_date" checked onchange="onAutoFillToggleChange()" class="w-4 h-4 rounded cursor-pointer">
+                    <span>Isi otomatis saat tanggal dipilih</span>
                   </label>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-emerald-500/15 text-emerald-700 border border-emerald-500/30">Auto-Active</span>
+                  <span class="px-2 py-0.5 rounded text-xs font-bold tracking-wide bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Aktif</span>
                 </div>
-                <button type="button" onclick="autoFillPiketFromDb(false)" class="w-full py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm border hover:opacity-95" style="background: var(--navy); color: var(--gold); border-color: var(--gold);">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                  ⚡ Acak / Isi Otomatis Petugas Piket Hari Ini Sekarang
+                <button type="button" onclick="autoFillPiketFromDb(false)" class="btn-gold w-full text-sm">
+                  Acak / isi otomatis (posisi belum terkunci)
                 </button>
+                <p id="pk-autofill-reason" class="text-xs hidden" style="color: var(--muted);"></p>
               </div>
             </div>
           </div>
@@ -972,12 +852,12 @@
           <div id="piket-categories-container" class="space-y-4"></div>
 
           <!-- TAMBAH KATEGORI BARU -->
-          <div class="doc-card p-4 border-dashed border-2 flex items-center justify-between bg-slate-50/50">
+          <div class="doc-card p-4 border-dashed border-2 flex items-center justify-between" style="border-color: var(--line);">
             <div>
-              <h4 class="text-xs font-bold uppercase tracking-wide text-slate-600">Perlu Kategori Piket Lain?</h4>
-              <p class="text-[11px] text-slate-400">Tambahkan pos/tugas baru jika ada kegiatan insidentil</p>
+              <h4 class="text-sm font-bold">Perlu kategori piket lain?</h4>
+              <p class="text-xs" style="color: var(--muted);">Tambahkan pos atau tugas baru jika ada kegiatan insidentil</p>
             </div>
-            <button onclick="openCustomCategoryModal()" class="btn-outline text-xs !py-1.5">
+            <button onclick="openCustomCategoryModal()" class="btn-outline text-sm">
               + Kategori Baru
             </button>
           </div>
@@ -987,39 +867,38 @@
         <!-- PREVIEW PIKET -->
         <div class="h-full">
           <div class="doc-card sticky top-20 max-h-[calc(100vh-110px)] overflow-y-auto p-5 space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+            <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--line);">
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                <p class="text-xs font-bold uppercase tracking-wide text-slate-600">Preview Output Reminder</p>
+                <p class="text-sm font-bold">Pratinjau reminder</p>
               </div>
-              <span id="pk-warn-badge" class="hidden text-[10px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full animate-bounce">
-                ⚠️ Ada Petugas Ganda
+              <span id="pk-warn-badge" class="hidden text-xs font-bold text-amber-200 bg-amber-500/15 border border-amber-500/40 px-2 py-1 rounded">
+                Ada petugas ganda
               </span>
             </div>
 
-            <!-- CATATAN SOP EDITABLE -->
-            <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
+            <div class="rounded-lg p-3 space-y-2 border" style="background: var(--surface-alt); border-color: var(--line);">
               <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold uppercase tracking-wide text-slate-500">SOP / Catatan Kunjungan (Bisa Diedit):</span>
-                <button onclick="resetCatatanSop()" class="text-[10px] text-blue-600 hover:underline">Reset SOP Default</button>
+                <span class="text-xs font-semibold" style="color: var(--muted);">SOP / catatan kunjungan</span>
+                <button onclick="resetCatatanSop()" class="text-xs" style="color: var(--gold-text);">Reset SOP default</button>
               </div>
-              <textarea id="pk_catatan_sop" rows="4" class="w-full text-xs bg-white border border-slate-300 rounded p-2 focus:ring-1 focus:ring-blue-500 font-sans" oninput="onPiketInput()">1. Kunjungan pagi dimulai pukul 09.00 - 11.00 WIB
+              <textarea id="pk_catatan_sop" rows="4" class="field-textarea text-sm" oninput="onPiketInput()">1. Kunjungan pagi dimulai pukul 09.00 - 11.00 WIB
 2. Pelayanan titipan barang dimulai pukul 09.00 - 11.30 WIB
 3. Petugas piket yang bertugas harap selalu mematuhi peraturan
 4. Petugas piket harap selalu berkoordinasi dengan Piket Perwira Kunjungan</textarea>
             </div>
 
-            <pre id="pk-output-box" class="font-mono whitespace-pre-wrap text-[13px] leading-relaxed bg-slate-50 border border-slate-200 rounded-xl p-4 min-h-[160px] text-slate-800"></pre>
+            <pre id="pk-output-box" class="font-mono whitespace-pre-wrap text-sm leading-relaxed rounded-xl p-4 min-h-[160px]" style="background: var(--navy); border: 1px solid var(--line); color: var(--ink);"></pre>
 
             <div class="pt-2 space-y-2.5">
-              <button onclick="copyPiketOutput()" id="btn-copy-piket" class="btn-gold w-full py-3 text-sm font-bold shadow-md">
-                📋 Salin Output Reminder Piket
+              <button onclick="copyPiketOutput()" id="btn-copy-piket" class="btn-gold w-full py-3 text-sm font-bold">
+                Salin output reminder piket
               </button>
               <div class="flex gap-2">
-                <button onclick="savePiketToHistoryManual()" class="btn-secondary flex-1 text-xs">
+                <button onclick="savePiketToHistoryManual()" class="btn-secondary flex-1 text-sm">
                   Simpan ke Riwayat
                 </button>
-                <button onclick="resetPiketForm()" class="btn-secondary flex-1 text-xs text-red-600 hover:bg-red-50">
+                <button onclick="resetPiketForm()" class="btn-secondary flex-1 text-sm text-red-300">
                   Reset Jadwal
                 </button>
               </div>
@@ -1043,8 +922,8 @@
             <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">Kemenimipas Humas Suite</span>
             <span class="text-xs text-slate-400 font-mono">Ditjen PAS Standard</span>
           </div>
-          <h2 class="text-lg font-bold text-white font-display mt-1">AI Generator Rilis Berita &amp; Humas Kedinasan</h2>
-          <p class="text-xs text-slate-300">Buat artikel rilis berita 5W+1H, caption media sosial, dan broadcast WhatsApp dalam sekali input.</p>
+          <h2 class="text-lg font-bold text-white font-display mt-1">Generator rilis berita &amp; humas kedinasan</h2>
+          <p class="text-sm text-slate-300">Buat artikel 5W+1H, caption media sosial, dan broadcast WhatsApp dari satu formulir. Teks disusun dari template resmi, bukan kecerdasan buatan.</p>
         </div>
       </div>
 
@@ -1116,7 +995,7 @@
               <button onclick="generateHumasNews()" class="btn-gold flex-1 text-xs font-bold">
                 ⚡ Hasilkan Berita &amp; Caption
               </button>
-              <button onclick="resetHumasForm()" class="btn-secondary text-xs text-red-400 border-red-500/30 hover:bg-red-950/40">
+              <button onclick="resetHumasForm()" class="btn-secondary text-sm text-red-300 border-red-500/30">
                 Reset
               </button>
             </div>
@@ -1130,7 +1009,7 @@
           <div class="doc-card p-5 space-y-4">
             <div class="flex items-center justify-between border-b border-white/10 pb-3">
               <h3 class="font-bold text-sm text-white tracking-wide uppercase font-display">
-                2. Hasil Generasi Otomatis
+                2. Hasil template rilis
               </h3>
               <span class="text-[10px] text-amber-400 font-mono">Kemenimipas Verified Format</span>
             </div>
@@ -1197,51 +1076,57 @@
       <div class="doc-card p-5 space-y-4" style="border-left: 4px solid var(--gold); background: var(--surface-alt);">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h3 class="font-display font-bold text-base text-navy flex items-center gap-2">
-              <span>☁️ Pengaturan Sinkronisasi Supabase Cloud (Real-time Database)</span>
+            <h3 class="font-display font-bold text-base text-white flex items-center gap-2">
+              <span>Pengaturan sinkronisasi cloud</span>
             </h3>
-            <p class="text-xs text-slate-500 mt-0.5">
-              Hubungkan portal ini ke Supabase agar penambahan petugas dan kamus langsung sinkron ke seluruh perangkat pegawai Lapas.
+            <p class="text-sm mt-0.5" style="color: var(--muted);">
+              Status koneksi ditampilkan untuk semua petugas. URL dan kunci hanya dibuka setelah konfirmasi admin.
             </p>
           </div>
-          <div id="cfg-cloud-status-badge" class="px-2.5 py-1 rounded-full text-xs font-bold border shrink-0 bg-slate-100 text-slate-600 border-slate-300">
-            📴 Mode Lokal (Offline)
-          </div>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-          <div>
-            <label class="field-label">Supabase Project URL</label>
-            <input type="text" id="cfg-supa-url" placeholder="https://xyzabc.supabase.co" class="field-input !bg-white font-mono text-xs">
-          </div>
-          <div>
-            <label class="field-label">Supabase Anon Key (Public Key)</label>
-            <input type="password" id="cfg-supa-key" placeholder="eyJhbGciOiJIUzI1NiIsIn..." class="field-input !bg-white font-mono text-xs">
+          <div id="cfg-cloud-status-badge" class="px-2.5 py-1 rounded-full text-xs font-bold border shrink-0" style="background: var(--surface); color: var(--muted); border-color: var(--line);">
+            Mode lokal
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-slate-200">
-          <div class="text-[11px] text-slate-500 italic">
-            💡 Kunci tersimpan aman di browser Anda. Belum punya kunci? <span class="font-semibold text-navy">Jalankan file <code class="font-mono bg-amber-100 text-amber-900 px-1 rounded">supabase_schema.sql</code> di SQL Editor Supabase Anda.</span>
+        <div id="cloud-config-locked" class="space-y-3">
+          <p class="text-sm" style="color: var(--muted);">Bidang kunci koneksi disembunyikan agar tidak diubah sembarang operator.</p>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input type="password" id="cfg-admin-unlock" placeholder="Ketik ADMIN untuk membuka" class="field-input sm:max-w-xs">
+            <button type="button" onclick="unlockCloudSettings()" class="btn-outline text-sm">Buka pengaturan</button>
           </div>
-          <div class="flex gap-2">
-            <button onclick="disconnectSupabaseConfig()" type="button" class="btn-secondary text-xs text-red-600 hover:bg-red-50">
-              Putuskan &amp; Pakai Lokal
+        </div>
+
+        <div id="cloud-config-fields" class="hidden space-y-3">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label class="field-label">Supabase Project URL</label>
+              <input type="text" id="cfg-supa-url" placeholder="https://xyzabc.supabase.co" class="field-input font-mono text-sm">
+            </div>
+            <div>
+              <label class="field-label">Kunci anon (bukan service role)</label>
+              <input type="password" id="cfg-supa-key" placeholder="Kunci publik" class="field-input font-mono text-sm">
+            </div>
+          </div>
+          <p class="text-xs" style="color: var(--muted);">Jangan tempel service-role key. Jalankan <code class="font-mono">supabase_schema.sql</code> di SQL Editor jika tabel belum ada.</p>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="disconnectSupabaseConfig()" type="button" class="btn-secondary text-sm text-red-300">
+              Putuskan &amp; pakai lokal
             </button>
-            <button onclick="saveSupabaseConfig()" type="button" class="btn-gold text-xs">
-              💾 Simpan &amp; Hubungkan Cloud
+            <button onclick="saveSupabaseConfig()" type="button" class="btn-gold text-sm">
+              Simpan &amp; hubungkan
             </button>
+            <button type="button" onclick="lockCloudSettings()" class="btn-outline text-sm">Tutup pengaturan</button>
           </div>
         </div>
       </div>
 
       <!-- SUB-NAVIGATION TABS -->
-      <div class="flex border-b border-slate-300 gap-6">
-        <button onclick="switchDbSubTab('petugas')" id="subtab-btn-petugas" class="pb-3 text-sm font-bold text-navy border-b-2 border-navy">
-          👥 Daftar &amp; Database Petugas (<span id="db-total-count">0</span>)
+      <div class="flex border-b gap-6" style="border-color: var(--line);">
+        <button onclick="switchDbSubTab('petugas')" id="subtab-btn-petugas" class="pb-3 text-sm font-bold text-white border-b-2" style="border-color: var(--gold);">
+          Daftar petugas (<span id="db-unique-count">0</span> orang · <span id="db-total-count">0</span> penempatan)
         </button>
-        <button onclick="switchDbSubTab('kamus')" id="subtab-btn-kamus" class="pb-3 text-sm font-semibold text-slate-500 border-b-2 border-transparent hover:text-navy">
-          ⚡ Kamus Smart Auto-Correction (<span id="kamus-total-count">0</span>)
+        <button onclick="switchDbSubTab('kamus')" id="subtab-btn-kamus" class="pb-3 text-sm font-semibold border-b-2 border-transparent hover:text-white" style="color: var(--muted);">
+          Kamus koreksi (<span id="kamus-total-count">0</span>)
         </button>
       </div>
 
@@ -1249,9 +1134,9 @@
       <div id="subview-petugas" class="space-y-4">
         
         <!-- ADD OFFICER BAR & FILTER -->
-        <div class="doc-card p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-slate-50">
+        <div class="doc-card p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
           <div class="flex flex-1 gap-2 items-center">
-            <select id="db-filter-category" class="field-select !w-44 text-xs font-semibold" onchange="renderOfficersDatabase()">
+            <select id="db-filter-category" class="field-select !w-44 text-sm font-semibold" onchange="renderOfficersDatabase()">
               <option value="ALL">Semua Kategori</option>
               <option value="PERWIRA">Perwira Piket</option>
               <option value="PB">Penggeledahan Barang (PB)</option>
@@ -1259,22 +1144,13 @@
               <option value="PD">Pendaftaran / PD</option>
               <option value="WARTELSUSPAS">Wartelsuspas</option>
             </select>
-            <input type="text" id="db-search-input" placeholder="Cari nama atau gelar pegawai..." class="field-input text-xs" oninput="renderOfficersDatabase()">
+            <input type="text" id="db-search-input" placeholder="Cari nama atau gelar pegawai..." class="field-input text-sm" oninput="renderOfficersDatabase()">
           </div>
           <div class="flex flex-wrap gap-2">
-            <button onclick="openImportScheduleModal()" class="btn-gold text-xs shrink-0 flex items-center gap-1.5 shadow-sm">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              📥 Impor &amp; Auto-Parse Jadwal Bulanan
-            </button>
-            <button onclick="exportScheduleJson()" class="btn-outline text-xs shrink-0 flex items-center gap-1">
-              📤 Ekspor Backup (.json)
-            </button>
-            <button onclick="openAddOfficerModal()" class="btn-primary text-xs shrink-0">
-              + Tambah Petugas Baru
-            </button>
-            <button onclick="resetOfficersToSeed()" class="btn-secondary text-xs text-red-600 hover:bg-red-50 shrink-0">
-              Reset ke Data Asli Lapas
-            </button>
+            <button onclick="openImportScheduleModal()" class="btn-gold text-sm shrink-0">Impor jadwal</button>
+            <button onclick="exportScheduleJson()" class="btn-outline text-sm shrink-0">Ekspor JSON</button>
+            <button onclick="openAddOfficerModal()" class="btn-primary text-sm shrink-0">+ Tambah petugas</button>
+            <button onclick="resetOfficersToSeed()" class="btn-secondary text-sm text-red-300 shrink-0">Reset data asli</button>
           </div>
         </div>
 
@@ -1283,10 +1159,10 @@
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-sm">
               <thead>
-                <tr class="bg-slate-100 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                <tr class="text-xs font-bold tracking-wide" style="background: var(--surface-alt); color: var(--muted);">
                   <th class="py-3 px-4 w-12 text-center">No</th>
-                  <th class="py-3 px-4 w-44">Kategori Tugas</th>
-                  <th class="py-3 px-4">Nama Lengkap &amp; Gelar Resmi</th>
+                  <th class="py-3 px-4 w-44">Kategori tugas</th>
+                  <th class="py-3 px-4">Nama lengkap &amp; gelar</th>
                   <th class="py-3 px-4 w-32 text-right">Aksi</th>
                 </tr>
               </thead>
@@ -1302,9 +1178,9 @@
       <!-- SUB-VIEW 2: KAMUS AUTO-KOREKSI -->
       <div id="subview-kamus" class="hidden space-y-4">
         
-        <div class="doc-card p-4 flex flex-col sm:flex-row gap-3 items-center justify-between bg-slate-50">
-          <div class="text-xs text-slate-600">
-            Kamus ini bekerja otomatis pada saat Anda mengetik di kolom <strong>Uraian Kegiatan Laporan Atensi</strong>. Setiap singkatan/kata salah akan langsung diubah ke format baku.
+        <div class="doc-card p-4 flex flex-col sm:flex-row gap-3 items-center justify-between">
+          <div class="text-sm" style="color: var(--muted);">
+            Kamus ini bekerja saat Anda mengetik di kolom uraian Laporan Atensi.
           </div>
           <div class="flex gap-2 shrink-0">
             <button onclick="openAddCorrectionModal()" class="btn-gold text-xs">
@@ -1320,10 +1196,10 @@
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-sm">
               <thead>
-                <tr class="bg-slate-100 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                <tr class="text-xs font-bold tracking-wide" style="background: var(--surface-alt); color: var(--muted);">
                   <th class="py-3 px-4 w-12 text-center">No</th>
-                  <th class="py-3 px-4 w-64">Singkatan / Kata Salah (Ketik Ini)</th>
-                  <th class="py-3 px-4">Hasil Koreksi Baku (Otomatis Menjadi Ini)</th>
+                  <th class="py-3 px-4 w-64">Singkatan / kata salah</th>
+                  <th class="py-3 px-4">Hasil koreksi baku</th>
                   <th class="py-3 px-4 w-28 text-right">Aksi</th>
                 </tr>
               </thead>
@@ -1345,35 +1221,27 @@
       
       <!-- BACKUP & RESTORE CARDS -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="doc-card p-5 border-l-4" style="border-left-color: var(--navy);">
-          <div class="flex items-start justify-between">
+        <div class="doc-card p-5" style="border-left: 4px solid var(--gold);">
+          <div class="flex items-start justify-between gap-3">
             <div>
-              <h3 class="font-bold text-base font-display" style="color: var(--navy);">Ekspor Data Cadangan (.json)</h3>
-              <p class="text-xs text-slate-500 mt-1">Unduh seluruh database pegawai, kamus auto-koreksi, dan riwayat laporan sebagai file cadangan untuk dipindahkan ke komputer/HP lain.</p>
-            </div>
-            <div class="p-2.5 rounded-lg bg-blue-50 text-blue-700">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <h3 class="font-bold text-base font-display text-white">Ekspor cadangan (.json)</h3>
+              <p class="text-sm mt-1" style="color: var(--muted);">Unduh database petugas, kamus, dan riwayat sebagai file cadangan.</p>
             </div>
           </div>
-          <button onclick="exportBackupData()" class="btn-primary text-xs mt-4">
-            Unduh File Backup JSON
+          <button onclick="exportBackupData()" class="btn-primary text-sm mt-4">
+            Unduh file backup
           </button>
         </div>
 
-        <div class="doc-card p-5 border-l-4 border-emerald-600">
-          <div class="flex items-start justify-between">
-            <div>
-              <h3 class="font-bold text-base font-display text-emerald-900">Impor &amp; Pulihkan Data</h3>
-              <p class="text-xs text-slate-500 mt-1">Pilih file backup (.json) yang sebelumnya telah diunduh untuk memulihkan seluruh database dan riwayat ke perangkat ini.</p>
-            </div>
-            <div class="p-2.5 rounded-lg bg-emerald-50 text-emerald-700">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            </div>
+        <div class="doc-card p-5" style="border-left: 4px solid var(--emerald);">
+          <div>
+            <h3 class="font-bold text-base font-display text-white">Impor &amp; pulihkan data</h3>
+            <p class="text-sm mt-1" style="color: var(--muted);">Pilih file backup. Sistem membuat cadangan lokal otomatis sebelum menimpa data.</p>
           </div>
           <div class="mt-4 flex items-center gap-2">
-            <input type="file" id="import-file-input" accept=".json" class="hidden" onchange="importBackupData(event)">
-            <button onclick="document.getElementById('import-file-input').click()" class="btn-secondary text-xs font-bold border-emerald-300 text-emerald-800 hover:bg-emerald-50">
-              Pilih File Backup &amp; Pulihkan...
+            <input type="file" id="backup-import-file-input" accept=".json" class="hidden" onchange="importBackupData(event)">
+            <button onclick="document.getElementById('backup-import-file-input').click()" class="btn-secondary text-sm font-bold">
+              Pilih file backup
             </button>
           </div>
         </div>
@@ -1381,19 +1249,20 @@
 
       <!-- HISTORY LIST -->
       <div class="doc-card p-5 space-y-4">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b pb-4" style="border-color: var(--line);">
           <div>
-            <h3 class="font-bold text-base font-display" style="color: var(--navy);">Riwayat Laporan &amp; Reminder Tersimpan</h3>
-            <p class="text-xs text-slate-500">Daftar pesan resmi yang pernah disalin atau disimpan</p>
+            <h3 class="font-bold text-base font-display text-white">Riwayat laporan &amp; reminder</h3>
+            <p class="text-sm" style="color: var(--muted);">Sumber yang sama dengan angka di Dashboard</p>
           </div>
-          <div class="flex gap-2 items-center w-full sm:w-auto">
-            <select id="history-filter-type" class="field-select text-xs !py-1.5" onchange="renderHistoryLog()">
-              <option value="ALL">Semua Jenis</option>
+          <div class="flex flex-wrap gap-2 items-center w-full sm:w-auto">
+            <input type="search" id="history-search" placeholder="Cari judul atau isi..." class="field-input text-sm sm:w-52" oninput="renderHistoryLog()">
+            <select id="history-filter-type" class="field-select text-sm" onchange="renderHistoryLog()">
+              <option value="ALL">Semua jenis</option>
               <option value="ATENSI">Laporan Atensi</option>
               <option value="PIKET">Reminder Piket</option>
             </select>
-            <button onclick="clearAllHistory()" class="btn-secondary text-xs text-red-600 hover:bg-red-50 shrink-0 !py-1.5">
-              Hapus Semua Riwayat
+            <button onclick="clearAllHistory()" class="btn-secondary text-sm text-red-300 shrink-0">
+              Hapus semua riwayat
             </button>
           </div>
         </div>
@@ -1412,8 +1281,8 @@
 
 <!-- MODAL: ADD/EDIT OFFICER -->
 <div id="modal-officer" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
-  <div class="doc-card w-full max-w-md p-6 space-y-4 bg-white">
-    <h3 class="font-bold text-base font-display" style="color: var(--navy);" id="modal-officer-title">Tambah Petugas Baru</h3>
+  <div class="doc-card w-full max-w-md p-6 space-y-4" style="background: var(--surface-alt);">
+    <h3 class="font-bold text-base font-display text-white" id="modal-officer-title">Tambah Petugas Baru</h3>
     <div class="space-y-3 text-sm">
       <div>
         <label class="field-label">Kategori Tugas</label>
@@ -1439,8 +1308,8 @@
 
 <!-- MODAL: ADD CORRECTION KEY -->
 <div id="modal-correction" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
-  <div class="doc-card w-full max-w-md p-6 space-y-4 bg-white">
-    <h3 class="font-bold text-base font-display" style="color: var(--navy);">Tambah Kata Kunci Koreksi</h3>
+  <div class="doc-card w-full max-w-md p-6 space-y-4" style="background: var(--surface-alt);">
+    <h3 class="font-bold text-base font-display text-white">Tambah Kata Kunci Koreksi</h3>
     <div class="space-y-3 text-sm">
       <div>
         <label class="field-label">Kata Salah / Singkatan (yang diketik)</label>
@@ -1460,8 +1329,8 @@
 
 <!-- MODAL: ADD CUSTOM PIKET CATEGORY -->
 <div id="modal-custom-cat" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
-  <div class="doc-card w-full max-w-md p-6 space-y-4 bg-white">
-    <h3 class="font-bold text-base font-display" style="color: var(--navy);">Tambah Kategori Piket Baru</h3>
+  <div class="doc-card w-full max-w-md p-6 space-y-4" style="background: var(--surface-alt);">
+    <h3 class="font-bold text-base font-display text-white">Tambah Kategori Piket Baru</h3>
     <div class="space-y-3 text-sm">
       <div>
         <label class="field-label">Kode Kategori (Singkat, tanpa spasi)</label>
@@ -1491,96 +1360,96 @@
 
 <!-- MODAL: VIEW HISTORY DETAIL -->
 <div id="modal-history-detail" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
-  <div class="doc-card w-full max-w-2xl p-6 space-y-4 bg-white max-h-[85vh] flex flex-col">
-    <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+  <div class="doc-card w-full max-w-2xl p-6 space-y-4 max-h-[85vh] flex flex-col" style="background: var(--surface-alt);">
+    <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--line);">
       <div>
-        <span id="hist-modal-type-badge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider"></span>
-        <h3 id="hist-modal-title" class="font-bold text-base font-display mt-1 text-slate-800"></h3>
-        <p id="hist-modal-time" class="text-xs text-slate-400"></p>
+        <span id="hist-modal-type-badge" class="px-2 py-0.5 rounded text-xs font-bold tracking-wider"></span>
+        <h3 id="hist-modal-title" class="font-bold text-base font-display mt-1 text-white"></h3>
+        <p id="hist-modal-time" class="text-xs" style="color: var(--muted);"></p>
       </div>
-      <button onclick="closeHistoryDetailModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+      <button onclick="closeHistoryDetailModal()" class="text-slate-300 font-bold text-lg min-h-[40px] min-w-[40px]">✕</button>
     </div>
-    <div class="flex-1 overflow-y-auto bg-slate-50 p-4 rounded-lg border border-slate-200 font-mono text-xs leading-relaxed whitespace-pre-wrap text-slate-800" id="hist-modal-content"></div>
-    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 shrink-0">
-      <button onclick="closeHistoryDetailModal()" class="btn-secondary text-xs">Tutup</button>
-      <button onclick="copyHistoryModalContent()" class="btn-gold text-xs">📋 Salin Ulang Pesan Ini</button>
+    <div class="flex-1 overflow-y-auto p-4 rounded-lg font-mono text-sm leading-relaxed whitespace-pre-wrap" id="hist-modal-content" style="background: var(--navy); border: 1px solid var(--line); color: var(--ink);"></div>
+    <div class="flex justify-end gap-2 pt-2 border-t shrink-0" style="border-color: var(--line);">
+      <button onclick="closeHistoryDetailModal()" class="btn-secondary text-sm">Tutup</button>
+      <button onclick="copyHistoryModalContent()" class="btn-gold text-sm">Salin ulang pesan ini</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL: IMPOR & AUTO-PARSE JADWAL BULANAN -->
+<!-- MODAL: IMPOR JADWAL -->
 <div id="modal-import-jadwal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden">
-  <div class="doc-card w-full max-w-2xl p-6 space-y-5 bg-white max-h-[90vh] flex flex-col shadow-2xl">
-    <div class="flex items-center justify-between border-b border-slate-200 pb-3.5">
+  <div class="doc-card w-full max-w-2xl p-6 space-y-5 max-h-[90vh] flex flex-col" style="background: var(--surface-alt);">
+    <div class="flex items-center justify-between border-b pb-3.5" style="border-color: var(--line);">
       <div>
-        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-navy text-gold border border-gold/30">Auto-Parser Jadwal Bulanan</span>
-        <h3 class="font-bold text-base font-display mt-1 text-slate-800">📥 Impor &amp; Masukkan Jadwal Baru</h3>
-        <p class="text-xs text-slate-500">Tempel langsung dari Surat Perintah PDF/Excel/Word atau upload file konfigurasi JSON.</p>
+        <h3 class="font-bold text-base font-display text-white">Impor jadwal petugas</h3>
+        <p class="text-sm" style="color: var(--muted);">Tempel daftar nama atau unggah file JSON. Hasil parsing ditinjau sebelum disimpan.</p>
       </div>
-      <button onclick="closeImportScheduleModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+      <button onclick="closeImportScheduleModal()" class="text-slate-300 font-bold text-lg min-h-[40px] min-w-[40px]">✕</button>
     </div>
 
     <div class="flex-1 overflow-y-auto space-y-4 pr-1">
-      <!-- PILIH KATEGORI TUJUAN -->
       <div>
-        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">1. Pilih Kategori Tugas Tujuan</label>
-        <select id="import-target-category" class="field-select text-xs font-semibold">
-          <option value="ALL_AUTO_JSON">📦 Impor File Backup Lengkap Semua Kategori (.json / .csv)</option>
-          <option value="WARTELSUSPAS" selected>📋 Piket Pengawasan Wartelsuspas</option>
-          <option value="PERWIRA">🛡️ Perwira Pengawas Pelayanan</option>
-          <option value="PO">👥 Penggeledahan Orang (PO)</option>
-          <option value="PB">📦 Penggeledahan Barang (PB)</option>
-          <option value="PD">📝 Pendaftaran Kunjungan / PD</option>
+        <label class="field-label">1. Kategori tujuan</label>
+        <select id="import-target-category" class="field-select text-sm font-semibold">
+          <option value="ALL_AUTO_JSON">Impor file backup semua kategori (.json)</option>
+          <option value="WARTELSUSPAS" selected>Piket Pengawasan Wartelsuspas</option>
+          <option value="PERWIRA">Perwira Pengawas Pelayanan</option>
+          <option value="PO">Penggeledahan Orang (PO)</option>
+          <option value="PB">Penggeledahan Barang (PB)</option>
+          <option value="PD">Pendaftaran Kunjungan / PD</option>
         </select>
       </div>
-
-      <!-- TEXTAREA COPY PASTE -->
       <div>
-        <div class="flex items-center justify-between mb-1.5">
-          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide">2. Tempel Teks Daftar Nama Petugas</label>
-          <span class="text-[11px] text-slate-400 font-mono">1 baris = 1 nama</span>
-        </div>
+        <label class="field-label">2. Tempel daftar nama (satu baris satu nama)</label>
         <textarea id="import-schedule-text" rows="8"
-          class="field-textarea font-mono text-xs leading-relaxed resize-y bg-slate-50/80 border-slate-300 focus:bg-white"
-          placeholder="Contoh salin langsung dari Surat Perintah:&#10;1. NOVRIADY, SH&#10;2. HANDOKO&#10;3. DANIEL J.W. SIHOMBING&#10;4. TEDI SEPDIAN, SH&#10;&#10;(Nomor urut, tanda titik, atau bullet akan otomatis dibersihkan oleh sistem)"></textarea>
+          class="field-textarea font-mono text-sm leading-relaxed resize-y"
+          placeholder="1. NOVRIADY, SH&#10;2. HANDOKO"></textarea>
       </div>
-
-      <!-- OPSI MODE IMPOR -->
-      <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
-        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide">3. Mode Penggabungan Database</label>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 bg-white cursor-pointer hover:border-navy">
-            <input type="radio" name="import_mode" value="replace" checked class="mt-0.5 text-navy focus:ring-navy">
+      <div class="p-3.5 rounded-xl border space-y-2" style="border-color: var(--line);">
+        <label class="field-label">3. Mode penggabungan</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          <label class="flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer" style="border-color: var(--line);">
+            <input type="radio" name="import_mode" value="replace" checked class="mt-0.5">
             <div>
-              <strong class="block text-slate-800">⭕ Timpa &amp; Ganti Bulan Baru</strong>
-              <span class="text-[11px] text-slate-500">Menimpa daftar lama dengan nama-nama baru (Sangat disarankan saat ganti bulan).</span>
+              <strong class="block text-white">Timpa daftar kategori</strong>
+              <span class="text-xs" style="color: var(--muted);">Ganti nama lama dengan daftar baru.</span>
             </div>
           </label>
-          <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 bg-white cursor-pointer hover:border-navy">
-            <input type="radio" name="import_mode" value="append" class="mt-0.5 text-navy focus:ring-navy">
+          <label class="flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer" style="border-color: var(--line);">
+            <input type="radio" name="import_mode" value="append" class="mt-0.5">
             <div>
-              <strong class="block text-slate-800">⭕ Tambahkan ke Daftar</strong>
-              <span class="text-[11px] text-slate-500">Menambahkan nama baru tanpa menghapus petugas yang sudah ada sebelumnya.</span>
+              <strong class="block text-white">Tambahkan ke daftar</strong>
+              <span class="text-xs" style="color: var(--muted);">Nama baru ditambah, yang lama tetap.</span>
             </div>
           </label>
         </div>
       </div>
-
-      <!-- ATAU UPLOAD FILE -->
-      <div class="border-t border-slate-200 pt-3 flex items-center justify-between text-xs">
-        <span class="text-slate-500 font-semibold">Atau upload file `.json` / `.txt` backup:</span>
-        <label class="btn-outline !py-1.5 !px-3 cursor-pointer text-xs flex items-center gap-1.5">
-          <span>📁 Pilih File...</span>
+      <div class="border-t pt-3 flex items-center justify-between text-sm" style="border-color: var(--line);">
+        <span style="color: var(--muted);">Atau unggah file .json / .txt</span>
+        <label class="btn-outline cursor-pointer text-sm">
+          <span>Pilih file</span>
           <input type="file" id="import-file-input" accept=".json,.csv,.txt" class="hidden" onchange="handleScheduleFileUpload(event)">
         </label>
       </div>
     </div>
 
-    <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-200 shrink-0">
-      <button onclick="closeImportScheduleModal()" class="btn-secondary text-xs">Batal</button>
-      <button onclick="parseAndImportScheduleText()" class="btn-gold text-xs px-5 py-2 font-bold shadow-md">
-        ⚡ Simpan &amp; Terapkan Otomatis
-      </button>
+    <div class="flex justify-end gap-2.5 pt-3 border-t shrink-0" style="border-color: var(--line);">
+      <button onclick="closeImportScheduleModal()" class="btn-secondary text-sm">Batal</button>
+      <button onclick="parseAndImportScheduleText()" class="btn-gold text-sm px-5">Simpan &amp; terapkan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: TYPED CONFIRM -->
+<div id="modal-typed-confirm" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 hidden">
+  <div class="doc-card w-full max-w-md p-6 space-y-4" style="background: var(--surface-alt);">
+    <h3 class="font-bold text-base font-display text-white" id="typed-confirm-title">Konfirmasi</h3>
+    <p class="text-sm" style="color: var(--muted);" id="typed-confirm-body"></p>
+    <input type="text" id="typed-confirm-input" class="field-input" autocomplete="off">
+    <div class="flex justify-end gap-2">
+      <button type="button" onclick="closeTypedConfirm(false)" class="btn-secondary text-sm">Batal</button>
+      <button type="button" onclick="closeTypedConfirm(true)" class="btn-primary text-sm bg-red-800">Lanjutkan</button>
     </div>
   </div>
 </div>
@@ -1665,6 +1534,12 @@ let SIMAP_CLOUD = {
   key: 'sb_publishable__sLfvo2GwTwmvkp_lbyJXw_3oZaWpSb' 
 };
 let supabaseClient = null;
+let LAST_SYNC_AT = localStorage.getItem('simap_last_sync_at') || '';
+let ATENSI_READY = null;
+let ATENSI_DIRTY = false;
+let PIKET_LOCKS = {};
+let PIKET_READY_ID = null;
+let typedConfirmResolver = null;
 
 function loadGlobalStore() {
   // Load Local first for instant response
@@ -1717,17 +1592,23 @@ function updateCloudStatusBadge(isCloud) {
   
   if (sideStatus) {
     sideStatus.innerHTML = isCloud ?
-      `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Cloud Connected` :
-      `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Offline Ready`;
+      `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Cloud terhubung` :
+      `<span class="w-2 h-2 rounded-full bg-amber-400"></span> Siap lokal`;
   }
-  if (topText) topText.textContent = isCloud ? 'Siap (Cloud Sync)' : 'Siap (Mode Lokal)';
-  if (topDot) topDot.style.background = isCloud ? '#10B981' : '#D9A441';
+  if (topText) topText.textContent = isCloud ? 'Siap (Cloud)' : 'Siap (Mode Lokal)';
+  if (topDot) topDot.style.background = isCloud ? '#10B981' : '#D97706';
   if (cfgBadge) {
-    cfgBadge.className = isCloud ? 
-      'px-2.5 py-1 rounded-full text-xs font-bold border shrink-0 bg-emerald-100 text-emerald-800 border-emerald-300' :
-      'px-2.5 py-1 rounded-full text-xs font-bold border shrink-0 bg-slate-100 text-slate-600 border-slate-300';
-    cfgBadge.textContent = isCloud ? '⚡ Terhubung ke Cloud' : '📴 Mode Lokal (Offline)';
+    cfgBadge.style.background = isCloud ? 'rgba(16,185,129,0.15)' : 'var(--surface)';
+    cfgBadge.style.color = isCloud ? '#6EE7B7' : 'var(--muted)';
+    cfgBadge.style.borderColor = isCloud ? 'rgba(16,185,129,0.4)' : 'var(--line)';
+    cfgBadge.textContent = isCloud ? 'Terhubung ke cloud' : 'Mode lokal';
   }
+  const dashDot = document.getElementById('dash-sync-dot');
+  const dashText = document.getElementById('dash-sync-text');
+  const dashTime = document.getElementById('dash-sync-time');
+  if (dashDot) dashDot.style.background = isCloud ? '#10B981' : '#D97706';
+  if (dashText) dashText.textContent = isCloud ? 'Terhubung ke cloud' : 'Mode lokal — data tersimpan di perangkat ini';
+  if (dashTime) dashTime.textContent = LAST_SYNC_AT ? ('Terakhir disinkronkan: ' + LAST_SYNC_AT) : 'Belum tersinkronkan ke cloud';
 }
 
 async function fetchFromSupabaseCloud() {
@@ -1761,6 +1642,16 @@ async function fetchFromSupabaseCloud() {
       localStorage.setItem(STORAGE_KEYS.CUSTOM_CATS, JSON.stringify(SIMAP_CUSTOM_CATS));
       renderPiketCategories();
     }
+
+    const { data: histData, error: histErr } = await supabaseClient.from('history_logs').select('*').order('created_at', { ascending: false });
+    if (!histErr && histData && histData.length > 0) {
+      mergeCloudHistory(histData);
+    }
+
+    LAST_SYNC_AT = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB';
+    localStorage.setItem('simap_last_sync_at', LAST_SYNC_AT);
+    updateCloudStatusBadge(true);
+    renderDashboardStats();
   } catch(e) { console.warn('Supabase fetch error:', e); }
 }
 
@@ -1805,14 +1696,117 @@ function saveSupabaseConfig() {
 }
 
 function disconnectSupabaseConfig() {
-  if (!confirm('Putuskan koneksi dari Supabase Cloud dan gunakan mode lokal sepenuhnya?')) return;
+  if (!confirm('Putuskan koneksi dari cloud dan gunakan mode lokal sepenuhnya?')) return;
   SIMAP_CLOUD = { url: '', key: '' };
   supabaseClient = null;
   localStorage.removeItem(STORAGE_KEYS.CLOUD_CONFIG);
-  document.getElementById('cfg-supa-url').value = '';
-  document.getElementById('cfg-supa-key').value = '';
+  const urlEl = document.getElementById('cfg-supa-url');
+  const keyEl = document.getElementById('cfg-supa-key');
+  if (urlEl) urlEl.value = '';
+  if (keyEl) keyEl.value = '';
   updateCloudStatusBadge(false);
-  showToast('Koneksi Supabase diputuskan. Aplikasi berjalan di mode lokal.');
+  lockCloudSettings();
+  showToast('Koneksi cloud diputuskan. Aplikasi berjalan di mode lokal.');
+}
+
+function unlockCloudSettings() {
+  const input = document.getElementById('cfg-admin-unlock');
+  if (!input || input.value.trim().toUpperCase() !== 'ADMIN') {
+    showToast('Ketik ADMIN untuk membuka pengaturan koneksi.', 'error');
+    return;
+  }
+  document.getElementById('cloud-config-locked')?.classList.add('hidden');
+  document.getElementById('cloud-config-fields')?.classList.remove('hidden');
+  if (document.getElementById('cfg-supa-url')) {
+    document.getElementById('cfg-supa-url').value = SIMAP_CLOUD.url || '';
+    document.getElementById('cfg-supa-key').value = SIMAP_CLOUD.key || '';
+  }
+}
+
+function lockCloudSettings() {
+  document.getElementById('cloud-config-fields')?.classList.add('hidden');
+  document.getElementById('cloud-config-locked')?.classList.remove('hidden');
+  const input = document.getElementById('cfg-admin-unlock');
+  if (input) input.value = '';
+}
+
+function toggleSidebarCollapse() {
+  const side = document.getElementById('app-sidebar');
+  if (!side) return;
+  side.classList.toggle('is-collapsed');
+  localStorage.setItem('simap_sidebar_collapsed', side.classList.contains('is-collapsed') ? '1' : '0');
+}
+
+function toggleMoreSheet() {
+  document.getElementById('more-sheet')?.classList.toggle('open');
+}
+function closeMoreSheet() {
+  document.getElementById('more-sheet')?.classList.remove('open');
+}
+
+function openTypedConfirm(title, body, expected) {
+  return new Promise((resolve) => {
+    typedConfirmResolver = resolve;
+    document.getElementById('typed-confirm-title').textContent = title;
+    document.getElementById('typed-confirm-body').textContent = body;
+    const input = document.getElementById('typed-confirm-input');
+    input.value = '';
+    input.dataset.expected = expected;
+    document.getElementById('modal-typed-confirm').classList.remove('hidden');
+    input.focus();
+  });
+}
+function closeTypedConfirm(ok) {
+  const modal = document.getElementById('modal-typed-confirm');
+  const input = document.getElementById('typed-confirm-input');
+  const expected = (input.dataset.expected || '').trim();
+  let pass = false;
+  if (ok) {
+    pass = input.value.trim() === expected;
+    if (!pass) {
+      showToast('Teks konfirmasi tidak sesuai.', 'error');
+      return;
+    }
+  }
+  modal.classList.add('hidden');
+  const resolver = typedConfirmResolver;
+  typedConfirmResolver = null;
+  if (resolver) resolver(pass);
+}
+
+function getHistoryStore() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e) { return []; }
+}
+function setHistoryStore(hist) {
+  localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(hist));
+}
+function getPersonnelCounts() {
+  const names = new Set();
+  let placements = 0;
+  Object.values(SIMAP_DB).forEach(arr => {
+    if (!Array.isArray(arr)) return;
+    placements += arr.length;
+    arr.forEach(n => names.add(n));
+  });
+  return { unique: names.size, placements };
+}
+function mergeCloudHistory(rows) {
+  const local = getHistoryStore();
+  const byId = {};
+  local.forEach(h => { byId[h.id] = h; });
+  rows.forEach(row => {
+    if (!byId[row.id]) {
+      byId[row.id] = {
+        id: row.id,
+        type: row.type,
+        title: row.title,
+        timestamp: row.timestamp_str || row.created_at,
+        content: row.content
+      };
+    }
+  });
+  const merged = Object.values(byId).sort((a, b) => String(b.id).localeCompare(String(a.id)));
+  setHistoryStore(merged.slice(0, 80));
 }
 
 function logoutSIMAP() {
@@ -1830,23 +1824,18 @@ function getAllCategories() { return [...DEFAULT_CATEGORIES, ...SIMAP_CUSTOM_CAT
    ============================================================ */
 function showToast(message, type = 'success') {
   const container = document.getElementById('toast-container');
+  if (!container) return;
   const toast = document.createElement('div');
-  const bgColor = type === 'success' ? 'bg-navy border-gold' : 'bg-red-800 border-red-400';
-  toast.className = `p-3.5 rounded-xl shadow-2xl border text-white text-sm font-semibold flex items-center gap-2.5 transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto ${bgColor}`;
-  toast.style.background = type === 'success' ? 'var(--navy)' : '#991B1B';
-  toast.style.borderColor = type === 'success' ? 'var(--gold)' : '#F87171';
-
-  toast.innerHTML = `
-    <span class="text-base">${type === 'success' ? '✅' : '⚠️'}</span>
-    <span>${message}</span>
-  `;
+  const isErr = type === 'error';
+  toast.className = 'p-3.5 rounded-xl shadow-2xl border text-white text-sm font-semibold flex items-center gap-2.5 transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto';
+  toast.style.background = isErr ? '#991B1B' : 'var(--navy)';
+  toast.style.borderColor = isErr ? '#F87171' : 'var(--gold)';
+  toast.innerHTML = `<span>${isErr ? 'Peringatan' : 'Berhasil'}:</span><span>${message}</span>`;
   container.appendChild(toast);
-
   setTimeout(() => {
     toast.classList.remove('translate-y-2', 'opacity-0');
     toast.classList.add('translate-y-0', 'opacity-100');
   }, 20);
-
   setTimeout(() => {
     toast.classList.remove('translate-y-0', 'opacity-100');
     toast.classList.add('translate-y-2', 'opacity-0');
@@ -1878,23 +1867,24 @@ function switchTab(tabId) {
 
   // Update Header Title
   const titles = {
-    dashboard: 'Dashboard Utama SIMAP',
-    atensi: 'Generator Laporan Atensi Pimpinan',
-    piket: 'Generator Reminder Piket Harian',
-    humas: 'Kehumasan & AI Generator Rilis Berita',
-    database: 'Manajemen Database & Kamus Koreksi',
-    history: 'Riwayat Tersimpan & Backup Data'
+    dashboard: 'Dashboard',
+    atensi: 'Laporan Atensi Pimpinan',
+    piket: 'Reminder Piket Harian',
+    humas: 'Humas & Rilis Berita',
+    database: 'Petugas & Kamus Koreksi',
+    history: 'Riwayat & Cadangan'
   };
   document.getElementById('top-header-title').textContent = titles[tabId] || 'Portal Operasional';
 
-  // Refresh data on enter
+  const moreBtn = document.getElementById('botnav-more');
+  if (moreBtn) {
+    moreBtn.classList.toggle('active', ['humas', 'database', 'history'].includes(tabId));
+  }
+  closeMoreSheet();
+
   if (tabId === 'dashboard') renderDashboardStats();
   if (tabId === 'database') {
     renderOfficersDatabase();
-    if (document.getElementById('cfg-supa-url')) {
-      document.getElementById('cfg-supa-url').value = SIMAP_CLOUD.url || '';
-      document.getElementById('cfg-supa-key').value = SIMAP_CLOUD.key || '';
-    }
   }
   if (tabId === 'history') renderHistoryLog();
   if (tabId === 'piket') renderPiketCategories();
@@ -1941,7 +1931,9 @@ function generateHumasNews() {
   newsText += `Pada ${dayName} (${dateFormatted}), Lapas Kelas IIB Tanjung Pati sukses menyelenggarakan kegiatan ${judul || 'kedinasan'} yang bertempat di ${lokasi}.\n\n`;
   
   if (poin) {
-    newsText += `Kegiatan yang berlangsung pada ${waktu} ini berjalan dengan lancar dan kondusif. ${poin}\n\n`;
+    const katEl = document.getElementById('hm_kategori');
+    const katLabel = katEl && katEl.selectedOptions[0] ? katEl.selectedOptions[0].textContent.trim() : '';
+    newsText += `Kegiatan ${katLabel ? '(' + katLabel + ') ' : ''}yang berlangsung pada ${waktu} ini berjalan dengan lancar dan kondusif. ${poin}\n\n`;
   }
 
   if (pejabat) {
@@ -2001,6 +1993,7 @@ function copyHumasOutput(type) {
 }
 
 function resetHumasForm() {
+  if (!confirm('Kosongkan formulir Humas? Draf yang belum disalin akan hilang.')) return;
   ['hm_judul', 'hm_pejabat', 'hm_poin', 'hm_quote'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
@@ -2026,114 +2019,114 @@ function startClock() {
 }
 
 function renderDashboardStats() {
-  // Total Officers
-  const allNames = new Set();
-  Object.values(SIMAP_DB).forEach(arr => {
-    if (Array.isArray(arr)) arr.forEach(name => allNames.add(name));
-  });
+  const counts = getPersonnelCounts();
   const totalOfficersEl = document.getElementById('stat-total-officers');
-  if (totalOfficersEl) totalOfficersEl.textContent = allNames.size;
+  if (totalOfficersEl) totalOfficersEl.textContent = counts.unique;
+  const placeEl = document.getElementById('stat-officer-placements');
+  if (placeEl) placeEl.textContent = counts.placements;
 
-  // Corrections
   const correctionsEl = document.getElementById('stat-corrections');
   if (correctionsEl) correctionsEl.textContent = Object.keys(SIMAP_CORRECTIONS).length;
 
-  // Draft status
   const atensiDraft = localStorage.getItem(STORAGE_KEYS.ATENSI_DRAFT);
   const draftBadge = document.getElementById('stat-draft-status');
-  if (draftBadge) {
-    if (atensiDraft) {
-      draftBadge.textContent = 'Ada Draf Aktif';
-      draftBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
-    } else {
-      draftBadge.textContent = 'Kosong';
-      draftBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700';
-    }
-  }
+  if (draftBadge) draftBadge.textContent = atensiDraft ? 'Ada draf' : 'Kosong';
 
-  // History count & Breakdown
-  let hist = [];
-  try { hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e){}
-  
+  const hist = getHistoryStore();
   const totalHistoryEl = document.getElementById('stat-history-count');
   if (totalHistoryEl) totalHistoryEl.textContent = hist.length;
 
   let atensiCount = 0;
   let piketCount = 0;
   hist.forEach(h => {
-    if (h.type === 'ATENSI' || h.type === 'atensi') atensiCount++;
-    else if (h.type === 'PIKET' || h.type === 'piket') piketCount++;
+    const t = String(h.type || '').toUpperCase();
+    if (t === 'ATENSI') atensiCount++;
+    else if (t === 'PIKET') piketCount++;
   });
-
   const atensiGenEl = document.getElementById('stat-atensi-generated');
   if (atensiGenEl) atensiGenEl.textContent = atensiCount;
-
   const piketGenEl = document.getElementById('stat-piket-generated');
   if (piketGenEl) piketGenEl.textContent = piketCount;
 
   const timeSavedEl = document.getElementById('stat-time-saved');
-  if (timeSavedEl) {
-    const mins = hist.length * 15; // est 15 mins saved per generation
-    const hrs = Math.floor(mins / 60);
-    const remMins = mins % 60;
-    timeSavedEl.textContent = hrs > 0 ? `${hrs}j ${remMins}m` : `${mins}m`;
+  if (timeSavedEl) timeSavedEl.textContent = String(hist.length);
+
+  const now = new Date();
+  const hour = now.getHours();
+  const greet = hour < 11 ? 'Selamat pagi' : hour < 15 ? 'Selamat siang' : hour < 18 ? 'Selamat sore' : 'Selamat malam';
+  const greetEl = document.getElementById('dash-greeting');
+  if (greetEl) greetEl.textContent = greet + ', petugas';
+  const dateEl = document.getElementById('dash-date-line');
+  if (dateEl) dateEl.textContent = formatTanggalId(now) + ' · ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+
+  const todayStr = formatTanggalId(now);
+  const todayAtensi = hist.find(h => String(h.type).toUpperCase() === 'ATENSI' && (h.title || '').includes(todayStr.split(',')[0] ? todayStr : ''));
+  const latestAtensi = hist.find(h => String(h.type).toUpperCase() === 'ATENSI');
+  const atensiBox = document.getElementById('dash-today-atensi');
+  if (atensiBox) atensiBox.textContent = latestAtensi ? latestAtensi.title : 'Belum ada laporan tersimpan';
+
+  const latestPiket = hist.find(h => String(h.type).toUpperCase() === 'PIKET');
+  const piketBox = document.getElementById('dash-next-piket');
+  if (piketBox) piketBox.textContent = latestPiket ? latestPiket.title : 'Belum ada reminder tersimpan';
+
+  const conflictBox = document.getElementById('dash-conflict');
+  if (conflictBox) {
+    const dupes = checkCrossCategoryDuplicates();
+    conflictBox.textContent = dupes.length
+      ? (dupes.length + ' petugas terpasang di lebih dari satu kategori pada form piket')
+      : 'Tidak ada petugas ganda pada form piket';
   }
 
-  // Render / Update Chart.js
+  const incomplete = document.getElementById('dash-incomplete');
+  if (incomplete) {
+    incomplete.textContent = atensiDraft ? 'Ada draf laporan atensi yang belum diselesaikan' : 'Tidak ada draf atensi tertunda';
+  }
+
+  const recent = document.getElementById('dash-recent-list');
+  if (recent) {
+    if (!hist.length) {
+      recent.innerHTML = `<div class="rounded-lg p-4 text-sm" style="border:1px solid var(--line);color:var(--muted);">Belum ada aktivitas. Buat laporan atau reminder untuk mengisi riwayat.</div>`;
+    } else {
+      recent.innerHTML = hist.slice(0, 5).map(item => `
+        <button type="button" onclick="switchTab('history')" class="w-full text-left rounded-lg p-3 border" style="border-color:var(--line);">
+          <p class="text-xs" style="color:var(--muted);">${item.type} · ${item.timestamp || ''}</p>
+          <p class="text-sm font-semibold text-white truncate">${item.title}</p>
+        </button>`).join('');
+    }
+  }
+
+  updateCloudStatusBadge(!!supabaseClient);
+
   if (typeof Chart !== 'undefined') {
     const canvas = document.getElementById('simapActivityChart');
     if (canvas) {
       const ctx = canvas.getContext('2d');
-      const chartData = [atensiCount, piketCount, hist.length === 0 ? 1 : 0];
-      const chartLabels = [
-        `Laporan Atensi (${atensiCount})`, 
-        `Reminder Piket (${piketCount})`, 
-        hist.length === 0 ? 'Belum ada data' : 'Lainnya'
-      ];
-
+      const chartData = [atensiCount, piketCount];
+      const chartLabels = [`Laporan Atensi (${atensiCount})`, `Reminder Piket (${piketCount})`];
       if (window.myActivityChartInstance) {
         window.myActivityChartInstance.data.datasets[0].data = chartData;
         window.myActivityChartInstance.data.labels = chartLabels;
         window.myActivityChartInstance.update();
-      } else {
+      } else if (atensiCount + piketCount > 0) {
         window.myActivityChartInstance = new Chart(ctx, {
           type: 'doughnut',
           data: {
             labels: chartLabels,
             datasets: [{
               data: chartData,
-              backgroundColor: [
-                '#3B82F6', // Blue
-                '#F59E0B', // Amber
-                '#334155'  // Slate
-              ],
-              borderColor: '#0F1F38',
-              borderWidth: 3,
-              hoverOffset: 6
+              backgroundColor: ['#3B82F6', '#C9A227'],
+              borderColor: '#0A1220',
+              borderWidth: 2
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '72%',
+            cutout: '70%',
             plugins: {
               legend: {
                 position: 'bottom',
-                labels: {
-                  color: '#CBD5E1',
-                  font: { family: 'IBM Plex Sans', size: 11, weight: '600' },
-                  padding: 15,
-                  usePointStyle: true,
-                  pointStyle: 'circle'
-                }
-              },
-              tooltip: {
-                backgroundColor: 'rgba(15, 31, 56, 0.95)',
-                titleFont: { family: 'Source Serif 4', size: 13, weight: 'bold' },
-                bodyFont: { family: 'IBM Plex Sans', size: 12 },
-                borderColor: '#C59B27',
-                borderWidth: 1,
-                padding: 10
+                labels: { color: '#A8B4C4', font: { family: 'IBM Plex Sans', size: 12 }, padding: 12 }
               }
             }
           }
@@ -2233,16 +2226,103 @@ function onAtensiUraianInput() {
   onAtensiInput();
 }
 
-function onAtensiInput() {
-  // Save draft
+function markAtensiDirty() {
+  ATENSI_DIRTY = true;
+  ATENSI_READY = null;
+  const copyBtn = document.getElementById('btn-copy-atensi');
+  if (copyBtn) copyBtn.disabled = true;
+  const dot = document.getElementById('atensi-dirty-dot');
+  const txt = document.getElementById('atensi-dirty-text');
+  const idEl = document.getElementById('atensi-ready-id');
+  if (dot) dot.classList.remove('hidden');
+  if (txt) txt.textContent = 'Perubahan belum dijadikan laporan siap salin';
+  if (idEl) idEl.textContent = '';
+}
+
+function markAtensiCleanDraft() {
+  const dot = document.getElementById('atensi-dirty-dot');
+  const txt = document.getElementById('atensi-dirty-text');
+  if (dot) dot.classList.add('hidden');
+  if (txt) txt.textContent = 'Draf tersimpan otomatis';
+}
+
+function validateAtensiForm() {
+  const required = ['at_kegiatan', 'at_tanggal', 'at_uraian', 'at_kota', 'at_nama_kepala'];
+  const msgEl = document.getElementById('atensi-validation-msg');
+  let valid = true;
+  const errors = [];
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.style.borderColor = 'var(--maroon)';
+      valid = false;
+    } else {
+      el.style.borderColor = '';
+    }
+  });
+  const uraian = (document.getElementById('at_uraian').value || '').trim();
+  if (uraian && uraian.length < 40) {
+    errors.push('Uraian kegiatan masih terlalu pendek. Lengkapi poin kegiatan sebelum membuat laporan.');
+    document.getElementById('at_uraian').style.borderColor = 'var(--maroon)';
+    valid = false;
+  }
+  if (!valid) {
+    msgEl.textContent = errors[0] || 'Lengkapi kolom yang ditandai sebelum membuat laporan.';
+    msgEl.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    msgEl.classList.add('hidden');
+  }
+  return valid;
+}
+
+function prepareAtensiReport() {
+  if (!validateAtensiForm()) return;
+  const fullReport = generateAtensiFullReportText();
+  const title = `Laporan Atensi (${document.getElementById('at_tanggal').value})`;
+  const fingerprint = title + '|' + fullReport.slice(0, 180);
+  const existing = getHistoryStore().find(h => h.fingerprint === fingerprint);
+  if (existing) {
+    showToast('Laporan serupa sudah ada di riwayat. Periksa sebelum membuat ganda.', 'error');
+  }
+  ATENSI_READY = {
+    id: existing ? existing.id : ('ATN_' + Date.now()),
+    title,
+    content: fullReport,
+    fingerprint
+  };
+  ATENSI_DIRTY = false;
+  const copyBtn = document.getElementById('btn-copy-atensi');
+  if (copyBtn) copyBtn.disabled = false;
+  const dot = document.getElementById('atensi-dirty-dot');
+  const txt = document.getElementById('atensi-dirty-text');
+  const idEl = document.getElementById('atensi-ready-id');
+  if (dot) dot.classList.add('hidden');
+  if (txt) txt.textContent = 'Laporan siap disalin';
+  if (idEl) idEl.textContent = 'ID: ' + ATENSI_READY.id;
+  showToast('Laporan dibuat. Silakan salin ke WhatsApp atau simpan ke riwayat.');
+}
+
+function saveAtensiDraftManual() {
   const draft = {};
   getAtensiFieldIds().forEach(id => {
     const el = document.getElementById(id);
     if (el) draft[id] = el.value;
   });
   localStorage.setItem(STORAGE_KEYS.ATENSI_DRAFT, JSON.stringify(draft));
+  markAtensiCleanDraft();
+  showToast('Draf laporan disimpan di perangkat ini.');
+}
 
-  // Update Preview
+function onAtensiInput() {
+  const draft = {};
+  getAtensiFieldIds().forEach(id => {
+    const el = document.getElementById(id);
+    if (el) draft[id] = el.value;
+  });
+  localStorage.setItem(STORAGE_KEYS.ATENSI_DRAFT, JSON.stringify(draft));
+  markAtensiDirty();
+
   const kegiatan = document.getElementById('at_kegiatan').value;
   const tanggal = document.getElementById('at_tanggal').value;
   const jam = document.getElementById('at_jam').value;
@@ -2251,9 +2331,7 @@ function onAtensiInput() {
   const pelaksana = document.getElementById('at_pelaksana').value;
   const kota = document.getElementById('at_kota').value;
   const nama = document.getElementById('at_nama_kepala').value;
-
   const safe = (s, p) => (s && s.trim() ? s : p);
-
   const preview = document.getElementById('atensi-live-preview');
   preview.innerText = `*LAPORAN ATENSI PIMPINAN*
 
@@ -2275,9 +2353,6 @@ ${safe(kota, '(kota & tanggal belum diisi)')}
 Kepala,
 
 ${safe(nama, '(nama kepala belum diisi)')}`;
-
-  // Hide validation error if any
-  document.getElementById('atensi-validation-msg').classList.add('hidden');
 }
 
 function loadAtensiDraft() {
@@ -2307,7 +2382,11 @@ function resetAtensiForm() {
 
   localStorage.removeItem(STORAGE_KEYS.ATENSI_DRAFT);
   document.getElementById('atensi-correction-list').innerHTML = '';
+  ATENSI_READY = null;
+  const copyBtn = document.getElementById('btn-copy-atensi');
+  if (copyBtn) copyBtn.disabled = true;
   onAtensiInput();
+  markAtensiCleanDraft();
   showToast('Formulir Laporan Atensi berhasil direset', 'success');
 }
 
@@ -2363,62 +2442,38 @@ NIP. ${nip}`;
 }
 
 function generateAndCopyAtensi() {
-  // Validate required fields
-  const required = ['at_kegiatan', 'at_tanggal', 'at_uraian', 'at_kota', 'at_nama_kepala'];
-  const msgEl = document.getElementById('atensi-validation-msg');
-  let valid = true;
-
-  required.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el.value.trim()) {
-      el.style.borderColor = 'var(--maroon)';
-      valid = false;
-    } else {
-      el.style.borderColor = '';
-    }
-  });
-
-  if (!valid) {
-    msgEl.textContent = 'Mohon lengkapi kolom yang berwarna merah sebelum menyalin laporan!';
-    msgEl.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    return;
+  if (!ATENSI_READY) {
+    prepareAtensiReport();
+    if (!ATENSI_READY) return;
   }
-
-  const fullReport = generateAtensiFullReportText();
-
-  // Copy to clipboard
-  copyToClipboardHelper(fullReport, () => {
+  copyToClipboardHelper(ATENSI_READY.content, () => {
     const btn = document.getElementById('btn-copy-atensi');
     const origHtml = btn.innerHTML;
-    btn.innerHTML = `✅ Tersalin ke Clipboard!`;
+    btn.innerHTML = `Tersalin`;
     setTimeout(() => btn.innerHTML = origHtml, 2000);
-
-    // Auto save history
-    addHistoryEntry('ATENSI', `Laporan Atensi (${document.getElementById('at_tanggal').value})`, fullReport);
-    showToast('Laporan Atensi berhasil disalin & disimpan ke riwayat!');
+    addHistoryEntry('ATENSI', ATENSI_READY.title, ATENSI_READY.content, ATENSI_READY.id, ATENSI_READY.fingerprint);
+    showToast('Laporan Atensi disalin ke clipboard dan dicatat di riwayat.');
   });
 }
 
 function saveAtensiToHistoryManual() {
-  if (!document.getElementById('at_uraian').value.trim()) {
-    showToast('Uraian kegiatan masih kosong!', 'error');
-    return;
+  if (!ATENSI_READY) {
+    prepareAtensiReport();
+    if (!ATENSI_READY) return;
   }
-  const fullReport = generateAtensiFullReportText();
-  addHistoryEntry('ATENSI', `Laporan Atensi (${document.getElementById('at_tanggal').value || 'Tanpa Tanggal'})`, fullReport);
-  showToast('Laporan berhasil disimpan ke halaman Riwayat!');
+  addHistoryEntry('ATENSI', ATENSI_READY.title, ATENSI_READY.content, ATENSI_READY.id, ATENSI_READY.fingerprint);
+  showToast('Laporan disimpan ke riwayat (tanpa menduplikasi entri yang sama).');
 }
 
 /* ============================================================
    6. MODUL REMINDER PIKET HARIAN
    ============================================================ */
 const colorMapStyles = {
-  blue: { bg: 'bg-blue-50', text: 'text-blue-800', border: 'border-blue-200', btn: 'text-blue-700 bg-blue-50 hover:bg-blue-100 border-blue-300' },
-  rose: { bg: 'bg-rose-50', text: 'text-rose-800', border: 'border-rose-200', btn: 'text-rose-700 bg-rose-50 hover:bg-rose-100 border-rose-300' },
-  violet: { bg: 'bg-violet-50', text: 'text-violet-800', border: 'border-violet-200', btn: 'text-violet-700 bg-violet-50 hover:bg-violet-100 border-violet-300' },
-  teal: { bg: 'bg-teal-50', text: 'text-teal-800', border: 'border-teal-200', btn: 'text-teal-700 bg-teal-50 hover:bg-teal-100 border-teal-300' },
-  amber: { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200', btn: 'text-amber-700 bg-amber-50 hover:bg-amber-100 border-amber-300' }
+  blue: { bg: 'bg-blue-500/10', text: 'text-blue-200', border: 'border-blue-500/30', btn: 'text-blue-200 bg-blue-500/10 hover:bg-blue-500/20 border-blue-500/30' },
+  rose: { bg: 'bg-rose-500/10', text: 'text-rose-200', border: 'border-rose-500/30', btn: 'text-rose-200 bg-rose-500/10 hover:bg-rose-500/20 border-rose-500/30' },
+  violet: { bg: 'bg-violet-500/10', text: 'text-violet-200', border: 'border-violet-500/30', btn: 'text-violet-200 bg-violet-500/10 hover:bg-violet-500/20 border-violet-500/30' },
+  teal: { bg: 'bg-teal-500/10', text: 'text-teal-200', border: 'border-teal-500/30', btn: 'text-teal-200 bg-teal-500/10 hover:bg-teal-500/20 border-teal-500/30' },
+  amber: { bg: 'bg-amber-500/10', text: 'text-amber-200', border: 'border-amber-500/30', btn: 'text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30' }
 };
 
 const HARI_ID = ['MINGGU','SENIN','SELASA','RABU','KAMIS',"JUM'AT",'SABTU'];
@@ -2446,7 +2501,7 @@ function renderPiketCategories() {
     section.innerHTML = `
       <div class="${st.bg} px-4 py-2.5 flex items-center justify-between border-b ${st.border}">
         <h3 class="text-xs font-bold uppercase tracking-wider ${st.text}">${cat.label}</h3>
-        <span class="text-[10px] font-bold ${st.text} bg-white/80 px-2 py-0.5 rounded-full border ${st.border}" id="pk-count-${cat.key}">0 orang</span>
+        <span class="text-xs font-bold ${st.text} px-2 py-0.5 rounded-full border ${st.border}" id="pk-count-${cat.key}">0 orang</span>
       </div>
       <div class="p-3 space-y-2.5" id="pk-rows-${cat.key}"></div>
       <div class="px-3 pb-3">
@@ -2473,30 +2528,37 @@ function renderPiketRowsForCategory(catKey) {
   if (countBadge) countBadge.textContent = `${filledCount} orang`;
 
   rows.forEach((val, idx) => {
+    const isLocked = !!(PIKET_LOCKS[catKey] && PIKET_LOCKS[catKey][idx]);
     const rowEl = document.createElement('div');
     rowEl.className = 'relative';
     rowEl.innerHTML = `
       <div class="flex gap-2 items-center">
-        <span class="text-xs font-mono text-slate-400 w-5 text-right shrink-0">${idx + 1}.</span>
+        <span class="text-xs font-mono w-5 text-right shrink-0" style="color: var(--muted);">${idx + 1}.</span>
         <div class="relative flex-1">
           <input type="text" autocomplete="off"
-            class="pkAcInput field-input !py-1.5 text-xs font-semibold"
+            class="pkAcInput field-input !py-2 text-sm font-semibold"
             data-cat="${catKey}" data-idx="${idx}"
             placeholder="Cari atau ketik nama petugas..." value="${val || ''}"
+            ${isLocked ? 'readonly' : ''}
             oninput="onPiketAutocompleteInput(this)"
             onfocus="openPiketDropdown(this)">
-          <div class="pkAcDropdown hidden absolute z-30 mt-1 w-full bg-white border border-slate-300 rounded-lg shadow-xl overflow-y-auto ac-list"></div>
+          <div class="pkAcDropdown hidden absolute z-30 mt-1 w-full rounded-lg shadow-xl overflow-y-auto ac-list" style="background: var(--surface-alt); border: 1px solid var(--line);"></div>
         </div>
-        <button type="button" onclick="removePiketRow('${catKey}', ${idx})" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-100 text-slate-400 hover:bg-red-100 hover:text-red-600 font-bold text-xs shrink-0">✕</button>
+        <button type="button" onclick="togglePiketLock('${catKey}', ${idx})" class="min-h-[40px] min-w-[40px] px-2 rounded-lg border text-xs font-semibold shrink-0" style="border-color: var(--line); color: ${isLocked ? 'var(--gold-text)' : 'var(--muted)'}" title="Kunci posisi">${isLocked ? 'Terkunci' : 'Kunci'}</button>
+        <button type="button" onclick="removePiketRow('${catKey}', ${idx})" class="w-10 h-10 flex items-center justify-center rounded-lg font-bold text-sm shrink-0" style="background: var(--maroon-soft); color: #FECACA;">✕</button>
       </div>
-      <div class="pkDupWarning hidden text-[11px] text-red-600 font-bold mt-1 ml-7 flex items-center gap-1">
-        <span>⚠️</span> <span>Nama ini sudah dipilih di kategori ini.</span>
-      </div>
+      <div class="pkDupWarning hidden text-xs text-red-300 font-semibold mt-1 ml-7">Nama ini sudah dipilih di kategori ini.</div>
     `;
     wrap.appendChild(rowEl);
   });
 
   checkPiketDuplicates(catKey);
+}
+
+function togglePiketLock(catKey, idx) {
+  if (!PIKET_LOCKS[catKey]) PIKET_LOCKS[catKey] = [];
+  PIKET_LOCKS[catKey][idx] = !PIKET_LOCKS[catKey][idx];
+  renderPiketRowsForCategory(catKey);
 }
 
 function addPiketRow(catKey) {
@@ -2528,9 +2590,9 @@ function openPiketDropdown(input) {
 
   let html = '';
   filtered.slice(0, 45).forEach(name => {
-    html += `<div class="px-3 py-2 text-xs hover:bg-amber-50 cursor-pointer font-medium text-slate-800 border-b border-slate-100 last:border-none flex justify-between items-center" onmousedown="setPiketRowValue('${cat}', ${idx}, '${name.replace(/'/g, "\\'")}')">
+    html += `<div class="px-3 py-2 text-sm cursor-pointer font-medium border-b last:border-none flex justify-between items-center" style="border-color: var(--line); color: var(--ink);" onmousedown="setPiketRowValue('${cat}', ${idx}, '${name.replace(/'/g, "\\'")}')">
       <span>${name}</span>
-      <span class="text-[10px] text-slate-400 uppercase">${cat}</span>
+      <span class="text-xs uppercase" style="color: var(--muted);">${cat}</span>
     </div>`;
   });
 
@@ -2616,16 +2678,15 @@ function setPiketDateByShift(shift) {
 
   document.querySelectorAll('.dateShiftBtn').forEach(btn => {
     const active = parseInt(btn.dataset.shift) === shift;
-    btn.className = `dateShiftBtn flex-1 text-xs font-bold py-2 rounded-lg ${active ? 'bg-navy text-white' : 'bg-slate-100 text-slate-700 border border-slate-300'}`;
-    if (active) btn.style.background = 'var(--navy)';
-    else btn.style.background = '#F1F5F9';
+    btn.className = `dateShiftBtn date-chip flex-1 ${active ? 'is-active' : ''}`;
+    btn.style.background = '';
   });
 }
 
 function onPiketDateChange() {
   document.querySelectorAll('.dateShiftBtn').forEach(btn => {
-    btn.className = 'dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300';
-    btn.style.background = '#F1F5F9';
+    btn.className = 'dateShiftBtn date-chip flex-1';
+    btn.style.background = '';
   });
   updatePiketDateDisplay();
   const autoCheckbox = document.getElementById('pk_auto_fill_on_date');
@@ -2661,6 +2722,14 @@ function autoFillPiketFromDb(isQuiet = false) {
     seedNum = (now.getFullYear() * 1000 + (now.getMonth() + 1) * 50 + now.getDate());
   }
 
+  const used = new Set();
+  const skipped = [];
+  cats.forEach(cat => {
+    (PIKET_ROWS_STATE[cat.key] || []).forEach((name, idx) => {
+      if (PIKET_LOCKS[cat.key] && PIKET_LOCKS[cat.key][idx] && name) used.add(String(name).trim().toUpperCase());
+    });
+  });
+
   cats.forEach((cat, catIdx) => {
     const dbList = SIMAP_DB[cat.key] || [];
     if (dbList.length === 0) return;
@@ -2670,27 +2739,43 @@ function autoFillPiketFromDb(isQuiet = false) {
     else if (cat.key === 'WARTELSUSPAS') neededCount = Math.min(2, dbList.length);
     else if (cat.key === 'PB' || cat.key === 'PO' || cat.key === 'PD') neededCount = Math.min(2, dbList.length);
     else neededCount = Math.min(PIKET_ROWS_STATE[cat.key]?.length || 1, dbList.length);
-
     if (neededCount < 1) neededCount = 1;
 
+    const current = PIKET_ROWS_STATE[cat.key] || [];
     const picked = [];
-    const rotationStep = isQuiet ? 0 : Math.floor(Math.random() * dbList.length);
-    const startIndex = (seedNum + catIdx * 3 + rotationStep) % dbList.length;
-    
-    for (let i = 0; i < neededCount; i++) {
-      const idx = (startIndex + i) % dbList.length;
-      if (!picked.includes(dbList[idx])) {
-        picked.push(dbList[idx]);
-      }
+    (current || []).forEach((name, idx) => {
+      if (PIKET_LOCKS[cat.key] && PIKET_LOCKS[cat.key][idx] && name) picked.push(name);
+    });
+
+    const rotationStep = isQuiet ? 0 : Math.floor(Math.random() * Math.max(dbList.length, 1));
+    const startIndex = (seedNum + catIdx * 3 + rotationStep) % Math.max(dbList.length, 1);
+
+    for (let i = 0; i < dbList.length && picked.length < neededCount; i++) {
+      const name = dbList[(startIndex + i) % dbList.length];
+      const key = String(name).trim().toUpperCase();
+      if (used.has(key) || picked.map(n => String(n).trim().toUpperCase()).includes(key)) continue;
+      picked.push(name);
+      used.add(key);
     }
 
+    if (picked.length < neededCount) skipped.push(cat.label);
     PIKET_ROWS_STATE[cat.key] = picked.length > 0 ? picked : [''];
     renderPiketRowsForCategory(cat.key);
   });
 
   generatePiketOutput();
+  const reason = document.getElementById('pk-autofill-reason');
+  if (reason) {
+    if (skipped.length) {
+      reason.classList.remove('hidden');
+      reason.textContent = 'Tidak cukup petugas unik untuk: ' + skipped.join(', ') + '. Nama yang sudah terpakai dilewati.';
+    } else {
+      reason.classList.add('hidden');
+      reason.textContent = '';
+    }
+  }
   if (!isQuiet) {
-    showToast('⚡ Seluruh regu & perwira piket berhasil diisi otomatis dari database!', 'success');
+    showToast('Jadwal diisi otomatis tanpa menimpa posisi terkunci dan tanpa petugas ganda.');
   }
 }
 
@@ -2876,7 +2961,8 @@ function generatePiketOutput() {
     names.forEach((n, i) => { out += `${i + 1}. ${n}\n`; });
   });
 
-  const catatanText = document.getElementById('pk_catatan_sop').value.trim();
+  const catatanEl = document.getElementById('pk_catatan_sop');
+  const catatanText = catatanEl ? catatanEl.value.trim() : '';
   if (catatanText) {
     out += `\n*Catatan :*\n${catatanText}\n`;
   }
@@ -2892,33 +2978,61 @@ function generatePiketOutput() {
   } else if (warnBadge) {
     warnBadge.classList.add('hidden');
   }
+  const copyBtn = document.getElementById('btn-copy-piket');
+  if (copyBtn) copyBtn.disabled = piketHasConflicts();
+}
+
+function piketHasConflicts() {
+  const cross = checkCrossCategoryDuplicates();
+  if (cross.length) return true;
+  const cats = getAllCategories();
+  for (const cat of cats) {
+    const vals = (PIKET_ROWS_STATE[cat.key] || []).map(v => (v || '').trim().toUpperCase()).filter(Boolean);
+    if (new Set(vals).size !== vals.length) return true;
+  }
+  return false;
 }
 
 function copyPiketOutput() {
+  if (piketHasConflicts()) {
+    showToast('Ada petugas ganda. Perbaiki jadwal sebelum menyalin.', 'error');
+    return;
+  }
   const out = document.getElementById('pk-output-box').textContent;
+  if (!out || !out.trim()) {
+    showToast('Output masih kosong.', 'error');
+    return;
+  }
+  if (!PIKET_READY_ID) PIKET_READY_ID = 'PKT_' + Date.now();
   copyToClipboardHelper(out, () => {
     const btn = document.getElementById('btn-copy-piket');
     const origHtml = btn.innerHTML;
-    btn.innerHTML = `✅ Tersalin ke Clipboard!`;
+    btn.innerHTML = `Tersalin`;
     setTimeout(() => btn.innerHTML = origHtml, 2000);
-
     const display = document.getElementById('pk_date_display').textContent;
-    addHistoryEntry('PIKET', `Reminder Piket (${display || 'Tanpa Tanggal'})`, out);
-    showToast('Reminder Piket berhasil disalin & disimpan ke riwayat!');
+    addHistoryEntry('PIKET', `Reminder Piket (${display || 'Tanpa Tanggal'})`, out, PIKET_READY_ID);
+    showToast('Reminder piket disalin dan dicatat di riwayat.');
   });
 }
 
 function savePiketToHistoryManual() {
+  if (piketHasConflicts()) {
+    showToast('Ada petugas ganda. Perbaiki jadwal sebelum menyimpan.', 'error');
+    return;
+  }
   const out = document.getElementById('pk-output-box').textContent;
   const display = document.getElementById('pk_date_display').textContent;
-  addHistoryEntry('PIKET', `Reminder Piket (${display || 'Tanpa Tanggal'})`, out);
-  showToast('Reminder berhasil disimpan ke halaman Riwayat!');
+  if (!PIKET_READY_ID) PIKET_READY_ID = 'PKT_' + Date.now();
+  addHistoryEntry('PIKET', `Reminder Piket (${display || 'Tanpa Tanggal'})`, out, PIKET_READY_ID);
+  showToast('Reminder disimpan ke riwayat tanpa menduplikasi entri yang sama.');
 }
 
 function resetPiketForm() {
   if (!confirm('Apakah Anda yakin ingin mereset seluruh nama petugas dan jadwal di form piket?')) return;
   const cats = getAllCategories();
   cats.forEach(c => PIKET_ROWS_STATE[c.key] = ['']);
+  PIKET_LOCKS = {};
+  PIKET_READY_ID = null;
   setPiketDateByShift(0);
   renderPiketCategories();
   showToast('Jadwal piket berhasil direset', 'success');
@@ -2934,16 +3048,18 @@ function switchDbSubTab(tabName) {
   const viewKamus = document.getElementById('subview-kamus');
 
   if (tabName === 'petugas') {
-    btnPetugas.className = 'pb-3 text-sm font-bold text-navy border-b-2 border-navy';
-    btnPetugas.style.borderColor = 'var(--navy)';
-    btnKamus.className = 'pb-3 text-sm font-semibold text-slate-500 border-b-2 border-transparent hover:text-navy';
+    btnPetugas.className = 'pb-3 text-sm font-bold text-white border-b-2';
+    btnPetugas.style.borderColor = 'var(--gold)';
+    btnKamus.className = 'pb-3 text-sm font-semibold border-b-2 border-transparent';
+    btnKamus.style.color = 'var(--muted)';
     viewPetugas.classList.remove('hidden');
     viewKamus.classList.add('hidden');
     renderOfficersDatabase();
   } else {
-    btnKamus.className = 'pb-3 text-sm font-bold text-navy border-b-2 border-navy';
-    btnKamus.style.borderColor = 'var(--navy)';
-    btnPetugas.className = 'pb-3 text-sm font-semibold text-slate-500 border-b-2 border-transparent hover:text-navy';
+    btnKamus.className = 'pb-3 text-sm font-bold text-white border-b-2';
+    btnKamus.style.borderColor = 'var(--gold)';
+    btnPetugas.className = 'pb-3 text-sm font-semibold border-b-2 border-transparent';
+    btnPetugas.style.color = 'var(--muted)';
     viewKamus.classList.remove('hidden');
     viewPetugas.classList.add('hidden');
     renderCorrectionsDatabase();
@@ -2968,15 +3084,15 @@ function renderOfficersDatabase() {
       if (query && !name.toUpperCase().includes(query)) return;
       count++;
       const tr = document.createElement('tr');
-      tr.className = 'hover:bg-amber-50/50 transition-colors border-b border-slate-100 last:border-none';
+      tr.className = 'transition-colors';
       tr.innerHTML = `
-        <td class="py-3 px-4 font-mono text-xs text-slate-400 text-center">${rowNo++}</td>
+        <td class="py-3 px-4 font-mono text-xs text-center" style="color: var(--muted);">${rowNo++}</td>
         <td class="py-3 px-4">
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700">${cat.label}</span>
+          <span class="px-2 py-0.5 rounded text-xs font-bold tracking-wider" style="background: var(--surface-alt); color: var(--ink);">${cat.label}</span>
         </td>
-        <td class="py-3 px-4 font-semibold text-slate-800">${name}</td>
+        <td class="py-3 px-4 font-semibold text-white">${name}</td>
         <td class="py-3 px-4 text-right space-x-2">
-          <button onclick="deleteOfficerFromDb('${cat.key}', '${name.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-red-600 font-bold text-sm px-2 py-1 rounded hover:bg-red-50">Hapus</button>
+          <button onclick="deleteOfficerFromDb('${cat.key}', '${name.replace(/'/g, "\\'")}')" class="text-red-300 font-bold text-sm px-2 py-2 rounded min-h-[40px]">Hapus</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -2987,13 +3103,19 @@ function renderOfficersDatabase() {
     tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-xs text-slate-400 italic">Tidak ada petugas ditemukan sesuai pencarian.</td></tr>`;
   }
   document.getElementById('db-total-count').textContent = count;
+  const uniqueEl = document.getElementById('db-unique-count');
+  if (uniqueEl) uniqueEl.textContent = getPersonnelCounts().unique;
 }
 
 function deleteOfficerFromDb(catKey, name) {
-  if (!confirm(`Hapus petugas "${name}" dari kategori ${catKey}?`)) return;
+  if (!confirm(`Hapus petugas "${name}" dari kategori ${catKey}? Tindakan ini tidak bisa dibatalkan di perangkat ini.`)) return;
   SIMAP_DB[catKey] = (SIMAP_DB[catKey] || []).filter(n => n !== name);
   saveOfficersStore();
+  if (supabaseClient) {
+    supabaseClient.from('officers').delete().eq('category_key', catKey).eq('name', name).then();
+  }
   renderOfficersDatabase();
+  renderDashboardStats();
   showToast(`Petugas "${name}" berhasil dihapus dari database`);
 }
 
@@ -3050,13 +3172,13 @@ function renderCorrectionsDatabase() {
 
   entries.forEach(([key, val], idx) => {
     const tr = document.createElement('tr');
-    tr.className = 'hover:bg-amber-50/50 transition-colors border-b border-slate-100 last:border-none';
+    tr.className = 'transition-colors';
     tr.innerHTML = `
-      <td class="py-3 px-4 font-mono text-xs text-slate-400 text-center">${idx + 1}</td>
-      <td class="py-3 px-4 font-mono font-bold text-red-700">${key}</td>
-      <td class="py-3 px-4 font-bold text-emerald-800">→ ${val}</td>
+      <td class="py-3 px-4 font-mono text-xs text-center" style="color: var(--muted);">${idx + 1}</td>
+      <td class="py-3 px-4 font-mono font-bold text-red-300">${key}</td>
+      <td class="py-3 px-4 font-bold text-emerald-300">→ ${val}</td>
       <td class="py-3 px-4 text-right">
-        <button onclick="deleteCorrectionFromDb('${key.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-red-600 font-bold text-sm px-2 py-1 rounded hover:bg-red-50">Hapus</button>
+        <button onclick="deleteCorrectionFromDb('${key.replace(/'/g, "\\'")}')" class="text-red-300 font-bold text-sm px-2 py-2 rounded min-h-[40px]">Hapus</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -3129,19 +3251,24 @@ function saveCustomCategoryModal() {
 /* ============================================================
    9. RIWAYAT LOG & BACKUP DATA
    ============================================================ */
-function addHistoryEntry(type, title, content) {
-  let hist = [];
-  try { hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e){}
+function addHistoryEntry(type, title, content, id, fingerprint) {
+  let hist = getHistoryStore();
+  const entryId = id || (Date.now() + '_' + Math.random().toString(36).substr(2, 4));
+  const fp = fingerprint || (type + '|' + title + '|' + String(content).slice(0, 180));
+  const existingIdx = hist.findIndex(h => h.id === entryId || h.fingerprint === fp);
   const entry = {
-    id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+    id: existingIdx >= 0 ? hist[existingIdx].id : entryId,
     type,
     title,
     timestamp: new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB',
-    content
+    content,
+    fingerprint: fp
   };
-  hist.unshift(entry);
-  if (hist.length > 50) hist = hist.slice(0, 50); // keep last 50
-  localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(hist));
+  if (existingIdx >= 0) hist[existingIdx] = entry;
+  else hist.unshift(entry);
+  if (hist.length > 80) hist = hist.slice(0, 80);
+  setHistoryStore(hist);
+  renderDashboardStats();
   if (supabaseClient) {
     supabaseClient.from('history_logs').upsert({
       id: entry.id,
@@ -3155,44 +3282,48 @@ function addHistoryEntry(type, title, content) {
 
 function renderHistoryLog() {
   const container = document.getElementById('history-list-container');
-  const filterType = document.getElementById('history-filter-type').value;
+  const filterEl = document.getElementById('history-filter-type');
   if (!container) return;
   container.innerHTML = '';
-
-  let hist = [];
-  try { hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e){}
-
-  const filtered = hist.filter(item => filterType === 'ALL' || item.type === filterType);
+  const filterType = filterEl ? filterEl.value : 'ALL';
+  const query = ((document.getElementById('history-search') || {}).value || '').trim().toUpperCase();
+  const hist = getHistoryStore();
+  const filtered = hist.filter(item => {
+    const typeOk = filterType === 'ALL' || String(item.type).toUpperCase() === filterType;
+    if (!typeOk) return false;
+    if (!query) return true;
+    return String(item.title).toUpperCase().includes(query) || String(item.content).toUpperCase().includes(query);
+  });
 
   if (filtered.length === 0) {
-    container.innerHTML = `<div class="p-8 text-center text-xs text-slate-400 italic border rounded-lg">Belum ada riwayat laporan yang disalin atau disimpan.</div>`;
+    container.innerHTML = `<div class="p-8 text-center text-sm rounded-lg border" style="border-color: var(--line); color: var(--muted);">
+      <p class="font-semibold text-white mb-1">Belum ada riwayat</p>
+      <p>Buat laporan atensi atau reminder piket, lalu simpan atau salin untuk mengisi halaman ini.</p>
+      <div class="mt-4 flex justify-center gap-2">
+        <button type="button" onclick="switchTab('atensi')" class="btn-gold text-sm">Buat laporan</button>
+        <button type="button" onclick="switchTab('piket')" class="btn-secondary text-sm">Buat reminder</button>
+      </div>
+    </div>`;
     return;
   }
 
   filtered.forEach(item => {
-    const isAtensi = item.type === 'ATENSI';
-    const badgeColor = isAtensi ? 'bg-blue-100 text-blue-800 border-blue-200' : 'bg-amber-100 text-amber-800 border-amber-200';
+    const isAtensi = String(item.type).toUpperCase() === 'ATENSI';
     const cardEl = document.createElement('div');
-    cardEl.className = 'doc-card p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white hover:bg-slate-50 transition-colors';
-    
-    const excerpt = item.content.split('\n').slice(0, 3).join(' ... ');
-
+    cardEl.className = 'doc-card p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3';
+    const excerpt = String(item.content).split('\n').slice(0, 3).join(' · ');
     cardEl.innerHTML = `
       <div class="min-w-0 flex-1">
         <div class="flex items-center gap-2 mb-1">
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${badgeColor}">${isAtensi ? 'Laporan Atensi' : 'Reminder Piket'}</span>
-          <span class="text-xs text-slate-400">${item.timestamp}</span>
+          <span class="px-2 py-0.5 rounded text-xs font-bold tracking-wider border ${isAtensi ? 'text-blue-200 border-blue-400/40' : 'text-amber-200 border-amber-400/40'}">${isAtensi ? 'Laporan Atensi' : 'Reminder Piket'}</span>
+          <span class="text-xs" style="color: var(--muted);">${item.timestamp || ''}</span>
         </div>
-        <h4 class="font-bold text-sm text-slate-800 truncate">${item.title}</h4>
-        <p class="text-xs text-slate-500 truncate font-mono mt-0.5">${excerpt}</p>
+        <h4 class="font-bold text-sm text-white truncate">${item.title}</h4>
+        <p class="text-xs truncate font-mono mt-0.5" style="color: var(--muted);">${excerpt}</p>
       </div>
       <div class="flex gap-2 shrink-0 self-end sm:self-center">
-        <button onclick="viewHistoryDetail('${item.id}')" class="btn-outline text-xs !py-1.5">
-          Lihat &amp; Salin
-        </button>
-        <button onclick="deleteHistoryItem('${item.id}')" class="text-slate-400 hover:text-red-600 px-2 py-1.5 rounded font-bold text-xs">
-          Hapus
-        </button>
+        <button onclick="viewHistoryDetail('${item.id}')" class="btn-outline text-sm">Lihat &amp; salin</button>
+        <button onclick="deleteHistoryItem('${item.id}')" class="btn-secondary text-sm text-red-300">Hapus</button>
       </div>
     `;
     container.appendChild(cardEl);
@@ -3224,18 +3355,26 @@ function copyHistoryModalContent() {
 }
 
 function deleteHistoryItem(id) {
-  let hist = [];
-  try { hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]'); } catch(e){}
+  if (!confirm('Hapus item riwayat ini?')) return;
+  let hist = getHistoryStore();
   hist = hist.filter(h => h.id !== id);
-  localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(hist));
+  setHistoryStore(hist);
+  if (supabaseClient) supabaseClient.from('history_logs').delete().eq('id', id).then();
   renderHistoryLog();
+  renderDashboardStats();
   showToast('Item riwayat berhasil dihapus');
 }
 
-function clearAllHistory() {
-  if (!confirm('Apakah Anda yakin ingin menghapus seluruh riwayat laporan tersimpan?')) return;
+async function clearAllHistory() {
+  const ok = await openTypedConfirm(
+    'Hapus seluruh riwayat',
+    'Ketik HAPUS RIWAYAT untuk mengonfirmasi. Tindakan ini tidak bisa dibatalkan.',
+    'HAPUS RIWAYAT'
+  );
+  if (!ok) return;
   localStorage.removeItem(STORAGE_KEYS.HISTORY);
   renderHistoryLog();
+  renderDashboardStats();
   showToast('Seluruh riwayat berhasil dibersihkan');
 }
 
@@ -3276,21 +3415,34 @@ function importBackupData(event) {
         return;
       }
 
-      if (confirm('Pulihkan data dari file backup? Ini akan menggantikan database dan riwayat saat ini dengan data dari file cadangan.')) {
-        SIMAP_DB = data.officers;
-        SIMAP_CORRECTIONS = data.corrections || SEED_CORRECTIONS;
-        SIMAP_CUSTOM_CATS = data.customCategories || [];
-        saveOfficersStore();
-        saveCorrectionsStore();
-        saveCustomCatsStore();
-        if (data.history) localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(data.history));
-
-        renderDashboardStats();
-        renderOfficersDatabase();
-        renderHistoryLog();
-        renderPiketCategories();
-        showToast('Data berhasil dipulihkan secara sempurna!', 'success');
+      if (!confirm('Pulihkan data dari file backup? Cadangan otomatis dari data saat ini akan dibuat terlebih dahulu, lalu data diganti.')) {
+        event.target.value = '';
+        return;
       }
+      try {
+        const safety = {
+          version: 'auto-pre-restore',
+          timestamp: new Date().toISOString(),
+          officers: SIMAP_DB,
+          corrections: SIMAP_CORRECTIONS,
+          customCategories: SIMAP_CUSTOM_CATS,
+          history: getHistoryStore()
+        };
+        localStorage.setItem('simap_auto_backup_before_restore', JSON.stringify(safety));
+      } catch (err) {}
+      SIMAP_DB = data.officers;
+      SIMAP_CORRECTIONS = data.corrections || SEED_CORRECTIONS;
+      SIMAP_CUSTOM_CATS = data.customCategories || [];
+      saveOfficersStore();
+      saveCorrectionsStore();
+      saveCustomCatsStore();
+      if (data.history) setHistoryStore(data.history);
+      renderDashboardStats();
+      renderOfficersDatabase();
+      renderHistoryLog();
+      renderPiketCategories();
+      showToast('Data berhasil dipulihkan. Cadangan otomatis tersimpan di perangkat ini.');
+      event.target.value = '';
     } catch (err) {
       alert('Gagal membaca file backup JSON.');
     }
@@ -3330,11 +3482,17 @@ function fallbackCopy(text, onSuccess) {
    11. INITIALIZATION ON LOAD
    ============================================================ */
 window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('simap_sidebar_collapsed') === '1') {
+    document.getElementById('app-sidebar')?.classList.add('is-collapsed');
+  }
   loadGlobalStore();
   startClock();
   setPiketDateByShift(0);
   renderDashboardStats();
   loadAtensiDraft();
+  markAtensiCleanDraft();
+  const copyBtn = document.getElementById('btn-copy-atensi');
+  if (copyBtn) copyBtn.disabled = true;
   renderPiketCategories();
   setTimeout(() => {
     const autoCheckbox = document.getElementById('pk_auto_fill_on_date');
