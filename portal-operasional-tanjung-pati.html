@@ -14,54 +14,73 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
   :root {
-    --bg: #0A1220;
-    --surface: #132033;
-    --surface-alt: #1A2B40;
-    --surface-2: #1A2B40;
-    --surface-hover: #22364F;
-    --navy: #0B1728;
-    --navy-2: #142847;
-    --navy-light: #1E3B68;
-    --gold: #C9A227;
-    --gold-bright: #E8C547;
-    --gold-text: #E8C547;
-    --gold-soft: rgba(201, 162, 39, 0.16);
-    --gold-border: rgba(201, 162, 39, 0.42);
-    --gold-glow: rgba(201, 162, 39, 0.18);
-    --maroon: #E11D48;
-    --maroon-soft: rgba(225, 29, 72, 0.16);
-    --emerald: #10B981;
-    --emerald-soft: rgba(16, 185, 129, 0.16);
-    --warning: #D97706;
-    --ink: #F1F5F9;
-    --muted: #A8B4C4;
-    --line: rgba(255, 255, 255, 0.12);
-    --line-glow: rgba(201, 162, 39, 0.18);
+    /* Base canvas & surfaces — pertegas kontras antar lapisan */
+    --bg: #F1F2F4;            /* latar halaman lebih dalam agar kartu menonjol */
+    --surface: #FFFFFF;        /* kartu */
+    --surface-alt: #F7F8F9;    /* panel sekunder / grup */
+    --surface-2: #FFFFFF;
+    --surface-hover: #F3F4F6;
+    --field: #F8F9FA;          /* latar input/area isi (beda dari kartu putih) */
+    --field-border: #E3E5E8;   /* border input lebih jelas */
+
+    /* Brand (lime) — dipakai hemat untuk aksi & status */
+    --navy: #0F1A0A;
+    --navy-2: #1F360E;
+    --navy-light: #36591B;
+    --gold: #65A30D;
+    --gold-bright: #84CC16;
+    --gold-text: #3F6212;
+    --gold-soft: rgba(132, 204, 22, 0.12);
+    --gold-border: rgba(101, 163, 13, 0.35);
+    --gold-glow: rgba(132, 204, 22, 0.14);
+
+    --maroon: #E5484D;
+    --maroon-soft: rgba(229, 72, 77, 0.10);
+    --emerald: #30A46C;
+    --emerald-soft: rgba(48, 164, 108, 0.12);
+    --warning: #E5A000;
+
+    /* Neutral ink tiers (zinc — precise, not blue) */
+    --ink: #18181B;
+    --ink-2: #3F3F46;
+    --muted: #71717A;
+    --muted-2: #A1A1AA;
+    --line: #E6E7EA;
+    --line-strong: #D1D3D6;
+    --line-glow: rgba(132, 204, 22, 0.18);
+
+    /* Elevation */
+    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+    --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px -12px rgba(16, 24, 40, 0.10);
+    --shadow-pop: 0 12px 32px -8px rgba(16, 24, 40, 0.16);
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 16px;
   }
 
-  * { font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
-  .font-display { font-family: 'Source Serif 4', serif; }
-  .font-heading { font-family: 'Outfit', -apple-system, sans-serif; }
-  .font-mono { font-family: 'IBM Plex Mono', monospace; }
+  * { font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+  .font-display { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+  .font-heading { font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif; }
+  .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
   html { font-size: 16px; }
   body {
-    background:
-      radial-gradient(ellipse 70% 40% at 50% -10%, rgba(30, 59, 104, 0.28), transparent 65%),
-      #0A1220;
+    background: var(--bg);
     color: var(--ink);
     min-height: 100vh;
     font-size: 0.9375rem;
     line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   .section-title {
     color: var(--ink);
-    font-size: 0.9375rem;
-    font-weight: 700;
-    letter-spacing: 0.01em;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
   .date-chip {
     min-height: 44px;
@@ -73,9 +92,10 @@
     color: var(--ink);
   }
   .date-chip.is-active {
-    background: var(--navy-2);
+    background: var(--gold);
     border-color: var(--gold);
-    color: var(--gold-text);
+    color: #FFFFFF;
+    font-weight: 700;
   }
   .sidebar-panel { width: 16rem; transition: width 0.2s ease; }
   .sidebar-panel.is-collapsed { width: 4.75rem; }
@@ -109,11 +129,11 @@
     transform: translateX(2px);
   }
   .nav-item.active {
-    background: linear-gradient(90deg, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.03) 100%);
+    background: linear-gradient(90deg, rgba(132, 204, 22, 0.18) 0%, rgba(132, 204, 22, 0.03) 100%);
     border-left-color: var(--gold-bright);
     color: #FFFFFF;
     font-weight: 600;
-    box-shadow: inset 4px 0 15px rgba(212, 175, 55, 0.15);
+    box-shadow: inset 4px 0 15px rgba(132, 204, 22, 0.15);
   }
 
   .bottom-nav-item {
@@ -125,44 +145,43 @@
     border-top-color: var(--gold-bright);
     color: var(--gold-bright);
     font-weight: 700;
-    background: rgba(212, 175, 55, 0.08);
+    background: rgba(132, 204, 22, 0.08);
   }
 
   /* SECTION CARDS */
   .doc-card {
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.45);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   .doc-card:hover {
-    border-color: rgba(201, 162, 39, 0.28);
+    border-color: var(--line-strong);
   }
   .doc-card:focus-within {
     border-color: var(--gold);
-    box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.22);
+    box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.16);
   }
 
   .numeral-chip {
     width: 34px; height: 34px;
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(212, 175, 55, 0.08) 100%);
+    background: var(--gold-soft);
     border: 1px solid var(--gold-border);
-    color: var(--gold-bright);
+    color: var(--gold-text);
     display: inline-flex; align-items: center; justify-content: center;
-    font-family: 'Source Serif 4', serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
     font-size: 0.95rem;
-    border-radius: 8px;
+    border-radius: 9px;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   /* FORM INPUTS */
   .field-input, .field-select, .field-textarea {
     width: 100%;
-    background: rgba(6, 13, 24, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: var(--field);
+    border: 1px solid var(--field-border);
     border-radius: 10px;
     min-height: 44px;
     padding: 0.7rem 0.95rem;
@@ -170,14 +189,14 @@
     color: var(--ink);
     outline: none;
     transition: all 0.2s ease;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .field-input:hover, .field-select:hover, .field-textarea:hover {
+    border-color: var(--line-strong);
   }
   .field-input:focus, .field-select:focus, .field-textarea:focus {
-    border-color: var(--gold-bright);
-    background: rgba(11, 23, 40, 0.95);
-    box-shadow: 
-      0 0 0 3px rgba(212, 175, 55, 0.25),
-      inset 0 2px 4px rgba(0,0,0,0.2);
+    border-color: var(--gold);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.18);
   }
   .field-label {
     display: block;
@@ -190,66 +209,66 @@
 
   /* BUTTONS */
   .btn-primary {
-    background: linear-gradient(135deg, var(--navy-2) 0%, var(--navy-light) 100%);
+    background: var(--gold);
     color: #FFFFFF;
     font-weight: 600;
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid var(--gold);
     min-height: 44px;
     padding: 0.7rem 1.35rem;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-sm);
     display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
   }
   .btn-primary:hover { 
-    background: linear-gradient(135deg, var(--navy-light) 0%, #2A548F 100%); 
-    border-color: rgba(255, 255, 255, 0.35); 
-    box-shadow: 0 6px 20px rgba(30, 59, 104, 0.4);
+    background: var(--navy-2); 
+    border-color: var(--navy-2); 
+    box-shadow: 0 2px 10px rgba(46, 78, 14, 0.25);
     transform: translateY(-1px);
   }
-  .btn-primary:active { transform: translateY(1px); }
+  .btn-primary:active { transform: translateY(0); }
 
   .btn-gold {
-    background: linear-gradient(135deg, #F5CB3A 0%, #C59B27 100%);
-    color: #060D18;
+    background: var(--gold);
+    color: #FFFFFF;
     font-weight: 700;
     border-radius: 10px;
-    border: 1px solid var(--gold-bright);
+    border: 1px solid var(--gold);
     min-height: 44px;
     padding: 0.7rem 1.35rem;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 14px rgba(201, 162, 39, 0.22);
+    box-shadow: var(--shadow-sm);
     display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
   }
   .btn-gold:hover { 
-    background: linear-gradient(135deg, #FFD74D 0%, #D4AF37 100%); 
-    box-shadow: 0 6px 24px rgba(212, 175, 55, 0.45);
+    background: #4D7C0F; 
+    box-shadow: 0 2px 10px rgba(101, 163, 13, 0.25);
     transform: translateY(-1px);
   }
-  .btn-gold:active { transform: translateY(1px); }
+  .btn-gold:active { transform: translateY(0); }
 
   .btn-outline {
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-2);
+    background: var(--field);
     font-weight: 600;
     font-size: 0.875rem;
-    border-radius: 8px;
+    border-radius: 9px;
     min-height: 40px;
     padding: 0.55rem 0.95rem;
     transition: all 0.2s ease;
     display: inline-flex; align-items: center; gap: 0.45rem;
   }
   .btn-outline:hover { 
-    background: rgba(212, 175, 55, 0.12); 
-    border-color: var(--gold-bright); 
-    color: var(--gold-bright); 
+    background: var(--surface-hover); 
+    border-color: var(--line-strong); 
+    color: var(--ink); 
     transform: translateY(-1px);
   }
 
   .btn-secondary {
-    background: rgba(255, 255, 255, 0.06);
-    color: #FFFFFF;
+    background: var(--surface-alt);
+    color: var(--ink);
     border: 1px solid var(--line);
     font-weight: 600;
     border-radius: 10px;
@@ -259,23 +278,22 @@
     display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
   }
   .btn-secondary:hover { 
-    background: rgba(255, 255, 255, 0.12); 
-    border-color: rgba(255, 255, 255, 0.3);
+    background: var(--surface-hover); 
+    border-color: var(--line-strong); 
     transform: translateY(-1px);
   }
 
   /* STATUS BADGE & PILLS */
   .status-pill {
     display: inline-flex; align-items: center; gap: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: rgba(6, 13, 24, 0.65);
-    backdrop-filter: blur(8px);
+    border: 1px solid var(--line);
+    background: var(--surface);
     border-radius: 999px;
     padding: 0.3rem 0.85rem;
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--ink);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
   }
   .status-dot { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; }
   .status-dot.pulse { animation: pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
@@ -294,22 +312,27 @@
     white-space: pre-wrap;
     color: #FFFFFF;
     position: relative;
+    max-height: 52vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
+  .whatsapp-bubble::-webkit-scrollbar { width: 6px; }
+  .whatsapp-bubble::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.35); border-radius: 3px; }
 
   /* LETTERHEAD PREVIEW */
   .letterhead {
-    background: rgba(13, 25, 44, 0.92);
-    border: 1px solid rgba(212, 175, 55, 0.35);
+    background: #FFFFFF;
+    border: 1px solid var(--line);
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    box-shadow: 0 6px 20px -8px rgba(15, 23, 42, 0.12);
   }
   .letterhead-top {
     border-bottom: 2px solid var(--gold);
     padding: 1.25rem 1.4rem 1rem;
     text-align: center;
     position: relative;
-    background: linear-gradient(180deg, rgba(9, 18, 33, 0.98) 0%, rgba(13, 25, 44, 0.95) 100%);
+    background: linear-gradient(180deg, #F7FAEE 0%, #F0F6E4 100%);
   }
   .letterhead-seal {
     width: 48px; height: 48px;
@@ -317,15 +340,15 @@
     border: 2px solid var(--gold);
     border-radius: 999px;
     display: flex; align-items: center; justify-content: center;
-    color: var(--gold-bright);
-    background: rgba(212, 175, 55, 0.1);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    color: var(--gold);
+    background: rgba(132, 204, 22, 0.12);
+    box-shadow: 0 0 12px rgba(132, 204, 22, 0.2);
   }
 
   .correction-tag {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--gold-bright);
+    color: var(--gold-text);
     background: var(--gold-soft);
     border: 1px solid var(--gold-border);
     border-radius: 6px;
@@ -335,7 +358,7 @@
 
   /* AUTOCOMPLETE LIST */
   .ac-list { max-height: 240px; }
-  @keyframes flash { 0% { background-color: rgba(212, 175, 55, 0.35); } 100% { background-color: transparent; } }
+  @keyframes flash { 0% { background-color: rgba(132, 204, 22, 0.35); } 100% { background-color: transparent; } }
   .flash { animation: flash 0.9s ease-out; }
 
   button:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
@@ -347,12 +370,30 @@
   /* MODERN SCROLLBAR */
   ::-webkit-scrollbar { width: 7px; height: 7px; }
   ::-webkit-scrollbar-thumb { 
-    background: rgba(212, 175, 55, 0.25); 
+    background: rgba(132, 204, 22, 0.25); 
     border-radius: 4px;
     transition: background 0.2s ease;
   }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.45); }
-  ::-webkit-scrollbar-track { background: #060D18; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(132, 204, 22, 0.45); }
+  ::-webkit-scrollbar-track { background: #E2E8F0; }
+
+  /* Clear keyboard focus indicator for interactive controls (a11y) */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row pb-16 md:pb-0">
@@ -366,7 +407,7 @@
       </div>
       <div class="min-w-0 brand-text">
         <h1 class="text-sm font-bold text-white tracking-wide truncate font-display">SIMAP TANJUNG PATI</h1>
-        <p class="text-xs leading-tight truncate" style="color: var(--gold-text);">Lapas Kelas IIB Tanjung Pati</p>
+        <p class="text-xs leading-tight truncate" style="color: #A3E635;">Lapas Kelas IIB Tanjung Pati</p>
       </div>
     </div>
     <button type="button" onclick="toggleSidebarCollapse()" class="mt-3 w-full min-h-[40px] flex items-center justify-center gap-2 rounded-lg border border-white/15 text-xs font-semibold text-slate-200 hover:bg-white/5" title="Perkecil menu">
@@ -388,10 +429,6 @@
     <button onclick="switchTab('piket')" id="nav-piket" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left min-h-[44px]">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
       <span class="nav-label">Reminder Piket</span>
-    </button>
-    <button onclick="switchTab('humas')" id="nav-humas" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left min-h-[44px]">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-      <span class="nav-label">Humas &amp; Rilis</span>
     </button>
 
     <div class="nav-group-label pt-4 px-3 py-1.5 text-xs font-semibold tracking-wide text-slate-400">Manajemen &amp; Sistem</div>
@@ -443,10 +480,6 @@
   <button type="button" class="absolute inset-0 bg-black/50" onclick="closeMoreSheet()" aria-label="Tutup menu"></button>
   <div class="absolute bottom-16 left-0 right-0 mx-2 mb-2 rounded-xl border p-3 space-y-1" style="background: var(--surface-alt); border-color: var(--line);">
     <p class="text-xs font-semibold text-slate-400 px-2 pb-1">Menu lain</p>
-    <button onclick="switchTab('humas')" id="botnav-humas" class="bottom-nav-item w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-left min-h-[44px]">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"/><path d="M18 14h-8"/><path d="M10 6h8v4h-8V6Z"/></svg>
-      <span>Humas &amp; Rilis</span>
-    </button>
     <button onclick="switchTab('database')" id="botnav-database" class="bottom-nav-item w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-left min-h-[44px]">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
       <span>Petugas &amp; Kamus</span>
@@ -465,20 +498,20 @@
 <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
 
   <!-- TOP HEADER -->
-  <header class="sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center justify-between" style="background: var(--navy); border-bottom: 1px solid var(--gold);">
+  <header class="sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center justify-between" style="background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);">
     <div class="flex items-center gap-3 min-w-0">
-      <div class="md:hidden w-10 h-10 rounded bg-amber-400 flex items-center justify-center font-display font-bold text-slate-900 text-sm">
+      <div class="md:hidden w-10 h-10 rounded bg-lime-500 flex items-center justify-center font-bold text-lime-950 text-sm">
         P
       </div>
       <div class="min-w-0">
-        <h2 id="top-header-title" class="text-base font-bold text-white tracking-wide font-display truncate">Dashboard</h2>
+        <h2 id="top-header-title" class="text-base font-bold text-slate-900 tracking-wide font-display truncate">Dashboard</h2>
         <p class="text-xs hidden sm:block truncate" style="color: var(--muted);">SIMAP — Lapas Kelas IIB Tanjung Pati</p>
       </div>
     </div>
     <div class="flex items-center gap-3 sm:gap-4 text-right">
       <div class="font-mono text-sm font-semibold" style="color: var(--gold-text);" id="clock-wib">00:00:00 WIB</div>
       <div id="top-status-pill" class="status-pill hidden sm:inline-flex">
-        <span id="top-status-dot" class="status-dot" style="background: #D9A441;"></span>
+        <span id="top-status-dot" class="status-dot" style="background: #84CC16;"></span>
         <span id="top-status-text">Siap (Mode Lokal)</span>
       </div>
     </div>
@@ -498,7 +531,7 @@
       <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
         <div class="space-y-1">
           <p class="text-sm" style="color: var(--muted);" id="dash-greeting">Selamat bertugas</p>
-          <h2 class="text-xl sm:text-2xl font-bold font-display text-white">Operasional hari ini</h2>
+          <h2 class="text-xl sm:text-2xl font-bold font-display text-slate-900">Operasional hari ini</h2>
           <p class="text-sm" style="color: var(--muted);" id="dash-date-line">—</p>
         </div>
         <div class="flex flex-wrap gap-2">
@@ -519,28 +552,28 @@
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         <div class="doc-card p-4 space-y-2">
           <p class="text-xs font-semibold" style="color: var(--muted);">Laporan hari ini</p>
-          <p id="dash-today-atensi" class="text-sm font-semibold text-white leading-snug">Belum ada laporan tersimpan hari ini</p>
+          <p id="dash-today-atensi" class="text-sm font-semibold text-slate-900 leading-snug">Belum ada laporan tersimpan hari ini</p>
           <button onclick="switchTab('atensi')" class="text-sm font-semibold" style="color: var(--gold-text);">Buka generator →</button>
         </div>
         <div class="doc-card p-4 space-y-2">
           <p class="text-xs font-semibold" style="color: var(--muted);">Reminder piket berikutnya</p>
-          <p id="dash-next-piket" class="text-sm font-semibold text-white leading-snug">Belum ada reminder tersimpan</p>
+          <p id="dash-next-piket" class="text-sm font-semibold text-slate-900 leading-snug">Belum ada reminder tersimpan</p>
           <button onclick="switchTab('piket')" class="text-sm font-semibold" style="color: var(--gold-text);">Buka jadwal →</button>
         </div>
         <div class="doc-card p-4 space-y-2">
           <p class="text-xs font-semibold" style="color: var(--muted);">Peringatan jadwal</p>
-          <p id="dash-conflict" class="text-sm font-semibold text-white leading-snug">Tidak ada petugas ganda pada form piket</p>
+          <p id="dash-conflict" class="text-sm font-semibold text-slate-900 leading-snug">Tidak ada petugas ganda pada form piket</p>
         </div>
         <div class="doc-card p-4 space-y-2">
           <p class="text-xs font-semibold" style="color: var(--muted);">Data belum lengkap</p>
-          <p id="dash-incomplete" class="text-sm font-semibold text-white leading-snug">Semua draf atensi kosong</p>
+          <p id="dash-incomplete" class="text-sm font-semibold text-slate-900 leading-snug">Semua draf atensi kosong</p>
         </div>
       </div>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="doc-card p-4">
           <p class="text-xs font-semibold" style="color: var(--muted);">Output tersimpan</p>
-          <p id="stat-history-count" class="text-3xl font-bold font-display text-white mt-1">0</p>
+          <p id="stat-history-count" class="text-3xl font-bold font-display text-slate-900 mt-1">0</p>
           <p class="text-xs mt-1" style="color: var(--muted);">Dari riwayat yang sama</p>
         </div>
         <div class="doc-card p-4">
@@ -550,12 +583,12 @@
         </div>
         <div class="doc-card p-4">
           <p class="text-xs font-semibold" style="color: var(--muted);">Reminder Piket</p>
-          <p id="stat-piket-generated" class="text-3xl font-bold font-display text-amber-300 mt-1">0</p>
+          <p id="stat-piket-generated" class="text-3xl font-bold font-display text-lime-600 mt-1">0</p>
           <p class="text-xs mt-1" style="color: var(--muted);">Entri tipe PIKET</p>
         </div>
         <div class="doc-card p-4">
           <p class="text-xs font-semibold" style="color: var(--muted);">Petugas</p>
-          <p class="mt-1"><span id="stat-total-officers" class="text-3xl font-bold font-display text-white">0</span></p>
+          <p class="mt-1"><span id="stat-total-officers" class="text-3xl font-bold font-display text-slate-900">0</span></p>
           <p class="text-xs mt-1" style="color: var(--muted);"><span id="stat-officer-placements">0</span> penempatan kategori · <span id="stat-corrections">0</span> kamus</p>
         </div>
       </div>
@@ -761,7 +794,7 @@
                 <button type="button" onclick="saveAtensiDraftManual()" class="btn-secondary text-sm">Simpan Draf</button>
                 <button type="button" onclick="saveAtensiToHistoryManual()" class="btn-outline text-sm">Simpan ke Riwayat</button>
               </div>
-              <button type="button" onclick="resetAtensiForm()" class="btn-secondary text-sm text-red-300 border-red-500/30">Reset Form</button>
+              <button type="button" onclick="resetAtensiForm()" class="btn-secondary text-sm text-red-700 border-red-500/30">Reset Form</button>
             </div>
           </div>
 
@@ -769,7 +802,7 @@
 
         <!-- LIVE PREVIEW PANEL -->
         <div class="h-full">
-          <div class="letterhead sticky top-20 max-h-[calc(100vh-110px)] overflow-y-auto">
+          <div class="letterhead sticky top-20">
             <div class="letterhead-top">
               <div class="letterhead-seal">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/></svg>
@@ -831,20 +864,6 @@
               </div>
               <input type="date" id="pk_date" class="field-input text-sm font-semibold" onchange="onPiketDateChange()">
               <div class="mt-2.5 text-center rounded-lg py-2 text-sm font-bold border" style="background: var(--gold-soft); border-color: var(--gold-border); color: var(--gold-text);" id="pk_date_display">—</div>
-
-              <div class="mt-3.5 p-3.5 rounded-xl border space-y-2.5" style="border-color: var(--gold-border); background: var(--surface-alt);">
-                <div class="flex items-center justify-between gap-2">
-                  <label class="flex items-center gap-2 text-sm font-semibold cursor-pointer select-none">
-                    <input type="checkbox" id="pk_auto_fill_on_date" checked onchange="onAutoFillToggleChange()" class="w-4 h-4 rounded cursor-pointer">
-                    <span>Isi otomatis saat tanggal dipilih</span>
-                  </label>
-                  <span class="px-2 py-0.5 rounded text-xs font-bold tracking-wide bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Aktif</span>
-                </div>
-                <button type="button" onclick="autoFillPiketFromDb(false)" class="btn-gold w-full text-sm">
-                  Acak / isi otomatis (posisi belum terkunci)
-                </button>
-                <p id="pk-autofill-reason" class="text-xs hidden" style="color: var(--muted);"></p>
-              </div>
             </div>
           </div>
 
@@ -872,7 +891,7 @@
                 <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
                 <p class="text-sm font-bold">Pratinjau reminder</p>
               </div>
-              <span id="pk-warn-badge" class="hidden text-xs font-bold text-amber-200 bg-amber-500/15 border border-amber-500/40 px-2 py-1 rounded">
+              <span id="pk-warn-badge" class="hidden text-xs font-bold text-amber-700 bg-amber-50 border border-lime-500/40 px-2 py-1 rounded">
                 Ada petugas ganda
               </span>
             </div>
@@ -888,20 +907,29 @@
 4. Petugas piket harap selalu berkoordinasi dengan Piket Perwira Kunjungan</textarea>
             </div>
 
-            <pre id="pk-output-box" class="font-mono whitespace-pre-wrap text-sm leading-relaxed rounded-xl p-4 min-h-[160px]" style="background: var(--navy); border: 1px solid var(--line); color: var(--ink);"></pre>
+            <pre id="pk-output-box" class="font-mono whitespace-pre-wrap text-sm leading-relaxed rounded-xl p-4 min-h-[160px]" style="background: var(--surface); border: 1px solid var(--line); color: var(--ink);"></pre>
 
             <div class="pt-2 space-y-2.5">
-              <button onclick="copyPiketOutput()" id="btn-copy-piket" class="btn-gold w-full py-3 text-sm font-bold">
-                Salin output reminder piket
-              </button>
               <div class="flex gap-2">
-                <button onclick="savePiketToHistoryManual()" class="btn-secondary flex-1 text-sm">
-                  Simpan ke Riwayat
+                <button onclick="copyPiketOutput()" id="btn-copy-piket" class="btn-secondary flex-1 text-sm">
+                  📋 Salin output
                 </button>
-                <button onclick="resetPiketForm()" class="btn-secondary flex-1 text-sm text-red-300">
-                  Reset Jadwal
+                <button onclick="sendPiketToWhatsApp()" id="btn-wa-piket" class="btn-gold flex-1 text-sm font-bold">
+                  📲 Kirim ke WhatsApp
                 </button>
               </div>
+              <div class="grid grid-cols-3 gap-2">
+                <button onclick="savePiketDraft()" id="btn-save-piket-draft" class="btn-primary text-xs font-bold">
+                  💾 Simpan Draf
+                </button>
+                <button onclick="savePiketToHistoryManual()" class="btn-secondary text-xs">
+                  Ke Riwayat
+                </button>
+                <button onclick="resetPiketForm()" class="btn-secondary text-xs text-red-700">
+                  Reset
+                </button>
+              </div>
+              <p id="piket-draft-status" class="hidden text-xs font-medium text-center" style="color: var(--gold-text);"></p>
             </div>
           </div>
         </div>
@@ -911,172 +939,15 @@
     </div>
 
     <!-- =========================================================
-         TAB: HUMAS & AI RILIS BERITA KEMENIMIPAS
-         ========================================================= -->
-    <div id="view-humas" class="tab-view space-y-6">
-      
-      <!-- HEADER BANNER -->
-      <div class="doc-card p-5 border-l-4 border-amber-500 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">Kemenimipas Humas Suite</span>
-            <span class="text-xs text-slate-400 font-mono">Ditjen PAS Standard</span>
-          </div>
-          <h2 class="text-lg font-bold text-white font-display mt-1">Generator rilis berita &amp; humas kedinasan</h2>
-          <p class="text-sm text-slate-300">Buat artikel 5W+1H, caption media sosial, dan broadcast WhatsApp dari satu formulir. Teks disusun dari template resmi, bukan kecerdasan buatan.</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- INPUT FORM -->
-        <div class="lg:col-span-5 space-y-4">
-          <div class="doc-card p-5 space-y-4">
-            <h3 class="font-bold text-sm text-white tracking-wide uppercase font-display border-b border-white/10 pb-2.5">
-              1. Input Data Kegiatan Humas
-            </h3>
-
-            <div>
-              <label class="field-label">Judul / Nama Kegiatan Kedinasan *</label>
-              <input type="text" id="hm_judul" class="field-input" placeholder="contoh: Pelatihan Pertanian Hidroponik WBP" oninput="generateHumasNews()" />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label class="field-label">Kategori Kegiatan</label>
-                <select id="hm_kategori" class="field-select" onchange="generateHumasNews()">
-                  <option value="PEMBINAAN_KEMANDIRIAN">Pembinaan Kemandirian &amp; Vokasi WBP</option>
-                  <option value="PEMBINAAN_KEROHANIAN">Pembinaan Kerohanian &amp; Mental</option>
-                  <option value="PENGAMANAN_RAZIA">Pengamanan &amp; Razia Blok Jaga</option>
-                  <option value="KESEHATAN_MEDIS">Pelayanan Kesehatan &amp; Rujukan Medis</option>
-                  <option value="LAYANAN_KUNJUNGAN">Layanan Kunjungan &amp; Penitipan</option>
-                  <option value="HUMAS_SINERGI">Sinergi Instansi &amp; Kehumasan Umum</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="field-label">Waktu Pelaksanaan</label>
-                <select id="hm_waktu" class="field-select" onchange="generateHumasNews()">
-                  <option value="Pagi hari">Pagi Hari (08.00 - 11.30 WIB)</option>
-                  <option value="Siang hari">Siang Hari (13.00 - 15.30 WIB)</option>
-                  <option value="Sore hari">Sore Hari (16.00 - 18.00 WIB)</option>
-                  <option value="Malam hari">Malam Hari (19.30 - 21.00 WIB)</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label class="field-label">Tanggal Acara</label>
-                <input type="date" id="hm_tanggal" class="field-input" onchange="generateHumasNews()" />
-              </div>
-              <div>
-                <label class="field-label">Lokasi Acara</label>
-                <input type="text" id="hm_lokasi" class="field-input" value="Lapas Kelas IIB Tanjung Pati" oninput="generateHumasNews()" />
-              </div>
-            </div>
-
-            <div>
-              <label class="field-label">Pejabat / Tokoh yang Hadir</label>
-              <input type="text" id="hm_pejabat" class="field-input" placeholder="contoh: Kalapas Tanjung Pati, KPLP, Kasi Binadik, Perwakilan Kemenag" oninput="generateHumasNews()" />
-            </div>
-
-            <div>
-              <label class="field-label">Poin Utama &amp; Uraian Singkat *</label>
-              <textarea id="hm_poin" rows="3" class="field-textarea" placeholder="contoh: 30 WBP mengikuti pelatihan hidroponik. Pelatihan berlangsung interaktif dan seluruh WBP mendapatkan sertifikat." oninput="generateHumasNews()"></textarea>
-            </div>
-
-            <div>
-              <label class="field-label">Kutipan / Statement Pejabat (Opsional)</label>
-              <textarea id="hm_quote" rows="2" class="field-textarea" placeholder="contoh: 'Pelatihan ini bertujuan agar WBP memiliki keahlian mandiri saat kembali ke masyarakat', ujar Kalapas Tanjung Pati." oninput="generateHumasNews()"></textarea>
-            </div>
-
-            <div class="flex gap-2 pt-2">
-              <button onclick="generateHumasNews()" class="btn-gold flex-1 text-xs font-bold">
-                ⚡ Hasilkan Berita &amp; Caption
-              </button>
-              <button onclick="resetHumasForm()" class="btn-secondary text-sm text-red-300 border-red-500/30">
-                Reset
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- GENERATED OUTPUTS -->
-        <div class="lg:col-span-7 space-y-4">
-          
-          <!-- OUTPUT CARD -->
-          <div class="doc-card p-5 space-y-4">
-            <div class="flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 class="font-bold text-sm text-white tracking-wide uppercase font-display">
-                2. Hasil template rilis
-              </h3>
-              <span class="text-[10px] text-amber-400 font-mono">Kemenimipas Verified Format</span>
-            </div>
-
-            <!-- NEWS ARTICLE PRESS RELEASE -->
-            <div class="space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-amber-400"></span> Artikel Berita Media Massa (5W+1H)
-                </span>
-                <button onclick="copyHumasOutput('news')" class="btn-outline text-[11px] !py-1 !px-2.5">
-                  📋 Salin Artikel
-                </button>
-              </div>
-              <div id="hm-news-output" class="bg-slate-950/80 border border-white/10 rounded-xl p-4 font-serif text-sm text-slate-200 leading-relaxed whitespace-pre-wrap min-h-[160px]">
-                <p class="text-slate-500 italic text-center py-6">Isi data kegiatan pada form di samping untuk menghasilkan artikel berita rilis pers…</p>
-              </div>
-            </div>
-
-            <!-- CAPTION MEDIA SOSIAL -->
-            <div class="space-y-2 pt-2 border-t border-white/10">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-purple-400"></span> Caption Media Sosial (Instagram / FB)
-                </span>
-                <button onclick="copyHumasOutput('caption')" class="btn-outline text-[11px] !py-1 !px-2.5">
-                  📱 Salin Caption IG
-                </button>
-              </div>
-              <div id="hm-caption-output" class="bg-slate-950/80 border border-white/10 rounded-xl p-4 font-sans text-xs text-slate-200 leading-relaxed whitespace-pre-wrap min-h-[100px]">
-                <p class="text-slate-500 italic text-center py-4">Pratinjau caption Instagram lengkap dengan hashtag resmi Kemenimipas…</p>
-              </div>
-            </div>
-
-            <!-- BROADCAST WA -->
-            <div class="space-y-2 pt-2 border-t border-white/10">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Broadcast WhatsApp Mitra Media
-                </span>
-                <button onclick="copyHumasOutput('wa')" class="btn-outline text-[11px] !py-1 !px-2.5">
-                  💬 Salin Broadcast WA
-                </button>
-              </div>
-              <div id="hm-wa-output" class="whatsapp-bubble text-xs min-h-[90px]">
-                <p class="text-slate-400 italic text-center py-3">Pratinjau pesan broadcast WhatsApp untuk grup kedinasan &amp; wartawan…</p>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- =========================================================
-         TAB 4: DATABASE PETUGAS & KAMUS AUTO-KOREKSI
-         ========================================================= -->
+        TAB 4: DATABASE PETUGAS & KAMUS AUTO-KOREKSI
+        ========================================================= -->
     <div id="view-database" class="tab-view space-y-6">
       
       <!-- SUPABASE CLOUD CONFIGURATION CARD -->
       <div class="doc-card p-5 space-y-4" style="border-left: 4px solid var(--gold); background: var(--surface-alt);">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h3 class="font-display font-bold text-base text-white flex items-center gap-2">
+            <h3 class="font-display font-bold text-base text-slate-900 flex items-center gap-2">
               <span>Pengaturan sinkronisasi cloud</span>
             </h3>
             <p class="text-sm mt-0.5" style="color: var(--muted);">
@@ -1109,7 +980,7 @@
           </div>
           <p class="text-xs" style="color: var(--muted);">Jangan tempel service-role key. Jalankan <code class="font-mono">supabase_schema.sql</code> di SQL Editor jika tabel belum ada.</p>
           <div class="flex flex-wrap gap-2">
-            <button onclick="disconnectSupabaseConfig()" type="button" class="btn-secondary text-sm text-red-300">
+            <button onclick="disconnectSupabaseConfig()" type="button" class="btn-secondary text-sm text-red-700">
               Putuskan &amp; pakai lokal
             </button>
             <button onclick="saveSupabaseConfig()" type="button" class="btn-gold text-sm">
@@ -1122,10 +993,10 @@
 
       <!-- SUB-NAVIGATION TABS -->
       <div class="flex border-b gap-6" style="border-color: var(--line);">
-        <button onclick="switchDbSubTab('petugas')" id="subtab-btn-petugas" class="pb-3 text-sm font-bold text-white border-b-2" style="border-color: var(--gold);">
+        <button onclick="switchDbSubTab('petugas')" id="subtab-btn-petugas" class="pb-3 text-sm font-bold text-slate-900 border-b-2" style="border-color: var(--gold);">
           Daftar petugas (<span id="db-unique-count">0</span> orang · <span id="db-total-count">0</span> penempatan)
         </button>
-        <button onclick="switchDbSubTab('kamus')" id="subtab-btn-kamus" class="pb-3 text-sm font-semibold border-b-2 border-transparent hover:text-white" style="color: var(--muted);">
+        <button onclick="switchDbSubTab('kamus')" id="subtab-btn-kamus" class="pb-3 text-sm font-semibold border-b-2 border-transparent hover:text-slate-900" style="color: var(--muted);">
           Kamus koreksi (<span id="kamus-total-count">0</span>)
         </button>
       </div>
@@ -1150,7 +1021,7 @@
             <button onclick="openImportScheduleModal()" class="btn-gold text-sm shrink-0">Impor jadwal</button>
             <button onclick="exportScheduleJson()" class="btn-outline text-sm shrink-0">Ekspor JSON</button>
             <button onclick="openAddOfficerModal()" class="btn-primary text-sm shrink-0">+ Tambah petugas</button>
-            <button onclick="resetOfficersToSeed()" class="btn-secondary text-sm text-red-300 shrink-0">Reset data asli</button>
+            <button onclick="resetOfficersToSeed()" class="btn-secondary text-sm text-red-700 shrink-0">Reset data asli</button>
           </div>
         </div>
 
@@ -1224,7 +1095,7 @@
         <div class="doc-card p-5" style="border-left: 4px solid var(--gold);">
           <div class="flex items-start justify-between gap-3">
             <div>
-              <h3 class="font-bold text-base font-display text-white">Ekspor cadangan (.json)</h3>
+              <h3 class="font-bold text-base font-display text-slate-900">Ekspor cadangan (.json)</h3>
               <p class="text-sm mt-1" style="color: var(--muted);">Unduh database petugas, kamus, dan riwayat sebagai file cadangan.</p>
             </div>
           </div>
@@ -1235,7 +1106,7 @@
 
         <div class="doc-card p-5" style="border-left: 4px solid var(--emerald);">
           <div>
-            <h3 class="font-bold text-base font-display text-white">Impor &amp; pulihkan data</h3>
+            <h3 class="font-bold text-base font-display text-slate-900">Impor &amp; pulihkan data</h3>
             <p class="text-sm mt-1" style="color: var(--muted);">Pilih file backup. Sistem membuat cadangan lokal otomatis sebelum menimpa data.</p>
           </div>
           <div class="mt-4 flex items-center gap-2">
@@ -1251,7 +1122,7 @@
       <div class="doc-card p-5 space-y-4">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b pb-4" style="border-color: var(--line);">
           <div>
-            <h3 class="font-bold text-base font-display text-white">Riwayat laporan &amp; reminder</h3>
+            <h3 class="font-bold text-base font-display text-slate-900">Riwayat laporan &amp; reminder</h3>
             <p class="text-sm" style="color: var(--muted);">Sumber yang sama dengan angka di Dashboard</p>
           </div>
           <div class="flex flex-wrap gap-2 items-center w-full sm:w-auto">
@@ -1261,7 +1132,7 @@
               <option value="ATENSI">Laporan Atensi</option>
               <option value="PIKET">Reminder Piket</option>
             </select>
-            <button onclick="clearAllHistory()" class="btn-secondary text-sm text-red-300 shrink-0">
+            <button onclick="clearAllHistory()" class="btn-secondary text-sm text-red-700 shrink-0">
               Hapus semua riwayat
             </button>
           </div>
@@ -1282,7 +1153,7 @@
 <!-- MODAL: ADD/EDIT OFFICER -->
 <div id="modal-officer" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
   <div class="doc-card w-full max-w-md p-6 space-y-4" style="background: var(--surface-alt);">
-    <h3 class="font-bold text-base font-display text-white" id="modal-officer-title">Tambah Petugas Baru</h3>
+    <h3 class="font-bold text-base font-display text-slate-900" id="modal-officer-title">Tambah Petugas Baru</h3>
     <div class="space-y-3 text-sm">
       <div>
         <label class="field-label">Kategori Tugas</label>
@@ -1309,7 +1180,7 @@
 <!-- MODAL: ADD CORRECTION KEY -->
 <div id="modal-correction" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
   <div class="doc-card w-full max-w-md p-6 space-y-4" style="background: var(--surface-alt);">
-    <h3 class="font-bold text-base font-display text-white">Tambah Kata Kunci Koreksi</h3>
+    <h3 class="font-bold text-base font-display text-slate-900">Tambah Kata Kunci Koreksi</h3>
     <div class="space-y-3 text-sm">
       <div>
         <label class="field-label">Kata Salah / Singkatan (yang diketik)</label>
@@ -1330,7 +1201,7 @@
 <!-- MODAL: ADD CUSTOM PIKET CATEGORY -->
 <div id="modal-custom-cat" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
   <div class="doc-card w-full max-w-md p-6 space-y-4" style="background: var(--surface-alt);">
-    <h3 class="font-bold text-base font-display text-white">Tambah Kategori Piket Baru</h3>
+    <h3 class="font-bold text-base font-display text-slate-900">Tambah Kategori Piket Baru</h3>
     <div class="space-y-3 text-sm">
       <div>
         <label class="field-label">Kode Kategori (Singkat, tanpa spasi)</label>
@@ -1364,12 +1235,12 @@
     <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--line);">
       <div>
         <span id="hist-modal-type-badge" class="px-2 py-0.5 rounded text-xs font-bold tracking-wider"></span>
-        <h3 id="hist-modal-title" class="font-bold text-base font-display mt-1 text-white"></h3>
+        <h3 id="hist-modal-title" class="font-bold text-base font-display mt-1 text-slate-900"></h3>
         <p id="hist-modal-time" class="text-xs" style="color: var(--muted);"></p>
       </div>
-      <button onclick="closeHistoryDetailModal()" class="text-slate-300 font-bold text-lg min-h-[40px] min-w-[40px]">✕</button>
+      <button onclick="closeHistoryDetailModal()" class="text-slate-600 font-bold text-lg min-h-[40px] min-w-[40px]">✕</button>
     </div>
-    <div class="flex-1 overflow-y-auto p-4 rounded-lg font-mono text-sm leading-relaxed whitespace-pre-wrap" id="hist-modal-content" style="background: var(--navy); border: 1px solid var(--line); color: var(--ink);"></div>
+    <div class="flex-1 overflow-y-auto p-4 rounded-lg font-mono text-sm leading-relaxed whitespace-pre-wrap" id="hist-modal-content" style="background: var(--surface); border: 1px solid var(--line); color: var(--ink);"></div>
     <div class="flex justify-end gap-2 pt-2 border-t shrink-0" style="border-color: var(--line);">
       <button onclick="closeHistoryDetailModal()" class="btn-secondary text-sm">Tutup</button>
       <button onclick="copyHistoryModalContent()" class="btn-gold text-sm">Salin ulang pesan ini</button>
@@ -1382,10 +1253,10 @@
   <div class="doc-card w-full max-w-2xl p-6 space-y-5 max-h-[90vh] flex flex-col" style="background: var(--surface-alt);">
     <div class="flex items-center justify-between border-b pb-3.5" style="border-color: var(--line);">
       <div>
-        <h3 class="font-bold text-base font-display text-white">Impor jadwal petugas</h3>
+        <h3 class="font-bold text-base font-display text-slate-900">Impor jadwal petugas</h3>
         <p class="text-sm" style="color: var(--muted);">Tempel daftar nama atau unggah file JSON. Hasil parsing ditinjau sebelum disimpan.</p>
       </div>
-      <button onclick="closeImportScheduleModal()" class="text-slate-300 font-bold text-lg min-h-[40px] min-w-[40px]">✕</button>
+      <button onclick="closeImportScheduleModal()" class="text-slate-600 font-bold text-lg min-h-[40px] min-w-[40px]">✕</button>
     </div>
 
     <div class="flex-1 overflow-y-auto space-y-4 pr-1">
@@ -1412,14 +1283,14 @@
           <label class="flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer" style="border-color: var(--line);">
             <input type="radio" name="import_mode" value="replace" checked class="mt-0.5">
             <div>
-              <strong class="block text-white">Timpa daftar kategori</strong>
+              <strong class="block text-slate-900">Timpa daftar kategori</strong>
               <span class="text-xs" style="color: var(--muted);">Ganti nama lama dengan daftar baru.</span>
             </div>
           </label>
           <label class="flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer" style="border-color: var(--line);">
             <input type="radio" name="import_mode" value="append" class="mt-0.5">
             <div>
-              <strong class="block text-white">Tambahkan ke daftar</strong>
+              <strong class="block text-slate-900">Tambahkan ke daftar</strong>
               <span class="text-xs" style="color: var(--muted);">Nama baru ditambah, yang lama tetap.</span>
             </div>
           </label>
@@ -1444,7 +1315,7 @@
 <!-- MODAL: TYPED CONFIRM -->
 <div id="modal-typed-confirm" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 hidden">
   <div class="doc-card w-full max-w-md p-6 space-y-4" style="background: var(--surface-alt);">
-    <h3 class="font-bold text-base font-display text-white" id="typed-confirm-title">Konfirmasi</h3>
+    <h3 class="font-bold text-base font-display text-slate-900" id="typed-confirm-title">Konfirmasi</h3>
     <p class="text-sm" style="color: var(--muted);" id="typed-confirm-body"></p>
     <input type="text" id="typed-confirm-input" class="field-input" autocomplete="off">
     <div class="flex justify-end gap-2">
@@ -1459,6 +1330,25 @@
      JAVASCRIPT CORE ENGINE & LOGIC
      ========================================================================= -->
 <script>
+/* ============================================================
+   0. KONFIGURASI GLOBAL
+   ============================================================ */
+// Nomor WhatsApp tujuan untuk tombol "Kirim/Salin ke WhatsApp"
+// (format internasional tanpa "+"). GANTI di sini untuk mengubah tujuan.
+const WA_TARGET = '628998150779';
+
+// Bersihkan teks sebelum dikirim ke WhatsApp:
+// - buang karakter pengganti yang rusak (U+FFFD -> tampil sebagai "�")
+// - buang karakter kontrol tak terlihat yang bisa mengacaukan tampilan
+function cleanForWhatsApp(text) {
+  return String(text)
+    .replace(/\uFFFD/g, '')
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .replace(/\u000D/g, '')
+    .replace(/[ \t]+\n/g, '\n')
+    .trim();
+}
+
 /* ============================================================
    1. STORAGE ENGINE (StoreManager)
    ============================================================ */
@@ -1593,7 +1483,7 @@ function updateCloudStatusBadge(isCloud) {
   if (sideStatus) {
     sideStatus.innerHTML = isCloud ?
       `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Cloud terhubung` :
-      `<span class="w-2 h-2 rounded-full bg-amber-400"></span> Siap lokal`;
+      `<span class="w-2 h-2 rounded-full bg-lime-500"></span> Siap lokal`;
   }
   if (topText) topText.textContent = isCloud ? 'Siap (Cloud)' : 'Siap (Mode Lokal)';
   if (topDot) topDot.style.background = isCloud ? '#10B981' : '#D97706';
@@ -1870,7 +1760,6 @@ function switchTab(tabId) {
     dashboard: 'Dashboard',
     atensi: 'Laporan Atensi Pimpinan',
     piket: 'Reminder Piket Harian',
-    humas: 'Humas & Rilis Berita',
     database: 'Petugas & Kamus Koreksi',
     history: 'Riwayat & Cadangan'
   };
@@ -1878,7 +1767,7 @@ function switchTab(tabId) {
 
   const moreBtn = document.getElementById('botnav-more');
   if (moreBtn) {
-    moreBtn.classList.toggle('active', ['humas', 'database', 'history'].includes(tabId));
+    moreBtn.classList.toggle('active', ['database', 'history'].includes(tabId));
   }
   closeMoreSheet();
 
@@ -1888,120 +1777,8 @@ function switchTab(tabId) {
   }
   if (tabId === 'history') renderHistoryLog();
   if (tabId === 'piket') renderPiketCategories();
-  if (tabId === 'humas') generateHumasNews();
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-/* ============================================================
-   3B. AI HUMAS & PRESS RELEASE GENERATOR (KEMENIMIPAS)
-   ============================================================ */
-function generateHumasNews() {
-  const judul = (document.getElementById('hm_judul')?.value || '').trim();
-  const kategori = document.getElementById('hm_kategori')?.value || 'PEMBINAAN_KEMANDIRIAN';
-  const waktu = document.getElementById('hm_waktu')?.value || 'Pagi hari';
-  const tglInput = document.getElementById('hm_tanggal')?.value;
-  const lokasi = (document.getElementById('hm_lokasi')?.value || 'Lapas Kelas IIB Tanjung Pati').trim();
-  const pejabat = (document.getElementById('hm_pejabat')?.value || '').trim();
-  const poin = (document.getElementById('hm_poin')?.value || '').trim();
-  const quote = (document.getElementById('hm_quote')?.value || '').trim();
-
-  const newsOutputEl = document.getElementById('hm-news-output');
-  const captionOutputEl = document.getElementById('hm-caption-output');
-  const waOutputEl = document.getElementById('hm-wa-output');
-
-  if (!judul && !poin) {
-    if (newsOutputEl) newsOutputEl.innerHTML = '<p class="text-slate-500 italic text-center py-6">Isi judul dan poin utama kegiatan untuk menghasilkan artikel berita rilis pers…</p>';
-    if (captionOutputEl) captionOutputEl.innerHTML = '<p class="text-slate-500 italic text-center py-4">Pratinjau caption Instagram lengkap dengan hashtag resmi Kemenimipas…</p>';
-    if (waOutputEl) waOutputEl.innerHTML = '<p class="text-slate-400 italic text-center py-3">Pratinjau pesan broadcast WhatsApp untuk grup kedinasan &amp; wartawan…</p>';
-    return;
-  }
-
-  // Date formatting
-  const d = tglInput ? new Date(tglInput) : new Date();
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
-  const dateFormatted = d.toLocaleDateString('id-ID', options);
-  const dayName = d.toLocaleDateString('id-ID', { weekday: 'long' });
-
-  const judulNews = judul ? judul.toUpperCase() : 'KEGIATAN KEDINASAN LAPAS TANJUNG PATI';
-
-  // 1. ARTIKEL BERITA 5W+1H (KEMENIMIPAS STANDARD)
-  let newsText = `*${judulNews}*\n\n`;
-  newsText += `*TANJUNG PATI* – Lembaga Pemasyarakatan (Lapas) Kelas IIB Tanjung Pati di bawah naungan Direktorat Jenderal Pemasyarakatan, Kementerian Imigrasi dan Pemasyarakatan (Kemenimipas) terus berkomitmen meningkatkan kualitas pelayanan dan pembinaan kedinasan.\n\n`;
-  newsText += `Pada ${dayName} (${dateFormatted}), Lapas Kelas IIB Tanjung Pati sukses menyelenggarakan kegiatan ${judul || 'kedinasan'} yang bertempat di ${lokasi}.\n\n`;
-  
-  if (poin) {
-    const katEl = document.getElementById('hm_kategori');
-    const katLabel = katEl && katEl.selectedOptions[0] ? katEl.selectedOptions[0].textContent.trim() : '';
-    newsText += `Kegiatan ${katLabel ? '(' + katLabel + ') ' : ''}yang berlangsung pada ${waktu} ini berjalan dengan lancar dan kondusif. ${poin}\n\n`;
-  }
-
-  if (pejabat) {
-    newsText += `Acara ini dihadiri langsung oleh ${pejabat} beserta jajaran petugas Lapas Tanjung Pati yang mengawal jalannya kegiatan dengan penuh kedisiplinan dan kewaspadaan.\n\n`;
-  }
-
-  if (quote) {
-    newsText += `"${quote}"\n\n`;
-  } else {
-    newsText += `Kegiatan ini merupakan wujud nyata komitmen Lapas Kelas IIB Tanjung Pati dalam mendukung program akselerasi Kementerian Imigrasi dan Pemasyarakatan (Kemenimipas) untuk mewujudkan pelayanan pemasyarakatan yang transparan, akuntabel, dan berdampak positif.\n\n`;
-  }
-
-  newsText += `Secara keseluruhan, kegiatan berakhir dalam keadaan aman, tertib, dan terkendali. (Humas Lapas Tanjung Pati - Kemenimipas)`;
-
-  // 2. CAPTION MEDIA SOSIAL (INSTAGRAM / FB)
-  let captionText = `✨ *${judul || 'KEGIATAN KEDINASAN LAPAS TANJUNG PATI'}* ✨\n\n`;
-  captionText += `Halo Sahabat Pemasyarakatan! 👋\n\n`;
-  captionText += `Pada ${dayName}, ${dateFormatted}, Lapas Kelas IIB Tanjung Pati Kemenimipas menyelenggarakan ${judul || 'kegiatan kedinasan'} di ${lokasi}.\n\n`;
-  if (poin) captionText += `📌 *Poin Utama:* ${poin}\n\n`;
-  if (quote) captionText += `🗣️ *Statement:* ${quote}\n\n`;
-  captionText += `Lapas Tanjung Pati berkomitmen memberikan pelayanan terbaik dan menjaga situasi keamanan tetap kondusif. 🇮🇩✨\n\n`;
-  captionText += `#Kemenimipas #DitjenPAS #LapasTanjungPati #PemasyarakatanPASTI #HumasPemasyarakatan #KabinetMerahPutih`;
-
-  // 3. BROADCAST WHATSAPP
-  let waText = `📢 *RILIS BERITA / SIARAN PERS HUMAS LAPAS TANJUNG PATI*\n`;
-  waText += `*KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN (KEMENIMIPAS)*\n\n`;
-  waText += `*Judul:* ${judul || 'Kegiatan Kedinasan'}\n`;
-  waText += `*Waktu:* ${dayName}, ${dateFormatted} (${waktu})\n`;
-  waText += `*Lokasi:* ${lokasi}\n\n`;
-  if (pejabat) waText += `*Hadir:* ${pejabat}\n`;
-  if (poin) waText += `*Uraian:* ${poin}\n\n`;
-  waText += `Status Keamanan: *AMAN & KONDUSIF*\n\n`;
-  waText += `_Humas Lapas Kelas IIB Tanjung Pati - Ditjen PAS Kemenimipas_`;
-
-  if (newsOutputEl) newsOutputEl.textContent = newsText;
-  if (captionOutputEl) captionOutputEl.textContent = captionText;
-  if (waOutputEl) waOutputEl.textContent = waText;
-}
-
-function copyHumasOutput(type) {
-  let targetEl;
-  let label = 'Teks';
-  if (type === 'news') { targetEl = document.getElementById('hm-news-output'); label = 'Artikel Berita'; }
-  if (type === 'caption') { targetEl = document.getElementById('hm-caption-output'); label = 'Caption Instagram'; }
-  if (type === 'wa') { targetEl = document.getElementById('hm-wa-output'); label = 'Pesan Broadcast WA'; }
-
-  if (!targetEl || !targetEl.textContent.trim()) {
-    showToast('Belum ada teks yang dihasilkan untuk disalin!', 'error');
-    return;
-  }
-
-  navigator.clipboard.writeText(targetEl.textContent).then(() => {
-    showToast(`✅ ${label} berhasil disalin ke clipboard!`);
-  }).catch(() => {
-    showToast('Gagal menyalin teks ke clipboard.', 'error');
-  });
-}
-
-function resetHumasForm() {
-  if (!confirm('Kosongkan formulir Humas? Draf yang belum disalin akan hilang.')) return;
-  ['hm_judul', 'hm_pejabat', 'hm_poin', 'hm_quote'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  const tgl = document.getElementById('hm_tanggal');
-  if (tgl) tgl.value = '';
-  generateHumasNews();
-  showToast('Form Humas telah direset');
 }
 
 /* ============================================================
@@ -2090,7 +1867,7 @@ function renderDashboardStats() {
       recent.innerHTML = hist.slice(0, 5).map(item => `
         <button type="button" onclick="switchTab('history')" class="w-full text-left rounded-lg p-3 border" style="border-color:var(--line);">
           <p class="text-xs" style="color:var(--muted);">${item.type} · ${item.timestamp || ''}</p>
-          <p class="text-sm font-semibold text-white truncate">${item.title}</p>
+          <p class="text-sm font-semibold text-slate-900 truncate">${item.title}</p>
         </button>`).join('');
     }
   }
@@ -2114,7 +1891,7 @@ function renderDashboardStats() {
             labels: chartLabels,
             datasets: [{
               data: chartData,
-              backgroundColor: ['#3B82F6', '#C9A227'],
+              backgroundColor: ['#3B82F6', '#65A30D'],
               borderColor: '#0A1220',
               borderWidth: 2
             }]
@@ -2126,7 +1903,7 @@ function renderDashboardStats() {
             plugins: {
               legend: {
                 position: 'bottom',
-                labels: { color: '#A8B4C4', font: { family: 'IBM Plex Sans', size: 12 }, padding: 12 }
+                labels: { color: '#A8B4C4', font: { family: 'Plus Jakarta Sans', size: 12 }, padding: 12 }
               }
             }
           }
@@ -2339,9 +2116,9 @@ function onAtensiInput() {
 ${safe(kegiatan, '(kegiatan belum diisi)')}
 
 *II. WAKTU & TEMPAT*
-📅 : ${safe(tanggal, '(tanggal belum diisi)')}
-🕐 : ${safe(jam, '(jam dinas belum dipilih)')}
-📍 : ${safe(tempat, '(tempat belum diisi)')}
+Hari/Tanggal : ${safe(tanggal, '(tanggal belum diisi)')}
+Jam : ${safe(jam, '(jam dinas belum dipilih)')}
+Tempat : ${safe(tempat, '(tempat belum diisi)')}
 
 *III. URAIAN KEGIATAN*
 ${uraian ? formatUraianUtama(uraian) : '(uraian kegiatan belum diisi)'}
@@ -2417,9 +2194,9 @@ Bersama ini dengan hormat kami laporkan pelaksanaan kegiatan sebagai berikut :
 ${kegiatan}
 
 *II. WAKTU & TEMPAT*
-📅 : ${tanggal}
-🕐 : ${jam}
-📍 : ${tempat}
+Hari/Tanggal : ${tanggal}
+Jam : ${jam}
+Tempat : ${tempat}
 
 *III. URAIAN KEGIATAN*
 1. Menindaklanjuti perintah dari Bapak Direktur Jenderal Pemasyarakatan. Berikut uraian kegiatan Lapas Kelas IIB Tanjung Pati pada hari ini:
@@ -2446,14 +2223,12 @@ function generateAndCopyAtensi() {
     prepareAtensiReport();
     if (!ATENSI_READY) return;
   }
-  copyToClipboardHelper(ATENSI_READY.content, () => {
-    const btn = document.getElementById('btn-copy-atensi');
-    const origHtml = btn.innerHTML;
-    btn.innerHTML = `Tersalin`;
-    setTimeout(() => btn.innerHTML = origHtml, 2000);
-    addHistoryEntry('ATENSI', ATENSI_READY.title, ATENSI_READY.content, ATENSI_READY.id, ATENSI_READY.fingerprint);
-    showToast('Laporan Atensi disalin ke clipboard dan dicatat di riwayat.');
-  });
+  // Buka WhatsApp dengan tujuan + teks laporan terisi otomatis
+  const clean = cleanForWhatsApp(ATENSI_READY.content);
+  const url = 'https://wa.me/' + WA_TARGET + '?text=' + encodeURIComponent(clean);
+  window.open(url, '_blank');
+  addHistoryEntry('ATENSI', ATENSI_READY.title, ATENSI_READY.content, ATENSI_READY.id, ATENSI_READY.fingerprint);
+  showToast('Laporan siap dikirim ke WhatsApp (tinggal tekan kirim).');
 }
 
 function saveAtensiToHistoryManual() {
@@ -2469,11 +2244,11 @@ function saveAtensiToHistoryManual() {
    6. MODUL REMINDER PIKET HARIAN
    ============================================================ */
 const colorMapStyles = {
-  blue: { bg: 'bg-blue-500/10', text: 'text-blue-200', border: 'border-blue-500/30', btn: 'text-blue-200 bg-blue-500/10 hover:bg-blue-500/20 border-blue-500/30' },
-  rose: { bg: 'bg-rose-500/10', text: 'text-rose-200', border: 'border-rose-500/30', btn: 'text-rose-200 bg-rose-500/10 hover:bg-rose-500/20 border-rose-500/30' },
-  violet: { bg: 'bg-violet-500/10', text: 'text-violet-200', border: 'border-violet-500/30', btn: 'text-violet-200 bg-violet-500/10 hover:bg-violet-500/20 border-violet-500/30' },
-  teal: { bg: 'bg-teal-500/10', text: 'text-teal-200', border: 'border-teal-500/30', btn: 'text-teal-200 bg-teal-500/10 hover:bg-teal-500/20 border-teal-500/30' },
-  amber: { bg: 'bg-amber-500/10', text: 'text-amber-200', border: 'border-amber-500/30', btn: 'text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30' }
+  blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', btn: 'text-blue-700 bg-blue-50 hover:bg-blue-100 border-blue-200' },
+  rose: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', btn: 'text-rose-700 bg-rose-50 hover:bg-rose-100 border-rose-200' },
+  violet: { bg: 'bg-violet-50', text: 'text-violet-700', border: 'border-violet-200', btn: 'text-violet-700 bg-violet-50 hover:bg-violet-100 border-violet-200' },
+  teal: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200', btn: 'text-teal-700 bg-teal-50 hover:bg-teal-100 border-teal-200' },
+  amber: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', btn: 'text-amber-700 bg-amber-50 hover:bg-amber-100 border-amber-200' }
 };
 
 const HARI_ID = ['MINGGU','SENIN','SELASA','RABU','KAMIS',"JUM'AT",'SABTU'];
@@ -2547,7 +2322,7 @@ function renderPiketRowsForCategory(catKey) {
         <button type="button" onclick="togglePiketLock('${catKey}', ${idx})" class="min-h-[40px] min-w-[40px] px-2 rounded-lg border text-xs font-semibold shrink-0" style="border-color: var(--line); color: ${isLocked ? 'var(--gold-text)' : 'var(--muted)'}" title="Kunci posisi">${isLocked ? 'Terkunci' : 'Kunci'}</button>
         <button type="button" onclick="removePiketRow('${catKey}', ${idx})" class="w-10 h-10 flex items-center justify-center rounded-lg font-bold text-sm shrink-0" style="background: var(--maroon-soft); color: #FECACA;">✕</button>
       </div>
-      <div class="pkDupWarning hidden text-xs text-red-300 font-semibold mt-1 ml-7">Nama ini sudah dipilih di kategori ini.</div>
+      <div class="pkDupWarning hidden text-xs text-red-700 font-semibold mt-1 ml-7">Nama ini sudah dipilih di kategori ini.</div>
     `;
     wrap.appendChild(rowEl);
   });
@@ -2689,25 +2464,16 @@ function onPiketDateChange() {
     btn.style.background = '';
   });
   updatePiketDateDisplay();
-  const autoCheckbox = document.getElementById('pk_auto_fill_on_date');
-  if (autoCheckbox && autoCheckbox.checked) {
-    autoFillPiketFromDb(true);
-  }
+  const dateInput = document.getElementById('pk_date');
+  applyPiketDraftForDate(dateInput ? dateInput.value : '');
+  renderPiketCategories();
 }
 
 function setPiketShiftAndAutoFill(shift) {
   setPiketDateByShift(shift);
-  const autoCheckbox = document.getElementById('pk_auto_fill_on_date');
-  if (autoCheckbox && autoCheckbox.checked) {
-    autoFillPiketFromDb(true);
-  }
-}
-
-function onAutoFillToggleChange() {
-  const autoCheckbox = document.getElementById('pk_auto_fill_on_date');
-  if (autoCheckbox && autoCheckbox.checked) {
-    autoFillPiketFromDb(false);
-  }
+  const dateInput = document.getElementById('pk_date');
+  applyPiketDraftForDate(dateInput ? dateInput.value : '');
+  renderPiketCategories();
 }
 
 function autoFillPiketFromDb(isQuiet = false) {
@@ -2966,7 +2732,7 @@ function generatePiketOutput() {
   if (catatanText) {
     out += `\n*Catatan :*\n${catatanText}\n`;
   }
-  out += `\nTerima Kasih 🙏🙏`;
+  out += `\nTerima Kasih.`;
 
   outputBox.textContent = out;
 
@@ -3015,6 +2781,102 @@ function copyPiketOutput() {
   });
 }
 
+/* ============================================================
+   DRAFT PIKET PER TANGGAL
+   ============================================================ */
+function getPiketDraftKey(tanggalISO) {
+  return 'simap_piket_draft_' + (tanggalISO || '');
+}
+function getCurrentPiketDate() {
+  const dateInput = document.getElementById('pk_date');
+  return dateInput ? dateInput.value : '';
+}
+
+// Simpan komposisi piket (petugas, kunci, header, catatan) untuk tanggal aktif
+function savePiketDraft() {
+  const tanggal = getCurrentPiketDate();
+  if (!tanggal) {
+    showToast('Pilih tanggal piket terlebih dahulu.', 'error');
+    return;
+  }
+  const header = document.getElementById('pk_header');
+  const catatan = document.getElementById('pk_catatan_sop');
+  const draft = {
+    tanggal: tanggal,
+    rows: JSON.parse(JSON.stringify(PIKET_ROWS_STATE || {})),
+    locks: JSON.parse(JSON.stringify(PIKET_LOCKS || {})),
+    header: header ? header.value : '',
+    catatan: catatan ? catatan.value : '',
+    savedAt: Date.now()
+  };
+  localStorage.setItem(getPiketDraftKey(tanggal), JSON.stringify(draft));
+  const display = document.getElementById('pk_date_display').textContent || tanggal;
+  showPiketDraftStatus('Draf tersimpan untuk ' + display);
+  showToast('Draf piket berhasil disimpan.');
+}
+
+function hasPiketDraft(tanggal) {
+  try { return !!localStorage.getItem(getPiketDraftKey(tanggal)); }
+  catch (e) { return false; }
+}
+
+// Muat draf tanggal ke form (jika ada); jika tidak ada, mulai kosong
+function applyPiketDraftForDate(tanggal) {
+  if (!tanggal) return;
+  const raw = localStorage.getItem(getPiketDraftKey(tanggal));
+  if (raw) {
+    try {
+      const d = JSON.parse(raw);
+      const cats = getAllCategories();
+      const rows = d.rows || {};
+      cats.forEach(c => { if (!rows[c.key]) rows[c.key] = ['']; });
+      PIKET_ROWS_STATE = rows;
+      PIKET_LOCKS = d.locks || {};
+      const header = document.getElementById('pk_header');
+      if (header) header.value = d.header || '';
+      const catatan = document.getElementById('pk_catatan_sop');
+      if (catatan) catatan.value = d.catatan || '';
+      showPiketDraftStatus('Draf dimuat. Tinggal kirim ke WhatsApp.');
+      return;
+    } catch (e) { /* fall through */ }
+  }
+  const cats = getAllCategories();
+  cats.forEach(c => PIKET_ROWS_STATE[c.key] = ['']);
+  PIKET_LOCKS = {};
+  showPiketDraftStatus('');
+}
+
+function showPiketDraftStatus(msg) {
+  const el = document.getElementById('piket-draft-status');
+  if (!el) return;
+  if (msg) {
+    el.textContent = msg;
+    el.classList.remove('hidden');
+  } else {
+    el.classList.add('hidden');
+    el.textContent = '';
+  }
+}
+
+function sendPiketToWhatsApp() {
+  if (piketHasConflicts()) {
+    showToast('Ada petugas ganda. Perbaiki jadwal sebelum mengirim.', 'error');
+    return;
+  }
+  const out = document.getElementById('pk-output-box').textContent;
+  if (!out || !out.trim()) {
+    showToast('Output masih kosong.', 'error');
+    return;
+  }
+  if (!PIKET_READY_ID) PIKET_READY_ID = 'PKT_' + Date.now();
+  const clean = cleanForWhatsApp(out);
+  const url = 'https://wa.me/' + WA_TARGET + '?text=' + encodeURIComponent(clean);
+  window.open(url, '_blank');
+  const display = document.getElementById('pk_date_display').textContent;
+  addHistoryEntry('PIKET', `Reminder Piket (${display || 'Tanpa Tanggal'})`, out, PIKET_READY_ID);
+  showToast('Reminder piket siap dikirim (tinggal tekan kirim di WhatsApp).');
+}
+
 function savePiketToHistoryManual() {
   if (piketHasConflicts()) {
     showToast('Ada petugas ganda. Perbaiki jadwal sebelum menyimpan.', 'error');
@@ -3048,7 +2910,7 @@ function switchDbSubTab(tabName) {
   const viewKamus = document.getElementById('subview-kamus');
 
   if (tabName === 'petugas') {
-    btnPetugas.className = 'pb-3 text-sm font-bold text-white border-b-2';
+    btnPetugas.className = 'pb-3 text-sm font-bold text-slate-900 border-b-2';
     btnPetugas.style.borderColor = 'var(--gold)';
     btnKamus.className = 'pb-3 text-sm font-semibold border-b-2 border-transparent';
     btnKamus.style.color = 'var(--muted)';
@@ -3056,7 +2918,7 @@ function switchDbSubTab(tabName) {
     viewKamus.classList.add('hidden');
     renderOfficersDatabase();
   } else {
-    btnKamus.className = 'pb-3 text-sm font-bold text-white border-b-2';
+    btnKamus.className = 'pb-3 text-sm font-bold text-slate-900 border-b-2';
     btnKamus.style.borderColor = 'var(--gold)';
     btnPetugas.className = 'pb-3 text-sm font-semibold border-b-2 border-transparent';
     btnPetugas.style.color = 'var(--muted)';
@@ -3090,9 +2952,9 @@ function renderOfficersDatabase() {
         <td class="py-3 px-4">
           <span class="px-2 py-0.5 rounded text-xs font-bold tracking-wider" style="background: var(--surface-alt); color: var(--ink);">${cat.label}</span>
         </td>
-        <td class="py-3 px-4 font-semibold text-white">${name}</td>
+        <td class="py-3 px-4 font-semibold text-slate-900">${name}</td>
         <td class="py-3 px-4 text-right space-x-2">
-          <button onclick="deleteOfficerFromDb('${cat.key}', '${name.replace(/'/g, "\\'")}')" class="text-red-300 font-bold text-sm px-2 py-2 rounded min-h-[40px]">Hapus</button>
+          <button onclick="deleteOfficerFromDb('${cat.key}', '${name.replace(/'/g, "\\'")}')" class="text-red-700 font-bold text-sm px-2 py-2 rounded min-h-[40px]">Hapus</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -3175,10 +3037,10 @@ function renderCorrectionsDatabase() {
     tr.className = 'transition-colors';
     tr.innerHTML = `
       <td class="py-3 px-4 font-mono text-xs text-center" style="color: var(--muted);">${idx + 1}</td>
-      <td class="py-3 px-4 font-mono font-bold text-red-300">${key}</td>
-      <td class="py-3 px-4 font-bold text-emerald-300">→ ${val}</td>
+      <td class="py-3 px-4 font-mono font-bold text-red-700">${key}</td>
+      <td class="py-3 px-4 font-bold text-emerald-700">→ ${val}</td>
       <td class="py-3 px-4 text-right">
-        <button onclick="deleteCorrectionFromDb('${key.replace(/'/g, "\\'")}')" class="text-red-300 font-bold text-sm px-2 py-2 rounded min-h-[40px]">Hapus</button>
+        <button onclick="deleteCorrectionFromDb('${key.replace(/'/g, "\\'")}')" class="text-red-700 font-bold text-sm px-2 py-2 rounded min-h-[40px]">Hapus</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -3297,7 +3159,7 @@ function renderHistoryLog() {
 
   if (filtered.length === 0) {
     container.innerHTML = `<div class="p-8 text-center text-sm rounded-lg border" style="border-color: var(--line); color: var(--muted);">
-      <p class="font-semibold text-white mb-1">Belum ada riwayat</p>
+      <p class="font-semibold text-slate-900 mb-1">Belum ada riwayat</p>
       <p>Buat laporan atensi atau reminder piket, lalu simpan atau salin untuk mengisi halaman ini.</p>
       <div class="mt-4 flex justify-center gap-2">
         <button type="button" onclick="switchTab('atensi')" class="btn-gold text-sm">Buat laporan</button>
@@ -3315,15 +3177,15 @@ function renderHistoryLog() {
     cardEl.innerHTML = `
       <div class="min-w-0 flex-1">
         <div class="flex items-center gap-2 mb-1">
-          <span class="px-2 py-0.5 rounded text-xs font-bold tracking-wider border ${isAtensi ? 'text-blue-200 border-blue-400/40' : 'text-amber-200 border-amber-400/40'}">${isAtensi ? 'Laporan Atensi' : 'Reminder Piket'}</span>
+          <span class="px-2 py-0.5 rounded text-xs font-bold tracking-wider border ${isAtensi ? 'text-blue-700 border-blue-300 bg-blue-50' : 'text-amber-700 border-amber-300 bg-amber-50'}">${isAtensi ? 'Laporan Atensi' : 'Reminder Piket'}</span>
           <span class="text-xs" style="color: var(--muted);">${item.timestamp || ''}</span>
         </div>
-        <h4 class="font-bold text-sm text-white truncate">${item.title}</h4>
+        <h4 class="font-bold text-sm text-slate-900 truncate">${item.title}</h4>
         <p class="text-xs truncate font-mono mt-0.5" style="color: var(--muted);">${excerpt}</p>
       </div>
       <div class="flex gap-2 shrink-0 self-end sm:self-center">
         <button onclick="viewHistoryDetail('${item.id}')" class="btn-outline text-sm">Lihat &amp; salin</button>
-        <button onclick="deleteHistoryItem('${item.id}')" class="btn-secondary text-sm text-red-300">Hapus</button>
+        <button onclick="deleteHistoryItem('${item.id}')" class="btn-secondary text-sm text-red-700">Hapus</button>
       </div>
     `;
     container.appendChild(cardEl);
@@ -3494,12 +3356,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const copyBtn = document.getElementById('btn-copy-atensi');
   if (copyBtn) copyBtn.disabled = true;
   renderPiketCategories();
-  setTimeout(() => {
-    const autoCheckbox = document.getElementById('pk_auto_fill_on_date');
-    if (autoCheckbox && autoCheckbox.checked && typeof autoFillPiketFromDb === 'function') {
-      autoFillPiketFromDb(true);
-    }
-  }, 100);
 });
 </script>
 </body>

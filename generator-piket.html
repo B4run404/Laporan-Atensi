@@ -5,19 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 <title>Generator Reminder Piket — Lapas Tanjung Pati</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   html { -webkit-tap-highlight-color: transparent; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif; }
+  body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif; }
   .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
   .ac-list { max-height: 220px; }
-  @keyframes flash { 0% { background-color: #bbf7d0; } 100% { background-color: transparent; } }
+  @keyframes flash { 0% { background-color: #d9f99d; } 100% { background-color: transparent; } }
   .flash { animation: flash 0.9s ease-out; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 </style>
 </head>
-<body class="bg-[#F3F1EA] text-slate-900">
-<div class="bg-amber-100 border-b border-amber-300 text-amber-950 text-sm px-4 py-3 text-center">
+<body class="bg-slate-50 text-slate-900">
+<div class="bg-lime-50 border-b border-lime-200 text-lime-900 text-sm px-4 py-3 text-center">
   Halaman mandiri ini digantikan Portal SIMAP. Gunakan
   <a href="index.html" class="font-semibold underline">portal operasional</a>
   agar data petugas dan riwayat tidak terpisah.
@@ -26,7 +38,7 @@
 <!-- ===== HEADER BAR ===== -->
 <div class="bg-slate-900 text-white sticky top-0 z-30 shadow-md">
   <div class="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
-    <div class="w-9 h-9 rounded-full bg-amber-400 flex items-center justify-center text-slate-900 font-bold text-sm shrink-0">P</div>
+    <div class="w-9 h-9 rounded-full bg-lime-500 flex items-center justify-center text-lime-950 font-bold text-sm shrink-0">P</div>
     <div class="min-w-0">
       <h1 class="text-sm font-bold leading-tight truncate">Generator Reminder Piket</h1>
       <p class="text-[11px] text-slate-300 leading-tight truncate">Lapas Kelas IIB Tanjung Pati</p>
@@ -40,7 +52,7 @@
   <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Header Pesan</label>
     <textarea id="headerInput" rows="2"
-      class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400 resize-none"
+      class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400 resize-none"
       placeholder="MOHON IZIN MENGINGATKAN PIKET PERWIRA, PIKET KUNJUNGAN & PENGGELEDAHAN BARANG"></textarea>
     <p class="text-[11px] text-slate-400 mt-1">Kosongkan untuk memakai header default.</p>
   </section>
@@ -49,26 +61,12 @@
   <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Tanggal Piket</label>
     <div class="flex gap-2 mb-2">
-      <button data-shift="0" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-900 text-white">Hari Ini</button>
+      <button data-shift="0" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-lime-600 text-white">Hari Ini</button>
       <button data-shift="1" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Besok</button>
       <button data-shift="2" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Lusa</button>
     </div>
-    <input type="date" id="dateInput" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400">
-    <div class="mt-2 text-center bg-amber-50 border border-amber-200 rounded-lg py-2 text-sm font-bold text-amber-800" id="dateDisplay">—</div>
-
-    <!-- SMART AUTO-FILL CONTROLS -->
-    <div class="mt-3 p-3 rounded-xl border border-amber-200/80 bg-amber-50/60 space-y-2.5">
-      <div class="flex items-center justify-between">
-        <label class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer select-none">
-          <input type="checkbox" id="gen_auto_fill_on_date" checked class="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer">
-          <span>⚡ Otomatis Isi &amp; Acak Petugas Saat Tanggal Dipilih</span>
-        </label>
-        <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-emerald-500/15 text-emerald-700 border border-emerald-500/30">Auto</span>
-      </div>
-      <button type="button" onclick="autoFillGenFromDb(false)" class="w-full py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm border bg-slate-900 text-amber-400 border-amber-400 hover:bg-slate-800">
-        ⚡ Acak &amp; Isi Otomatis Petugas Piket Hari Ini Sekarang
-      </button>
-    </div>
+    <input type="date" id="dateInput" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400">
+    <div class="mt-2 text-center bg-lime-50 border border-lime-200 rounded-lg py-2 text-sm font-bold text-lime-800" id="dateDisplay">—</div>
   </section>
 
   <!-- ===== CATEGORIES CONTAINER ===== -->
@@ -78,12 +76,17 @@
   <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
     <div class="flex items-center justify-between mb-2">
       <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Preview Output</label>
-      <span id="warnBadge" class="hidden text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">⚠ Ada peringatan</span>
+      <span id="warnBadge" class="hidden text-[10px] font-semibold text-lime-800 bg-lime-100 px-2 py-0.5 rounded-full">⚠ Ada peringatan</span>
     </div>
     <pre id="outputBox" class="mono whitespace-pre-wrap text-[13px] leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-3 min-h-[120px]"></pre>
-    <button id="copyBtn" class="mt-3 w-full bg-emerald-600 active:bg-emerald-700 text-white font-bold text-sm py-3 rounded-lg shadow-sm transition-colors">
-      📋 Copy Output
-    </button>
+    <div class="flex gap-2 mt-3">
+      <button id="copyBtn" class="flex-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-800 text-white font-bold text-sm py-3 rounded-lg shadow-sm transition-colors">
+        📋 Copy
+      </button>
+      <button id="waBtn" class="flex-1 bg-lime-600 hover:bg-lime-700 active:bg-lime-600 text-white font-bold text-sm py-3 rounded-lg shadow-sm transition-colors">
+        📲 Kirim ke WhatsApp
+      </button>
+    </div>
   </section>
 
   <p class="text-center text-[11px] text-slate-400 pt-2 pb-4">Data petugas tersimpan otomatis di perangkat ini (localStorage).</p>
@@ -239,7 +242,7 @@ function renderRows(catKey) {
         <span class="text-xs font-mono text-slate-400 w-5 text-right shrink-0">${idx + 1}.</span>
         <div class="relative flex-1">
           <input type="text" autocomplete="off"
-            class="acInput w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400"
+            class="acInput w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
             data-cat="${catKey}" data-idx="${idx}"
             placeholder="Cari / pilih nama..." value="${val || ''}">
           <div class="acDropdown hidden absolute z-20 mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-lg overflow-y-auto ac-list"></div>
@@ -265,12 +268,12 @@ function openDropdown(input) {
 
   let html = '';
   filtered.slice(0, 50).forEach(name => {
-    html += `<div class="acOption px-3 py-2 text-sm hover:bg-amber-50 cursor-pointer" data-cat="${cat}" data-idx="${idx}" data-name="${name}">${name}</div>`;
+    html += `<div class="acOption px-3 py-2 text-sm hover:bg-lime-50 cursor-pointer" data-cat="${cat}" data-idx="${idx}" data-name="${name}">${name}</div>`;
   });
 
   const exactExists = list.some(n => n.toUpperCase() === query);
   if (query && !exactExists) {
-    html += `<div class="acAddNew px-3 py-2 text-sm text-emerald-700 font-semibold hover:bg-emerald-50 cursor-pointer border-t border-slate-100" data-cat="${cat}" data-idx="${idx}" data-name="${query}">+ Tambah "${query}" ke database</div>`;
+    html += `<div class="acAddNew px-3 py-2 text-sm text-lime-700 font-semibold hover:bg-lime-50 cursor-pointer border-t border-slate-100" data-cat="${cat}" data-idx="${idx}" data-name="${query}">+ Tambah "${query}" ke database</div>`;
   }
   if (!html) html = `<div class="px-3 py-2 text-xs text-slate-400">Tidak ditemukan. Ketik nama baru lalu pilih "Tambah".</div>`;
 
@@ -371,12 +374,8 @@ function setDateByShift(shift) {
   updateDateDisplay();
   document.querySelectorAll('.dateShiftBtn').forEach(b => {
     const active = parseInt(b.dataset.shift) === shift;
-    b.className = `dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg ${active ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 border border-slate-300'}`;
+    b.className = `dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg ${active ? 'bg-lime-600 text-white' : 'bg-slate-100 text-slate-700 border border-slate-300'}`;
   });
-  const autoCheckbox = document.getElementById('gen_auto_fill_on_date');
-  if (autoCheckbox && autoCheckbox.checked) {
-    autoFillGenFromDb(true);
-  }
 }
 
 function updateDateDisplay() {
@@ -394,10 +393,6 @@ document.querySelectorAll('.dateShiftBtn').forEach(btn => {
 dateInput.addEventListener('change', () => {
   document.querySelectorAll('.dateShiftBtn').forEach(b => b.className = 'dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300');
   updateDateDisplay();
-  const autoCheckbox = document.getElementById('gen_auto_fill_on_date');
-  if (autoCheckbox && autoCheckbox.checked) {
-    autoFillGenFromDb(true);
-  }
 });
 
 function autoFillGenFromDb(isQuiet = false) {
@@ -478,7 +473,7 @@ function generateOutput() {
 
   out += `\n*Catatan :*\n`;
   CATATAN_LINES.forEach((line, i) => { out += `${i + 1}. ${line}\n`; });
-  out += `\nTerima Kasih 🙏🙏`;
+  out += `\nTerima Kasih.`;
 
   outputBox.textContent = out;
 
@@ -524,18 +519,45 @@ copyBtn.addEventListener('click', async () => {
 });
 
 /* ============================================================
+   KIRIM KE WHATSAPP
+   ============================================================ */
+// Nomor WhatsApp tujuan (format internasional tanpa "+").
+// GANTI di sini satu kali untuk mengubah tujuan kirim.
+const WA_TARGET = '628998150779';
+
+// Bersihkan teks sebelum dikirim ke WhatsApp:
+// - buang karakter pengganti yang rusak (U+FFFD -> tampil sebagai "�")
+// - buang karakter kontrol tak terlihat yang bisa mengacaukan tampilan
+function cleanForWhatsApp(text) {
+  return String(text)
+    .replace(/\uFFFD/g, '')          // karakter rusak "�"
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // zero-width / BOM
+    .replace(/\u000D/g, '')          // rapikan baris (pakai \n)
+    .replace(/[ \t]+\n/g, '\n')      // hilangkan spasi sisa di ujung baris
+    .trim();
+}
+
+function sendToWhatsApp() {
+  const text = cleanForWhatsApp(outputBox.textContent);
+  if (!text) {
+    showToast('Belum ada output untuk dikirim.');
+    return;
+  }
+  const url = 'https://wa.me/' + WA_TARGET + '?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+}
+
+const waBtn = document.getElementById('waBtn');
+if (waBtn) waBtn.addEventListener('click', sendToWhatsApp);
+
+/* ============================================================
    INIT
 ============================================================ */
 setDateByShift(0);
 if (!document.querySelector('.row-input')?.value) {
   setTimeout(() => {
-    const autoCheckbox = document.getElementById('gen_auto_fill_on_date');
-    if (autoCheckbox && autoCheckbox.checked && typeof autoFillGenFromDb === 'function') {
-      autoFillGenFromDb(true);
-    } else {
-      CATEGORIES.forEach(cat => addRow(cat.key));
-      generateOutput();
-    }
+    CATEGORIES.forEach(cat => addRow(cat.key));
+    generateOutput();
   }, 50);
 } else {
   generateOutput();
