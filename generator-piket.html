@@ -13,9 +13,9 @@
   body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif; }
   .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
   .ac-list { max-height: 220px; }
-  @keyframes flash { 0% { background-color: #d9f99d; } 100% { background-color: transparent; } }
+  @keyframes flash { 0% { background-color: rgba(249,115,22,0.35); } 100% { background-color: transparent; } }
   .flash { animation: flash 0.9s ease-out; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -28,20 +28,20 @@
   }
 </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
-<div class="bg-lime-50 border-b border-lime-200 text-lime-900 text-sm px-4 py-3 text-center">
+<body class="bg-[#111] text-slate-100">
+<div class="border-b px-4 py-3 text-center text-sm" style="background:#1c1500; border-color:rgba(251,146,60,0.4); color:#fde68a;">
   Halaman mandiri ini digantikan Portal SIMAP. Gunakan
-  <a href="index.html" class="font-semibold underline">portal operasional</a>
+  <a href="index.html" class="font-semibold underline" style="color:#fb923c;">portal operasional</a>
   agar data petugas dan riwayat tidak terpisah.
 </div>
 
 <!-- ===== HEADER BAR ===== -->
-<div class="bg-slate-900 text-white sticky top-0 z-30 shadow-md">
+<div class="bg-black/85 border-b border-white/10 text-white sticky top-0 z-30 shadow-md backdrop-blur">
   <div class="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
-    <div class="w-9 h-9 rounded-full bg-lime-500 flex items-center justify-center text-lime-950 font-bold text-sm shrink-0">P</div>
+    <div class="w-9 h-9 rounded-full flex items-center justify-center text-black font-bold text-sm shrink-0" style="background:linear-gradient(135deg,#f97316,#fde047);">P</div>
     <div class="min-w-0">
       <h1 class="text-sm font-bold leading-tight truncate">Generator Reminder Piket</h1>
-      <p class="text-[11px] text-slate-300 leading-tight truncate">Lapas Kelas IIB Tanjung Pati</p>
+      <p class="text-[11px] text-slate-400 leading-tight truncate">Lapas Kelas IIB Tanjung Pati</p>
     </div>
   </div>
 </div>
@@ -49,51 +49,51 @@
 <div class="max-w-2xl mx-auto px-3 pt-4 space-y-3">
 
   <!-- ===== HEADER TEXT INPUT ===== -->
-  <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Header Pesan</label>
+  <section class="rounded-xl border border-white/10 p-4" style="background:#1c1c1e;">
+    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Header Pesan</label>
     <textarea id="headerInput" rows="2"
-      class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400 resize-none"
+      class="w-full text-sm bg-white/5 text-slate-100 border border-white/15 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500/60 resize-none placeholder:text-slate-500"
       placeholder="MOHON IZIN MENGINGATKAN PIKET PERWIRA, PIKET KUNJUNGAN & PENGGELEDAHAN BARANG"></textarea>
-    <p class="text-[11px] text-slate-400 mt-1">Kosongkan untuk memakai header default.</p>
+    <p class="text-[11px] text-slate-500 mt-1">Kosongkan untuk memakai header default.</p>
   </section>
 
   <!-- ===== DATE SYSTEM ===== -->
-  <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Tanggal Piket</label>
+  <section class="rounded-xl border border-white/10 p-4" style="background:#1c1c1e;">
+    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Tanggal Piket</label>
     <div class="flex gap-2 mb-2">
-      <button data-shift="0" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-lime-600 text-white">Hari Ini</button>
-      <button data-shift="1" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Besok</button>
-      <button data-shift="2" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300">Lusa</button>
+      <button data-shift="0" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-[#ea580c] text-white">Hari Ini</button>
+      <button data-shift="1" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-white/5 text-slate-300 border border-white/15">Besok</button>
+      <button data-shift="2" class="dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-white/5 text-slate-300 border border-white/15">Lusa</button>
     </div>
-    <input type="date" id="dateInput" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400">
-    <div class="mt-2 text-center bg-lime-50 border border-lime-200 rounded-lg py-2 text-sm font-bold text-lime-800" id="dateDisplay">—</div>
+    <input type="date" id="dateInput" class="w-full text-sm bg-white/5 text-slate-100 border border-white/15 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500/60 [color-scheme:dark]">
+    <div class="mt-2 text-center rounded-lg py-2 text-sm font-bold text-amber-300" style="background:rgba(249,115,22,0.14); border:1px solid rgba(251,146,60,0.35);" id="dateDisplay">—</div>
   </section>
 
   <!-- ===== CATEGORIES CONTAINER ===== -->
   <div id="categoriesContainer" class="space-y-3"></div>
 
   <!-- ===== OUTPUT ===== -->
-  <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+  <section class="rounded-xl border border-white/10 p-4" style="background:#1c1c1e;">
     <div class="flex items-center justify-between mb-2">
-      <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Preview Output</label>
-      <span id="warnBadge" class="hidden text-[10px] font-semibold text-lime-800 bg-lime-100 px-2 py-0.5 rounded-full">⚠ Ada peringatan</span>
+      <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide">Preview Output</label>
+      <span id="warnBadge" class="hidden text-[10px] font-semibold text-amber-300 px-2 py-0.5 rounded-full" style="background:rgba(249,115,22,0.18);">⚠ Ada peringatan</span>
     </div>
-    <pre id="outputBox" class="mono whitespace-pre-wrap text-[13px] leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-3 min-h-[120px]"></pre>
+    <pre id="outputBox" class="mono whitespace-pre-wrap text-[13px] leading-relaxed bg-black/50 border border-white/10 rounded-lg p-3 min-h-[120px] text-slate-100"></pre>
     <div class="flex gap-2 mt-3">
-      <button id="copyBtn" class="flex-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-800 text-white font-bold text-sm py-3 rounded-lg shadow-sm transition-colors">
+      <button id="copyBtn" class="flex-1 bg-white/10 hover:bg-white/15 active:bg-white/10 text-white font-bold text-sm py-3 rounded-lg shadow-sm transition-colors">
         📋 Copy
       </button>
-      <button id="waBtn" class="flex-1 bg-lime-600 hover:bg-lime-700 active:bg-lime-600 text-white font-bold text-sm py-3 rounded-lg shadow-sm transition-colors">
+      <button id="waBtn" class="flex-1 bg-[#ea580c] hover:bg-[#c2410c] active:bg-[#ea580c] text-white font-bold text-sm py-3 rounded-lg shadow-sm transition-colors">
         📲 Kirim ke WhatsApp
       </button>
     </div>
   </section>
 
-  <p class="text-center text-[11px] text-slate-400 pt-2 pb-4">Data petugas tersimpan otomatis di perangkat ini (localStorage).</p>
+  <p class="text-center text-[11px] text-slate-500 pt-2 pb-4">Data petugas tersimpan otomatis di perangkat ini (localStorage).</p>
 </div>
 
 <!-- Toast -->
-<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50"></div>
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-black text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50 border border-white/15"></div>
 
 <script>
 /* ============================================================
@@ -178,11 +178,11 @@ CATEGORIES.forEach(c => rows[c.key] = []);
    RENDER: KATEGORI + BARIS INPUT
 ============================================================ */
 const colorMap = {
-  blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', chip: 'bg-blue-600' },
-  rose: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', chip: 'bg-rose-600' },
-  violet: { bg: 'bg-violet-50', text: 'text-violet-700', border: 'border-violet-200', chip: 'bg-violet-600' },
-  teal: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200', chip: 'bg-teal-600' },
-  amber: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', chip: 'bg-amber-600' },
+  blue: { bg: 'bg-blue-500/15', text: 'text-blue-300', border: 'border-blue-500/30', chip: 'bg-blue-500' },
+  rose: { bg: 'bg-rose-500/15', text: 'text-rose-300', border: 'border-rose-500/30', chip: 'bg-rose-500' },
+  violet: { bg: 'bg-violet-500/15', text: 'text-violet-300', border: 'border-violet-500/30', chip: 'bg-violet-500' },
+  teal: { bg: 'bg-teal-500/15', text: 'text-teal-300', border: 'border-teal-500/30', chip: 'bg-teal-500' },
+  amber: { bg: 'bg-amber-500/15', text: 'text-amber-300', border: 'border-amber-500/30', chip: 'bg-amber-500' },
 };
 
 const container = document.getElementById('categoriesContainer');
@@ -190,11 +190,11 @@ const container = document.getElementById('categoriesContainer');
 function buildCategorySection(cat) {
   const c = colorMap[cat.color];
   const section = document.createElement('section');
-  section.className = `bg-white rounded-xl shadow-sm border ${c.border} overflow-hidden`;
+  section.className = `bg-[#1c1c1e] rounded-xl border ${c.border} overflow-hidden`;
   section.innerHTML = `
     <div class="${c.bg} px-4 py-2.5 flex items-center justify-between">
       <h2 class="text-sm font-bold ${c.text}">${cat.label}</h2>
-      <span class="text-[10px] font-semibold ${c.text} bg-white/70 px-2 py-0.5 rounded-full" id="count-${cat.key}">0 orang</span>
+      <span class="text-[10px] font-semibold ${c.text} bg-black/30 px-2 py-0.5 rounded-full" id="count-${cat.key}">0 orang</span>
     </div>
     <div class="p-3 space-y-2" id="rows-${cat.key}"></div>
     <div class="px-3 pb-3">
@@ -239,17 +239,17 @@ function renderRows(catKey) {
     row.className = 'relative';
     row.innerHTML = `
       <div class="flex gap-2 items-center">
-        <span class="text-xs font-mono text-slate-400 w-5 text-right shrink-0">${idx + 1}.</span>
+        <span class="text-xs font-mono text-slate-500 w-5 text-right shrink-0">${idx + 1}.</span>
         <div class="relative flex-1">
           <input type="text" autocomplete="off"
-            class="acInput w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
+            class="acInput w-full text-sm bg-white/5 text-slate-100 border border-white/15 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500/60 placeholder:text-slate-500"
             data-cat="${catKey}" data-idx="${idx}"
             placeholder="Cari / pilih nama..." value="${val || ''}">
-          <div class="acDropdown hidden absolute z-20 mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-lg overflow-y-auto ac-list"></div>
+          <div class="acDropdown hidden absolute z-20 mt-1 w-full bg-[#242426] border border-white/15 rounded-lg shadow-lg overflow-y-auto ac-list"></div>
         </div>
-        <button data-cat="${catKey}" data-idx="${idx}" class="removeRowBtn shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 text-slate-500 active:bg-red-100 active:text-red-600 font-bold">✕</button>
+        <button data-cat="${catKey}" data-idx="${idx}" class="removeRowBtn shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-slate-400 active:bg-red-500/20 active:text-red-300 font-bold">✕</button>
       </div>
-      <div class="dupWarning hidden text-[11px] text-amber-600 font-medium mt-1 ml-7"></div>
+      <div class="dupWarning hidden text-[11px] text-amber-400 font-medium mt-1 ml-7"></div>
     `;
     wrap.appendChild(row);
   });
@@ -268,14 +268,14 @@ function openDropdown(input) {
 
   let html = '';
   filtered.slice(0, 50).forEach(name => {
-    html += `<div class="acOption px-3 py-2 text-sm hover:bg-lime-50 cursor-pointer" data-cat="${cat}" data-idx="${idx}" data-name="${name}">${name}</div>`;
+    html += `<div class="acOption px-3 py-2 text-sm text-slate-100 hover:bg-white/10 cursor-pointer" data-cat="${cat}" data-idx="${idx}" data-name="${name}">${name}</div>`;
   });
 
   const exactExists = list.some(n => n.toUpperCase() === query);
   if (query && !exactExists) {
-    html += `<div class="acAddNew px-3 py-2 text-sm text-lime-700 font-semibold hover:bg-lime-50 cursor-pointer border-t border-slate-100" data-cat="${cat}" data-idx="${idx}" data-name="${query}">+ Tambah "${query}" ke database</div>`;
+    html += `<div class="acAddNew px-3 py-2 text-sm text-orange-400 font-semibold hover:bg-orange-500/10 cursor-pointer border-t border-white/10" data-cat="${cat}" data-idx="${idx}" data-name="${query}">+ Tambah "${query}" ke database</div>`;
   }
-  if (!html) html = `<div class="px-3 py-2 text-xs text-slate-400">Tidak ditemukan. Ketik nama baru lalu pilih "Tambah".</div>`;
+  if (!html) html = `<div class="px-3 py-2 text-xs text-slate-500">Tidak ditemukan. Ketik nama baru lalu pilih "Tambah".</div>`;
 
   dropdown.innerHTML = html;
   dropdown.classList.remove('hidden');
@@ -374,7 +374,7 @@ function setDateByShift(shift) {
   updateDateDisplay();
   document.querySelectorAll('.dateShiftBtn').forEach(b => {
     const active = parseInt(b.dataset.shift) === shift;
-    b.className = `dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg ${active ? 'bg-lime-600 text-white' : 'bg-slate-100 text-slate-700 border border-slate-300'}`;
+    b.className = `dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg ${active ? 'bg-[#ea580c] text-white' : 'bg-white/5 text-slate-300 border border-white/15'}`;
   });
 }
 
@@ -391,7 +391,7 @@ document.querySelectorAll('.dateShiftBtn').forEach(btn => {
   btn.addEventListener('click', () => setDateByShift(parseInt(btn.dataset.shift)));
 });
 dateInput.addEventListener('change', () => {
-  document.querySelectorAll('.dateShiftBtn').forEach(b => b.className = 'dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300');
+  document.querySelectorAll('.dateShiftBtn').forEach(b => b.className = 'dateShiftBtn flex-1 text-xs font-semibold py-2 rounded-lg bg-white/5 text-slate-300 border border-white/15');
   updateDateDisplay();
 });
 

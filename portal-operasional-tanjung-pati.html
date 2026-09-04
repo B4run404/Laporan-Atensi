@@ -14,48 +14,51 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
   :root {
-    /* Base canvas & surfaces — pertegas kontras antar lapisan */
-    --bg: #F1F2F4;            /* latar halaman lebih dalam agar kartu menonjol */
-    --surface: #FFFFFF;        /* kartu */
-    --surface-alt: #F7F8F9;    /* panel sekunder / grup */
-    --surface-2: #FFFFFF;
-    --surface-hover: #F3F4F6;
-    --field: #F8F9FA;          /* latar input/area isi (beda dari kartu putih) */
-    --field-border: #E3E5E8;   /* border input lebih jelas */
+    /* Aegis dark surfaces */
+    --bg: #111111;
+    --surface: rgba(24,24,26,0.80);
+    --surface-alt: #1b1b1d;
+    --surface-2: #161618;
+    --surface-hover: #242426;
+    --field: rgba(255,255,255,0.04);
+    --field-border: rgba(255,255,255,0.14);
 
-    /* Brand (lime) — dipakai hemat untuk aksi & status */
-    --navy: #0F1A0A;
-    --navy-2: #1F360E;
-    --navy-light: #36591B;
-    --gold: #65A30D;
-    --gold-bright: #84CC16;
-    --gold-text: #3F6212;
-    --gold-soft: rgba(132, 204, 22, 0.12);
-    --gold-border: rgba(101, 163, 13, 0.35);
-    --gold-glow: rgba(132, 204, 22, 0.14);
+    /* Brand (orange → kuning gradasi, latar gelap) */
+    --navy: #000000;
+    --navy-2: #c2410c;
+    --navy-light: #ea580c;
+    --gold: #fbbf24;              /* text/link — amber cerah, terbaca di gelap */
+    --gold-bright: #fbbf24;
+    --gold-text: #fbbf24;
+    --gold-soft: rgba(251,191,36,0.10);
+    --gold-border: rgba(251,146,60,0.35);
+    --gold-glow: rgba(249,115,22,0.2);
 
-    --maroon: #E5484D;
-    --maroon-soft: rgba(229, 72, 77, 0.10);
-    --emerald: #30A46C;
-    --emerald-soft: rgba(48, 164, 108, 0.12);
-    --warning: #E5A000;
+    --grad-a: #f97316;            /* orange */
+    --grad-b: #fde047;            /* kuning */
 
-    /* Neutral ink tiers (zinc — precise, not blue) */
-    --ink: #18181B;
-    --ink-2: #3F3F46;
-    --muted: #71717A;
-    --muted-2: #A1A1AA;
-    --line: #E6E7EA;
-    --line-strong: #D1D3D6;
-    --line-glow: rgba(132, 204, 22, 0.18);
+    --maroon: #F87171;
+    --maroon-soft: rgba(248,113,113,0.12);
+    --emerald: #4ADE80;
+    --emerald-soft: rgba(74,222,128,0.12);
+    --warning: #FBBF24;
+
+    /* Neutral ink (terang utk gelap) */
+    --ink: #f4f4f0;
+    --ink-2: #d4d4d8;
+    --muted: #a1a1aa;
+    --muted-2: #71717a;
+    --line: rgba(255,255,255,0.10);
+    --line-strong: rgba(255,255,255,0.18);
+    --line-glow: rgba(253,224,71,0.18);
 
     /* Elevation */
-    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
-    --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px -12px rgba(16, 24, 40, 0.10);
-    --shadow-pop: 0 12px 32px -8px rgba(16, 24, 40, 0.16);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-card: 0 1px 2px rgba(0,0,0,0.4), 0 18px 44px -18px rgba(0,0,0,0.7);
+    --shadow-pop: 0 24px 60px -20px rgba(0,0,0,0.8);
     --radius-sm: 8px;
     --radius: 12px;
     --radius-lg: 16px;
@@ -92,9 +95,9 @@
     color: var(--ink);
   }
   .date-chip.is-active {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: #FFFFFF;
+    background: linear-gradient(135deg, var(--grad-a) 0%, var(--grad-b) 100%);
+    border-color: transparent;
+    color: #1a1a1a;
     font-weight: 700;
   }
   .sidebar-panel { width: 16rem; transition: width 0.2s ease; }
@@ -209,42 +212,33 @@
 
   /* BUTTONS */
   .btn-primary {
-    background: var(--gold);
-    color: #FFFFFF;
-    font-weight: 600;
+    background: linear-gradient(135deg, var(--grad-a) 0%, var(--grad-b) 100%);
+    color: #1a1a1a;
+    font-weight: 700;
     border-radius: 10px;
-    border: 1px solid var(--gold);
+    border: none;
     min-height: 44px;
     padding: 0.7rem 1.35rem;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease, filter 0.2s ease;
     box-shadow: var(--shadow-sm);
     display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
   }
-  .btn-primary:hover { 
-    background: var(--navy-2); 
-    border-color: var(--navy-2); 
-    box-shadow: 0 2px 10px rgba(46, 78, 14, 0.25);
-    transform: translateY(-1px);
-  }
+  .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
   .btn-primary:active { transform: translateY(0); }
 
   .btn-gold {
-    background: var(--gold);
-    color: #FFFFFF;
+    background: linear-gradient(135deg, var(--grad-a) 0%, var(--grad-b) 100%);
+    color: #1a1a1a;
     font-weight: 700;
     border-radius: 10px;
-    border: 1px solid var(--gold);
+    border: none;
     min-height: 44px;
     padding: 0.7rem 1.35rem;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease, filter 0.2s ease;
     box-shadow: var(--shadow-sm);
     display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
   }
-  .btn-gold:hover { 
-    background: #4D7C0F; 
-    box-shadow: 0 2px 10px rgba(101, 163, 13, 0.25);
-    transform: translateY(-1px);
-  }
+  .btn-gold:hover { filter: brightness(1.08); transform: translateY(-1px); }
   .btn-gold:active { transform: translateY(0); }
 
   .btn-outline {
@@ -394,6 +388,24 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* ===== AEGIS DARK OVERRIDES =====
+     Mengoreksi kelas tailwind yang diarahkan ke tema terang agar terbaca
+     pada latar gelap. Satu titik, bukan edit per-elemen. */
+  body { background: #111; }
+  .text-slate-900, .text-slate-800, .text-slate-700 { color: #f4f4f0 !important; }
+  .text-slate-600, .text-slate-500 { color: #d4d4d8 !important; }
+  .text-slate-400, .text-slate-300 { color: #a1a1aa !important; }
+  .text-slate-200, .text-slate-100 { color: #e4e4e7 !important; }
+  .text-black { color: #f4f4f0 !important; }
+  .bg-white { background-color: #1b1b1d !important; }
+  .bg-slate-50, .bg-slate-100 { background-color: rgba(255,255,255,0.04) !important; }
+  .bg-slate-200 { background-color: rgba(255,255,255,0.08) !important; }
+  .border-slate-200, .border-slate-300 { border-color: rgba(255,255,255,0.14) !important; }
+
+  /* Input/field yang memakai var sudah gelap; paksa latar field gelap */
+  .field-input, .field-select, .field-textarea { background: var(--field) !important; color: var(--ink) !important; border-color: var(--field-border) !important; }
+  .whatsapp-bubble { color-scheme: dark; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row pb-16 md:pb-0">
@@ -407,7 +419,7 @@
       </div>
       <div class="min-w-0 brand-text">
         <h1 class="text-sm font-bold text-white tracking-wide truncate font-display">SIMAP TANJUNG PATI</h1>
-        <p class="text-xs leading-tight truncate" style="color: #A3E635;">Lapas Kelas IIB Tanjung Pati</p>
+        <p class="text-xs leading-tight truncate" style="color:#fb923c;">Lapas Kelas IIB Tanjung Pati</p>
       </div>
     </div>
     <button type="button" onclick="toggleSidebarCollapse()" class="mt-3 w-full min-h-[40px] flex items-center justify-center gap-2 rounded-lg border border-white/15 text-xs font-semibold text-slate-200 hover:bg-white/5" title="Perkecil menu">
@@ -498,20 +510,20 @@
 <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
 
   <!-- TOP HEADER -->
-  <header class="sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center justify-between" style="background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);">
+  <header class="sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center justify-between" style="background: rgba(17,17,17,0.88); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);">
     <div class="flex items-center gap-3 min-w-0">
-      <div class="md:hidden w-10 h-10 rounded bg-lime-500 flex items-center justify-center font-bold text-lime-950 text-sm">
+      <div class="md:hidden w-10 h-10 rounded flex items-center justify-center font-bold text-black text-sm" style="background:linear-gradient(135deg,#f97316,#fde047);">
         P
       </div>
       <div class="min-w-0">
-        <h2 id="top-header-title" class="text-base font-bold text-slate-900 tracking-wide font-display truncate">Dashboard</h2>
+        <h2 id="top-header-title" class="text-base font-bold text-white tracking-wide font-display truncate">Dashboard</h2>
         <p class="text-xs hidden sm:block truncate" style="color: var(--muted);">SIMAP — Lapas Kelas IIB Tanjung Pati</p>
       </div>
     </div>
     <div class="flex items-center gap-3 sm:gap-4 text-right">
       <div class="font-mono text-sm font-semibold" style="color: var(--gold-text);" id="clock-wib">00:00:00 WIB</div>
       <div id="top-status-pill" class="status-pill hidden sm:inline-flex">
-        <span id="top-status-dot" class="status-dot" style="background: #84CC16;"></span>
+        <span id="top-status-dot" class="status-dot" style="background: #fb923c;"></span>
         <span id="top-status-text">Siap (Mode Lokal)</span>
       </div>
     </div>
@@ -583,7 +595,7 @@
         </div>
         <div class="doc-card p-4">
           <p class="text-xs font-semibold" style="color: var(--muted);">Reminder Piket</p>
-          <p id="stat-piket-generated" class="text-3xl font-bold font-display text-lime-600 mt-1">0</p>
+          <p id="stat-piket-generated" class="text-3xl font-bold font-display text-orange-400 mt-1">0</p>
           <p class="text-xs mt-1" style="color: var(--muted);">Entri tipe PIKET</p>
         </div>
         <div class="doc-card p-4">
@@ -891,7 +903,7 @@
                 <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
                 <p class="text-sm font-bold">Pratinjau reminder</p>
               </div>
-              <span id="pk-warn-badge" class="hidden text-xs font-bold text-amber-700 bg-amber-50 border border-lime-500/40 px-2 py-1 rounded">
+              <span id="pk-warn-badge" class="hidden text-xs font-bold text-amber-300 px-2 py-1 rounded" style="background:rgba(245,158,11,0.16); border:1px solid rgba(251,146,60,0.4);">
                 Ada petugas ganda
               </span>
             </div>
@@ -1483,7 +1495,7 @@ function updateCloudStatusBadge(isCloud) {
   if (sideStatus) {
     sideStatus.innerHTML = isCloud ?
       `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Cloud terhubung` :
-      `<span class="w-2 h-2 rounded-full bg-lime-500"></span> Siap lokal`;
+      `<span class="w-2 h-2 rounded-full bg-orange-500"></span> Siap lokal`;
   }
   if (topText) topText.textContent = isCloud ? 'Siap (Cloud)' : 'Siap (Mode Lokal)';
   if (topDot) topDot.style.background = isCloud ? '#10B981' : '#D97706';
@@ -1891,7 +1903,7 @@ function renderDashboardStats() {
             labels: chartLabels,
             datasets: [{
               data: chartData,
-              backgroundColor: ['#3B82F6', '#65A30D'],
+              backgroundColor: ['#F97316', '#FBBF24'],
               borderColor: '#0A1220',
               borderWidth: 2
             }]
